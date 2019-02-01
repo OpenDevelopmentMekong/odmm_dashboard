@@ -1,0 +1,122 @@
+<html>
+	<head>
+		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script src="files/radarChart.js"></script>
+<style>
+	#unit3 select {
+		float: left;
+		margin-left: 10%;
+		margin-right: 10%;
+		width: 30%;
+	}
+</style>
+	</head>
+
+	<body>
+		<div id="unit3">
+			<h2>Compare the business environments between two states/regions</h2>
+			<select id="select1" onchange="changeRadar(1)"></select>
+			<select id="select2" onchange="changeRadar(2)"></select>
+			<div class="radarChart" align="center"></div>
+			<script>
+				var dataString = `name,rank,score,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10,
+An Giang,32,62.16,8.67,6.37,6.92,6.88,5.20,4.99,6.44,5.99,5.69,6.15,
+BRVT,16,64.43,8.19,5.94,6.36,6.42,5.04,4.33,5.45,7.08,7.29,5.55,
+Bac Giang,30,62.20,7.82,6.54,6.73,5.70,5.51,4.72,6.05,6.06,6.32,6.10,
+Bac Kan,59,58.82,6.25,5.13,6.65,4.83,4.28,6.42,4.15,6.32,6.09,6.06,
+Bac Lieu,42,61.09,8.58,6.55,6.47,6.70,6.38,5.93,6.04,5.77,5.25,5.68,
+Bac Ninh,17,64.36,7.27,6.57,5.93,6.65,5.90,3.85,5.81,6.86,7.56,5.39,
+Ben Tre,5,66.69,7.88,6.96,6.21,7.61,6.39,6.23,7.01,6.87,6.45,6.78,
+Binh Dinh,18,64.08,7.75,6.79,6.67,6.48,6.46,5.63,6.30,5.82,6.51,6.31,
+Binh Duong,14,64.47,7.66,6.83,6.52,7.45,5.38,5.61,6.04,6.69,6.35,6.39,`;
+				console.log(dataString);
+
+				var summaryData = d3.csv.parse(dataString);
+				/*var summaryData = [ {'state':'Mon', 's1': 20, 's2': 60, 's3' : 80},
+					{'state':'Rakhine', 's1': 85, 's2':26, 's3':84},
+					{'state':'Kayin', 's1':20, 's2':30, 's3':40}, 
+					{'state':'Bago', 's1':10, 's2':90, 's3':45} ]; */
+
+				d3.selectAll("select")
+					.selectAll("option")
+					.data(summaryData)
+					.enter()
+					.append("option")
+					.attr("value", function(d) { return d.name; } )
+					.text(function(d) { return d.name; });
+
+
+
+			 	function changeRadar(selectorNum) { 
+
+					// Determine which box to get value from
+					var selectorId = "";
+					if (selectorNum == 1) { 
+						selectorId = "#select1";
+						otherSelectorId = "#select2";
+				       	}
+					else if (selectorNum ==2) { 
+						selectorId="#select2"; 
+						otherSelectorId="#select1";
+					}
+					else { console.log("Wrong selector id for changeRadar!"); }
+					
+					// Subset original data based on selection
+					var newArea = d3.select(selectorId).property("value");
+					var otherArea = d3.select(otherSelectorId).property("value");
+					var newData = subsetSummaryByArea([newArea, otherArea]);
+
+					// Reshape subset to fit to radarChart.js input
+					var radarData = reshapeForRadar(newData);
+					console.log(radarData);
+
+					// Prepare chart
+					var radarChartOptions = {
+			 			w: 300,
+						h: 300,
+						maxValue: 0.5,
+						levels: 5,
+						roundStrokes: true,
+					};
+					RadarChart(".radarChart", radarData, radarChartOptions);
+
+				}
+
+				function subsetSummaryByArea(areaList) {
+					var returnData = [];
+					for (i in areaList) {
+						for (j in summaryData) {
+							if (areaList[i] == summaryData[j].name) {
+								returnData.push(summaryData[j]);
+							}
+						}
+					}
+					return returnData;
+				}
+
+				function reshapeForRadar(origData) {
+					var radarData = [];
+					var keys = Object.keys(origData[0]);
+					keys.splice(0,3);
+					keys.splice(-1,1);
+					console.log(keys);
+
+					for (i in origData) {
+						radarData.push([]);
+						// TODO: Get rid of non axes
+						for (j in keys) {
+							var value = +origData[i][keys[j]];
+							radarData[i].push({"axis": keys[j],
+								"value": value});
+						}
+					}
+					return radarData;
+				}
+
+
+
+			</script>
+
+		</div>
+	</body>
+</html>
