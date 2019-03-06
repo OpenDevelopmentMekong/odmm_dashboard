@@ -15,8 +15,8 @@
 	<body>
 		<div id="unit3">
 			<h2>Compare the business environments between two states/regions</h2>
-			<select id="select1" onchange="changeRadar(1)"></select>
-			<select id="select2" onchange="changeRadar(2)"></select>
+			<select id="select1" onchange="changeRadar('select1', 'select2', summaryData)"></select>
+			<select id="select2" onchange="changeRadar('select2', 'select1', summaryData)"></select>
 			<div class="radarChart" align="center"></div>
 			<script>
 				var dataString = `name,rank,score,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10,
@@ -30,11 +30,10 @@ Ben Tre,5,66.69,7.88,6.96,6.21,7.61,6.39,6.23,7.01,6.87,6.45,6.78,
 Binh Dinh,18,64.08,7.75,6.79,6.67,6.48,6.46,5.63,6.30,5.82,6.51,6.31,
 Binh Duong,14,64.47,7.66,6.83,6.52,7.45,5.38,5.61,6.04,6.69,6.35,6.39,`;
 				console.log(dataString);
-
 				var summaryData = d3.csv.parse(dataString);
 				/*var summaryData = [ {'state':'Mon', 's1': 20, 's2': 60, 's3' : 80},
 					{'state':'Rakhine', 's1': 85, 's2':26, 's3':84},
-					{'state':'Kayin', 's1':20, 's2':30, 's3':40}, 
+					{'state':'Kayin', 's1':20, 's2':30, 's3':40},
 					{'state':'Bago', 's1':10, 's2':90, 's3':45} ]; */
 
 				d3.selectAll("select")
@@ -46,29 +45,16 @@ Binh Duong,14,64.47,7.66,6.83,6.52,7.45,5.38,5.61,6.04,6.69,6.35,6.39,`;
 					.text(function(d) { return d.name; });
 
 
-
-			 	function changeRadar(selectorNum) { 
-
-					// Determine which box to get value from
-					var selectorId = "";
-					if (selectorNum == 1) { 
-						selectorId = "#select1";
-						otherSelectorId = "#select2";
-				       	}
-					else if (selectorNum ==2) { 
-						selectorId="#select2"; 
-						otherSelectorId="#select1";
-					}
-					else { console.log("Wrong selector id for changeRadar!"); }
-					
+        /* Call this func whenever the data changes to update RadarChart */
+			 	function changeRadar(selectorId, otherSelectorId, data) {
 					// Subset original data based on selection
-					var newArea = d3.select(selectorId).property("value");
-					var otherArea = d3.select(otherSelectorId).property("value");
-					var newData = subsetSummaryByArea([newArea, otherArea]);
+					var newArea = d3.select('#'+selectorId).property("value");
+					var otherArea = d3.select('#'+otherSelectorId).property("value");
+					var newData = subsetSummaryByArea([newArea, otherArea], data);
+					console.log(newData);
 
 					// Reshape subset to fit to radarChart.js input
 					var radarData = reshapeForRadar(newData);
-					console.log(radarData);
 
 					// Prepare chart
 					var radarChartOptions = {
@@ -82,18 +68,23 @@ Binh Duong,14,64.47,7.66,6.83,6.52,7.45,5.38,5.61,6.04,6.69,6.35,6.39,`;
 
 				}
 
-				function subsetSummaryByArea(areaList) {
+        /* Note that each row in the dataset represents a single area.
+				@Given a list of areas and the original dataset,
+				@Returns only the rows specified by the list of areas */
+				function subsetSummaryByArea(areaList, data) {
 					var returnData = [];
 					for (i in areaList) {
-						for (j in summaryData) {
-							if (areaList[i] == summaryData[j].name) {
-								returnData.push(summaryData[j]);
+						for (j in data) {
+							if (areaList[i] == data[j]['name']) {
+								returnData.push(data[j]);
 							}
 						}
 					}
 					return returnData;
 				}
 
+				/* @Given a list of rows,
+				@Returns a list of lists as required by RadarChart.js*/
 				function reshapeForRadar(origData) {
 					var radarData = [];
 					var keys = Object.keys(origData[0]);
@@ -112,11 +103,8 @@ Binh Duong,14,64.47,7.66,6.83,6.52,7.45,5.38,5.61,6.04,6.69,6.35,6.39,`;
 					}
 					return radarData;
 				}
-
-
-
 			</script>
-
 		</div>
+
 	</body>
 </html>
