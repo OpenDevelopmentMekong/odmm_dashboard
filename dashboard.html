@@ -15,11 +15,14 @@
 	<body>
 		<div id="unit3">
 			<h2>Compare the business environments between two states/regions</h2>
-			<select id="select1" onchange="changeRadar('select1', 'select2', summaryData)"></select>
-			<select id="select2" onchange="changeRadar('select2', 'select1', summaryData)"></select>
+			<select id="select1" onchange="changeRadar('select1', 'select2', data)"></select>
+			<select id="select2" onchange="changeRadar('select2', 'select1', data)"></select>
+			<div id='areaSelector'>
+				<button type="button" onclick="data = setAreaLevel(srData);">States/Regions</button> |
+				<button type="button" onclick="data = setAreaLevel(tspData);">Townships</button>
 			<div class="radarChart" align="center"></div>
 			<script>
-				var dataString = `name,rank,score,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10,
+				var srString = `name,rank,score,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10,
 An Giang,32,62.16,8.67,6.37,6.92,6.88,5.20,4.99,6.44,5.99,5.69,6.15,
 BRVT,16,64.43,8.19,5.94,6.36,6.42,5.04,4.33,5.45,7.08,7.29,5.55,
 Bac Giang,30,62.20,7.82,6.54,6.73,5.70,5.51,4.72,6.05,6.06,6.32,6.10,
@@ -29,21 +32,41 @@ Bac Ninh,17,64.36,7.27,6.57,5.93,6.65,5.90,3.85,5.81,6.86,7.56,5.39,
 Ben Tre,5,66.69,7.88,6.96,6.21,7.61,6.39,6.23,7.01,6.87,6.45,6.78,
 Binh Dinh,18,64.08,7.75,6.79,6.67,6.48,6.46,5.63,6.30,5.82,6.51,6.31,
 Binh Duong,14,64.47,7.66,6.83,6.52,7.45,5.38,5.61,6.04,6.69,6.35,6.39,`;
-				console.log(dataString);
-				var summaryData = d3.csv.parse(dataString);
-				/*var summaryData = [ {'state':'Mon', 's1': 20, 's2': 60, 's3' : 80},
-					{'state':'Rakhine', 's1': 85, 's2':26, 's3':84},
-					{'state':'Kayin', 's1':20, 's2':30, 's3':40},
-					{'state':'Bago', 's1':10, 's2':90, 's3':45} ]; */
+				var srData = d3.csv.parse(srString);
 
-				d3.selectAll("select")
-					.selectAll("option")
-					.data(summaryData)
-					.enter()
-					.append("option")
-					.attr("value", function(d) { return d.name; } )
-					.text(function(d) { return d.name; });
+				var tspString = `name,rank,score,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10,
+Thanh Hoa,28,62.46,8.30,6.96,6.36,6.23,4.57,4.61,5.57,6.72,6.51,5.74,
+Tien Giang,40,61.44,7.48,6.26,6.14,7.15,5.28,6.15,5.58,6.57,6.01,4.84,
+Tra Vinh,37,61.71,8.09,7.31,6.33,7.91,7.82,6.31,5.84,4.77,5.30,6.72,
+Tuyen Quang,39,61.51,8.29,6.06,6.59,5.79,4.58,4.91,5.10,6.13,6.72,5.95,
+Vinh Long,6,66.07,8.47,6.69,6.06,7.40,6.64,5.35,6.15,6.73,6.63,7.08,
+Vinh Phuc,12,64.90,7.10,5.77,6.59,7.27,6.05,5.00,5.97,6.81,6.68,6.28,
+Yen Bai,46,60.72,7.65,5.36,6.16,5.89,4.31,5.24,5.21,6.94,6.22,6.17,
+Ha Noi,13,64.71,6.72,5.32,6.31,7.19,4.40,4.07,4.10,7.68,8.09,4.88,`;
+				var tspData = d3.csv.parse(tspString);
 
+				// Default arealevel is state/regions
+				data = setAreaLevel(srData);
+
+        function setAreaLevel(targetDataset) {
+					d3.selectAll("select")
+						.selectAll("option")
+						.data([])
+						.exit()
+						.remove();
+						
+					d3.selectAll("select")
+						.selectAll("option")
+						.data(targetDataset)
+						.enter()
+						.append("option")
+						.attr("value", function(d) { return d.name; } )
+						.text(function(d) { return d.name; });
+
+				    changeRadar("select1", "select2", targetDataset);
+
+						return targetDataset;
+				}
 
         /* Call this func whenever the data changes to update RadarChart */
 			 	function changeRadar(selectorId, otherSelectorId, data) {
@@ -51,7 +74,6 @@ Binh Duong,14,64.47,7.66,6.83,6.52,7.45,5.38,5.61,6.04,6.69,6.35,6.39,`;
 					var newArea = d3.select('#'+selectorId).property("value");
 					var otherArea = d3.select('#'+otherSelectorId).property("value");
 					var newData = subsetSummaryByArea([newArea, otherArea], data);
-					console.log(newData);
 
 					// Reshape subset to fit to radarChart.js input
 					var radarData = reshapeForRadar(newData);
@@ -84,13 +106,15 @@ Binh Duong,14,64.47,7.66,6.83,6.52,7.45,5.38,5.61,6.04,6.69,6.35,6.39,`;
 				}
 
 				/* @Given a list of rows,
-				@Returns a list of lists as required by RadarChart.js*/
+				@Returns a list of list of dicts as required by RadarChart.js*/
 				function reshapeForRadar(origData) {
 					var radarData = [];
 					var keys = Object.keys(origData[0]);
+
+					// We don't need to use all data fields for radarChart,
+					// so we remove some columns
 					keys.splice(0,3);
 					keys.splice(-1,1);
-					console.log(keys);
 
 					for (i in origData) {
 						radarData.push([]);
