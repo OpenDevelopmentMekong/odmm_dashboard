@@ -4,6 +4,10 @@
 		<script src="files/radarChart.js"></script>
 		<script src="files/mapStateRegion.js"></script>
 		<script src="files/mapTownship.js"></script>
+
+		<script src="files/unit2.js"></script>
+		<script src="files/unit3.js"></script>
+
 <style>
 	#unit3 select {
 		float: left;
@@ -40,6 +44,7 @@
 		</div>
 
 		<script>
+		/* @@@@@@@@@@@@@@@@@@@@ S E T   U P @@@@@@@@@@@@@@@@@@@@ */
 			var srString = `name,rank,score,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10,
 An Giang,32,62.16,8.67,6.37,6.92,6.88,5.20,4.99,6.44,5.99,5.69,6.15,
 BRVT,16,64.43,8.19,5.94,6.36,6.42,5.04,4.33,5.45,7.08,7.29,5.55,
@@ -50,7 +55,6 @@ Bac Ninh,17,64.36,7.27,6.57,5.93,6.65,5.90,3.85,5.81,6.86,7.56,5.39,
 Ben Tre,5,66.69,7.88,6.96,6.21,7.61,6.39,6.23,7.01,6.87,6.45,6.78,
 Binh Dinh,18,64.08,7.75,6.79,6.67,6.48,6.46,5.63,6.30,5.82,6.51,6.31,
 Binh Duong,14,64.47,7.66,6.83,6.52,7.45,5.38,5.61,6.04,6.69,6.35,6.39,`;
-			var srData = d3.csv.parse(srString);
 
 			var tspString = `name,rank,score,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10,
 Thanh Hoa,28,62.46,8.30,6.96,6.36,6.23,4.57,4.61,5.57,6.72,6.51,5.74,
@@ -61,24 +65,27 @@ Vinh Long,6,66.07,8.47,6.69,6.06,7.40,6.64,5.35,6.15,6.73,6.63,7.08,
 Vinh Phuc,12,64.90,7.10,5.77,6.59,7.27,6.05,5.00,5.97,6.81,6.68,6.28,
 Yen Bai,46,60.72,7.65,5.36,6.16,5.89,4.31,5.24,5.21,6.94,6.22,6.17,
 Ha Noi,13,64.71,6.72,5.32,6.31,7.19,4.40,4.07,4.10,7.68,8.09,4.88,`;
+
+			var srData = d3.csv.parse(srString);
 			var tspData = d3.csv.parse(tspString);
 
       /* @@@@@@@@@@@@@@@@@@@@ U N I T ( 2 ) @@@@@@@@@@@@@@@@@@@@ */
 
-      // Setting up the map
-			var mapWidth = 400, mapHeight = 700;
-      var mapSvg = d3.select('#unit2')
-			  .select('#areaSelector')
-        .append('svg')
-        .attr('width', mapWidth)
-        .attr('height', mapHeight);
+      // Setting up the mapSvg
 
-      var areas = mapSvg.append('g');
-			var mercProjection = d3.geo.mercator()
-        .scale(2000)
-        .center([96.0785, 19.7633])
-        .translate([mapWidth/2, mapHeight/2]);
-			var geoPath = d3.geo.path().projection(mercProjection);
+			var mapWidth = 400, mapHeight = 700;
+		  var mapSvg = d3.select('#unit2')
+		    .select('#areaSelector')
+		    .append('svg')
+		    .attr('width', mapWidth)
+		    .attr('height', mapHeight);
+
+		  var areas = mapSvg.append('g');
+		  var mercProjection = d3.geo.mercator()
+		    .scale(2000)
+		    .center([96.0785, 19.7633])
+		    .translate([mapWidth/2, mapHeight/2]);
+		  var geoPath = d3.geo.path().projection(mercProjection);
 
 			// Draw the map
 			drawMap(mapStateRegion.features, areas, geoPath, 1);
@@ -91,132 +98,7 @@ Ha Noi,13,64.71,6.72,5.32,6.31,7.19,4.40,4.07,4.10,7.68,8.09,4.88,`;
 			/* @@@@@@@@@@@@@@@@@@@@ U N I T ( 4 ) @@@@@@@@@@@@@@@@@@@@ */
 
       /* @@@@@@@@@@@@@@@@@@@@   functions  @@@@@@@@@@@@@@@@@@@@ */
-			function drawMap(mapData, targetSvgGroup, pathFunc, state) {
-				var accessorForAreaName = '';
-				if (state) {
-					accessorForAreaName = 'ST';
-				} else {
-					accessorForAreaName = 'TS';
-				}
-				targetSvgGroup.selectAll('path')
-				  .data([])
-					.exit()
-					.remove()
 
-				targetSvgGroup.selectAll('path')
-					.data(mapData)
-					.enter()
-					.append('path')
-					.attr('id', (d) => (d.properties[accessorForAreaName]))
-					.attr('fill', '#110000')
-					.attr('stroke', '#aabbcc')
-					.on('click', function(d,i) { mapClick(d, accessorForAreaName);})
-					.on('mouseover', function(d,i) {
-						d3.select(this).attr('fill', '#00ee00');
-					})
-					.on('mouseout', function(d,i) {
-						d3.select(this).attr('fill', '#110000');
-					})
-					.attr('d', pathFunc);
-			}
-
-			function mapClick(datum, accessor) {
-        d3.select('#unit2').select('h2').select('a')
-				  .text(datum.properties[accessor]);
-			}
-
-			/* Allows toggling between state/region and Townships
-			based on the given dataset */
-			function setAreaLevel(targetDataset, unitSelector) {
-				unitSelector = '#' + unitSelector;
-				// Empty out the old dropdown options
-				d3.select(unitSelector)
-					.select("#areaSelector")
-					.selectAll("select")
-					.selectAll("option")
-					.data([])
-					.exit()
-					.remove();
-
-        // Populate the dropdown options with new data
-				d3.select(unitSelector)
-					.select("#areaSelector")
-					.selectAll("select")
-					.selectAll("option")
-					.data(targetDataset)
-					.enter()
-					.append("option")
-					.attr("value", function(d) { return d.name; } )
-					.text(function(d) { return d.name; });
-
-				  // This is just a courtesy return to avoid a two-line call to function
-					// e.g. data = setAreaLevel(newDataset, 'unit3'); instead of
-					//      setAreaLevel(newDataset, 'unit3');
-					//      data = newDataset,
-					//          where data is a global accessed by callback functions
-					//          indicating the currently selected dataset
-					return targetDataset;
-			}
-
-			/* Call this func whenever the data changes to update RadarChart */
-			function changeRadar(selectorId, otherSelectorId, data) {
-				// Subset original data based on selection
-				var newArea = d3.select('#'+selectorId).property("value");
-				var otherArea = d3.select('#'+otherSelectorId).property("value");
-				var newData = subsetSummaryByArea([newArea, otherArea], data);
-
-				// Reshape subset to fit to radarChart.js input
-				var radarData = reshapeForRadar(newData);
-
-				// Prepare chart
-				var radarChartOptions = {
-					w: 500,
-					h: 500,
-					maxValue: 10,
-					levels: 5,
-					roundStrokes: false,
-				};
-				RadarChart(".radarChart", radarData, radarChartOptions);
-
-			}
-
-			/* Note that each row in the dataset represents a single area.
-			@Given a list of areas and the original dataset,
-			@Returns only the rows specified by the list of areas */
-			function subsetSummaryByArea(areaList, data) {
-				var returnData = [];
-				for (i in areaList) {
-					for (j in data) {
-						if (areaList[i] == data[j]['name']) {
-							returnData.push(data[j]);
-						}
-					}
-				}
-				return returnData;
-			}
-
-			/* @Given a list of rows,
-			@Returns a list of list of dicts as required by RadarChart.js*/
-			function reshapeForRadar(origData) {
-				var radarData = [];
-				var keys = Object.keys(origData[0]);
-
-				// We don't need to use all data fields for radarChart,
-				// so we remove some columns
-				keys.splice(0,3);
-				keys.splice(-1,1);
-
-				for (i in origData) {
-					radarData.push([]);
-					// TODO: Get rid of non axes
-					for (j in keys) {
-						var value = +origData[i][keys[j]];
-						radarData[i].push({"axis": keys[j],
-							"value": value});
-					}
-				}
-				return radarData;
-			}
 		</script>
 
 	</body>
