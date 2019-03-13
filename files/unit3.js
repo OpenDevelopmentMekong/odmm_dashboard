@@ -1,7 +1,6 @@
 /* Allows toggling between state/region and Townships
 based on the given dataset */
 function setAreaLevel(targetDataset, unitSelector) {
-  unitSelector = '#' + unitSelector;
   // Empty out the old dropdown options
   d3.select(unitSelector)
     .select("#areaSelector")
@@ -21,21 +20,13 @@ function setAreaLevel(targetDataset, unitSelector) {
     .append("option")
     .attr("value", function(d) { return d.name; } )
     .text(function(d) { return d.name; });
-
-    // This is just a courtesy return to avoid a two-line call to function
-    // e.g. data = setAreaLevel(newDataset, 'unit3'); instead of
-    //      setAreaLevel(newDataset, 'unit3');
-    //      data = newDataset,
-    //          where data is a global accessed by callback functions
-    //          indicating the currently selected dataset
-    return targetDataset;
 }
 
 /* Call this func whenever the data changes to update RadarChart */
-function changeRadar(selectorId, otherSelectorId, data) {
+function changeRadar(selector, otherSelector, data) {
   // Subset original data based on selection
-  var newArea = d3.select('#'+selectorId).property("value");
-  var otherArea = d3.select('#'+otherSelectorId).property("value");
+  var newArea = d3.select(selector).property("value");
+  var otherArea = d3.select(otherSelector).property("value");
   var newData = subsetSummaryByArea([newArea, otherArea], data);
 
   // Reshape subset to fit to radarChart.js input

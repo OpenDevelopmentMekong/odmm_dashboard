@@ -28,17 +28,16 @@
 			</div>
 			<div id="areaSelector">
 			</div>
-		</div>
 
-		<div id="unit3">
+		<div class="unit3">
 			<h2>Compare the business environments between two states/regions</h2>
 			<div id="areaSelector">
-				<select id="select1" onchange="changeRadar('select1', 'select2', data)"></select>
-				<select id="select2" onchange="changeRadar('select2', 'select1', data)"></select>
+				<select id="select1" onchange="changeRadar('#select1', '#select2', data)"></select>
+				<select id="select2" onchange="changeRadar('#select2', '#select1', data)"></select>
 			</div>
 			<div id="areaLevelSelector">
-				<button type="button" onclick="data = setAreaLevel(srData, 'unit3'); changeRadar('select1','select2', data);">States/Regions</button> |
-				<button type="button" onclick="data = setAreaLevel(tspData, 'unit3'); changeRadar('select1','select2', data);">Townships</button>
+				<button type="button" onclick="data = srData; setAreaLevel(srData, '.unit3'); changeRadar('#select1','#select2', srData);">States/Regions</button> |
+				<button type="button" onclick="data = tspData; setAreaLevel(tspData, '.unit3'); changeRadar('#select1','#select2', tspData);">Townships</button>
 			<div class="radarChart" align="center"></div>
 		  </div>
 		</div>
@@ -92,8 +91,9 @@ Ha Noi,13,64.71,6.72,5.32,6.31,7.19,4.40,4.07,4.10,7.68,8.09,4.88,`;
 
 			/* @@@@@@@@@@@@@@@@@@@@ U N I T ( 3 ) @@@@@@@@@@@@@@@@@@@@ */
 			// Same sequence as in callback. This sets up our initial chart
-			data = setAreaLevel(srData, "unit3");
-			changeRadar('select1', 'select2', data);
+			data = srData;
+			setAreaLevel(srData, '.unit3');
+			changeRadar('#select1', '#select2', srData);
 
 			/* @@@@@@@@@@@@@@@@@@@@ U N I T ( 4 ) @@@@@@@@@@@@@@@@@@@@ */
 

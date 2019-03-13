@@ -31,3 +31,7 @@ function mapClick(datum, accessor) {
   d3.select('#unit2').select('h2').select('a')
     .text(datum.properties[accessor]);
 }
+
+function setupMap(mapWidth, mapHeight) {
+
+}
