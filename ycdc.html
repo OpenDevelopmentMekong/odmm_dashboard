@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+    <div id="mapExplorer">
+      <svg id="map">
+      </svg>
+    </div>
+
+    <script>
+    // Store everything we need to draw a map
+    var tspMap = {
+      'geojson' : NULL,
+      'width' : 700,
+      'height' : 500,
+      'projection' : NULL,
+      'path' : NULL,
+      'g' : NULL
+    };
+
+    // Set up the HTML
+    tspMap.g = d3.select('#mapExplorer')
+      .select('#map')
+      .append('svg')
+      .attr('width', tspMap.width)
+      .attr('height', tspMap.height)
+      .append('g');
+
+    // Set up the map projection
+    tspMap.projection = d3.geo.mercator()
+      .scale(2000)
+      .center([96.0785, 19.7633])
+      .translate([tspMap.width/2, tspMap.height/2]);
+
+    // Path function here translates geoJSON to path strings required by SVG
+    tspMap.path = d3.geo.path().projection(tspMap.projection);
+
+    // Put it all together!
+    tspMap.g.selectAll('path')
+      .data(tspMap.geojson.features)
+      .enter()
+      .append('path')
+      .attr('fill', '#110000')
+      .attr('stroke', '#aabbcc')
+      .on('mouseover', function(d,i) {
+        d3.select(this).attr('fill', '#00ee00');
+      })
+      .on('mouseout', function(d,i) {
+        d3.select(this).attr('fill', '#110000');
+      })
+      .attr('d', tspMap.path);
+
+    </script>
+
+  </body>
+</html>
