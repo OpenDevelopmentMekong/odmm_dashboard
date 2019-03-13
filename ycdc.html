@@ -1,27 +1,35 @@
 <html>
   <head>
     <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="files/ygntsp.js"></script>
+    <script src="files/candidateList.js"></script>
   </head>
   <body>
     <div id="mapExplorer">
-      <svg id="map">
-      </svg>
+    </div>
+    <div class="candidateInfo">
+      <h3>Township: <a class='township'></a></h3>
+      <p>မြို့တော်ကော်မတီ၀င် -- <a class='committee'></a></p>
+      <p>မြို့နယ်ဥက္ကဋ္ဌ -- <a class='chair'></a></p>
+      <p>မြို့နယ်အဖွဲ့၀င် (၁) -- <a class='member1'></a></p>
+      <p>မြို့နယ်အဖွဲ့၀င် (၂) -- <a class='member2'></a></p>
     </div>
 
     <script>
     // Store everything we need to draw a map
+    candidateList = d3.csv.parse(candidateList);
+    console.log(candidateList);
     var tspMap = {
-      'geojson' : NULL,
-      'width' : 700,
-      'height' : 500,
-      'projection' : NULL,
-      'path' : NULL,
-      'g' : NULL
+      'geojson' : ygntsp.features,
+      'width' : 500,
+      'height' : 600,
+      'projection' : '',
+      'path' : '',
+      'g' : ''
     };
 
     // Set up the HTML
     tspMap.g = d3.select('#mapExplorer')
-      .select('#map')
       .append('svg')
       .attr('width', tspMap.width)
       .attr('height', tspMap.height)
@@ -29,8 +37,8 @@
 
     // Set up the map projection
     tspMap.projection = d3.geo.mercator()
-      .scale(2000)
-      .center([96.0785, 19.7633])
+      .scale(60000)
+      .center([96.1951, 16.8361])
       .translate([tspMap.width/2, tspMap.height/2]);
 
     // Path function here translates geoJSON to path strings required by SVG
@@ -38,7 +46,7 @@
 
     // Put it all together!
     tspMap.g.selectAll('path')
-      .data(tspMap.geojson.features)
+      .data(ygntsp.features)
       .enter()
       .append('path')
       .attr('fill', '#110000')
@@ -49,7 +57,36 @@
       .on('mouseout', function(d,i) {
         d3.select(this).attr('fill', '#110000');
       })
+      .on('click', function(d,i) {
+        var areaName = d.properties['TS'];
+        mapClick(areaName);
+      })
       .attr('d', tspMap.path);
+
+    function mapClick(areaName) {
+      var candidateInfo = '';
+      for (i in candidateList) {
+        if (candidateList[i]['Township'] == areaName) {
+          candidateInfo = candidateList[i];
+        }
+      }
+
+      if (candidateInfo != '') {
+        var infoList = [];
+        infoList.push(candidateInfo['Township']);
+        infoList.push(candidateInfo['မြို့တော်ကော်မတီ၀င်']);
+        infoList.push(candidateInfo['မြို့နယ်ဥက္ကဋ္ဌ']);
+        infoList.push(candidateInfo['မြို့နယ်အဖွဲ့၀င် (၁)']);
+        infoList.push(candidateInfo['မြို့နယ်အဖွဲ့၀င် (၂)']);
+
+        d3.select('.candidateInfo')
+          .selectAll('a')
+          .data(infoList)
+          .text((d) => (d));
+
+
+      }
+    }
 
     </script>
 
