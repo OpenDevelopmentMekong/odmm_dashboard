@@ -1,10 +1,85 @@
 <html>
   <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="files/ygntsp.js"></script>
     <script src="files/candidateList.js"></script>
+
+    <style>
+      * {
+        font-family: Myanmar3;
+      }
+      @font-face {
+        font-family: Myanmar3;
+        src: local('Myanmar3'), url('https://mmwebfonts.comquas.com/fonts/myanmar3.woff')
+      }
+      svg {
+        float: left;
+        margin-right: 10px;
+        width: 500px;
+        display: inline-block;
+      }
+
+      .candidateInfo {
+        float: left;
+        color: red;
+      }
+      #chooseTownship, #constituency, #ecMembers {
+        font-size: 24px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+      }
+      #chooseTownship, #constituency {
+        text-align: center;
+      }
+      #chooseTownship {
+        background-image: url("https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/03/800px-Impressive_View_of_Yangon_City_Hall.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 327px;
+      }
+      #constituency {
+        text-align: center;
+        font-size: 24px;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+      #ecMembers {
+        font-size: 20px;
+        float: left;
+        width: 50%;
+        display: inline-block;
+      }
+
+      #tspElect {
+        float: left;
+        display: inline-block;
+        font-size: 20px;
+      }
+      select {
+        width: 300px;
+        height: 40px;
+        display: block;
+        margin: 0 auto;
+        padding-left: 20px;
+        font-size: 20px;
+      }
+
+      option {
+        font-size: 20px;
+      }
+
+      li.ec {
+        background-color: #eeeeee;
+        padding-left: 30px;
+      }
+
+    </style>
   </head>
   <body>
+    <!--
     <div id="mapExplorer">
     </div>
     <div class="candidateInfo">
@@ -14,18 +89,163 @@
       <p>မြို့နယ်အဖွဲ့၀င် (၁) -- <a class='member1'></a></p>
       <p>မြို့နယ်အဖွဲ့၀င် (၂) -- <a class='member2'></a></p>
     </div>
+    -->
+
+    <div id="chooseTownship">
+      <h3>သင်ဘယ်မြို့နယ်တွင်နေထိုင်ပါသလဲ?</h3>
+      <select id="tspSelector" onchange="tspSelected()"></select>
+    </div>
+    <div id="infoDisplay">
+      <div id="constituency"></div>
+      <div id="ecMembers"></div>
+      <div id="tspElect">
+        <p id="tspSec"><ol></ol></p>
+        <p id="tspMemberOne"><ol></ol></p>
+        <p id="tspMemberTwo"><ol></ol></p>
+
+      </div>
+    </div>
+
 
     <script>
-    // Store everything we need to draw a map
+    // Parse our original CSV into a dictionary
     candidateList = d3.csv.parse(candidateList);
-    console.log(candidateList);
+
+    // Populate our drop-down box
+    var tspSelector = d3.select('#chooseTownship')
+      .select('#tspSelector')
+      .selectAll('option')
+      .data(candidateList)
+      .enter()
+      .append('option')
+      .attr('value', function (d) {
+        return d['Township'];
+      })
+      .text( function (d) {
+        return d['မြို့နယ်'];
+      });
+
+    function tspSelected() {
+      var township = d3.select("#tspSelector").property("value");
+      var electionInfo = findElectionInfo(township);
+      var constituencyInfo = findConstituencyInfo(electionInfo.constituency);
+      var infoDisplay = d3.select("#infoDisplay");
+      // Display info on constituency number
+      var constituency = infoDisplay.select("#constituency");
+      constituency.selectAll('h4')
+        .data([])
+        .exit()
+        .remove();
+      constituency.selectAll('h3')
+        .data([])
+        .exit()
+        .remove();
+      constituency.append('h4')
+        .text(electionInfo.mmTsp + " မြို့နယ်သည်");
+      constituency.append('h3')
+        .text(electionInfo.constituency);
+      constituency.append('h4')
+        .text('တွင်ပါ၀င်ပါသည်။');
+
+      // Display info on EC candidates
+      var ecMembers = infoDisplay.select("#ecMembers");
+      ecMembers.selectAll('p').data([]).exit().remove();
+      ecMembers.selectAll('ol').data([]).exit().remove();
+      ecMembers.append('p')
+        .text(electionInfo.constituency + " မှအောက်ပါ မြို့တော်ကော်မတီ၀င်လောင်းများကို ရွေးချယ်တင်သွင်းနိုင်ပါသည် --");
+      ecMembers.append('ol')
+        .selectAll('li')
+        .data(constituencyInfo.ecCandidates)
+        .enter()
+        .append('li')
+        .attr('class', 'ec')
+        .text((d) => (d));
+
+    var tspElect = infoDisplay.select("#tspElect");
+    /*
+    tspElect.select("#tspSec").data([]).exit().remove();
+    tspElect.select("#tspMemberOne").data([]).exit().remove();
+    tspElect.select("#tspMemberTwo").data([]).exit().remove();*/
+
+    tspElect.select("#tspSec")
+      .text(electionInfo.mmTsp + " မြို့နယ်စည်ပင်ဥက္ကဋ္ဌ ရွေးချယ်တင်မြှောက်ရန် --");
+    tspElect.select("#tspMemberOne")
+      .text(electionInfo.mmTsp + " မြို့နယ်စည်ပင်အဖွဲ့၀င်(၁) ရွေးချယ်တင်မြှောက်ရန် --");
+    tspElect.select("#tspMemberTwo")
+      .text(electionInfo.mmTsp + " မြို့နယ်စည်ပင်အဖွဲ့၀င်(၂) ရွေးချယ်တင်မြှောက်ရန် --");
+
+    tspElect.select("#tspSec")
+      .append('ol')
+      .selectAll('li')
+      .data(electionInfo.secretaryCandidates)
+      .enter()
+      .append('li')
+      .text((d) => (d));
+
+    tspElect.select("#tspMemberOne")
+      .append('ol')
+      .selectAll('li')
+      .data(electionInfo.memberOneCandidates)
+      .enter()
+      .append('li')
+      .text((d) => (d));
+
+    tspElect.select("#tspMemberTwo")
+      .append('ol')
+      .selectAll('li')
+      .data(electionInfo.memberTwoCandidates)
+      .enter()
+      .append('li')
+      .text((d) => (d));
+
+    }
+
+    function findElectionInfo(township) {
+      electionInfo = {};
+      for (i in candidateList) {
+        if (candidateList[i]['Township'] == township) {
+          electionInfo['constituency'] = candidateList[i]['မဲဆန္ဒနယ်'];
+          electionInfo['mmTsp'] = candidateList[i]['မြို့နယ်'];
+          electionInfo['ecCandidates'] = candidateList[i]['မြို့တော်ကော်မတီ၀င်'].split(',');
+          electionInfo['secretaryCandidates'] = candidateList[i]['မြို့နယ်ဥက္ကဋ္ဌ'].split(',');
+          electionInfo['memberOneCandidates'] = candidateList[i]['မြို့နယ်အဖွဲ့၀င် (၁)'].split(',');
+          electionInfo['memberTwoCandidates'] = candidateList[i]['မြို့နယ်အဖွဲ့၀င် (၂)'].split(',');
+
+          if (electionInfo['ecCandidates'] == ['']) { electionInfo['ecCandidates'] = []; }
+          if (electionInfo['memberOneCandidates'] == ['']) { electionInfo['memberOneCandidates'] = []; }
+          if (electionInfo['memberTwoCandidates'] == ['']) { electionInfo['memberTwoCandidates'] = []; }
+
+        }
+      }
+      return electionInfo;
+    }
+
+    function findConstituencyInfo(constituency) {
+      var constituencyInfo = {
+        townships : [],
+        ecCandidates : []
+      };
+      for (i in candidateList) {
+        if (candidateList[i]['မဲဆန္ဒနယ်'] == constituency) {
+          var township = candidateList[i]['မြို့နယ်'];
+          if (candidateList[i]['မြို့တော်ကော်မတီ၀င်'] != '') {
+            var ecCand = candidateList[i]['မြို့တော်ကော်မတီ၀င်'].split(',');
+            for (j in ecCand) { constituencyInfo.ecCandidates.push(ecCand[j]);}
+          }
+          constituencyInfo.townships.push(township);
+
+        }
+      }
+      return constituencyInfo;
+    }
+    /*
     var tspMap = {
-      'geojson' : ygntsp.features,
-      'width' : 500,
-      'height' : 600,
-      'projection' : '',
-      'path' : '',
-      'g' : ''
+      geojson : ygntsp.features,
+      width : 500,
+      height : 600,
+      projection : '',
+      path : '',
+      g : ''
     };
 
     // Set up the HTML
@@ -63,6 +283,7 @@
       })
       .attr('d', tspMap.path);
 
+    // What happens when you click on the map?
     function mapClick(areaName) {
       var candidateInfo = '';
       for (i in candidateList) {
@@ -84,10 +305,9 @@
           .data(infoList)
           .text((d) => (d));
 
-
       }
     }
-
+    */
     </script>
 
   </body>
