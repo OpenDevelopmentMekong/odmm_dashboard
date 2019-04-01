@@ -1,7 +1,10 @@
 /* Allows toggling between state/region and Townships
 based on the given dataset */
-function setAreaLevel(targetDataset, unitSelector) {
+function setAreaLevel(targetDataset, unitSelector, township) {
   // Empty out the old dropdown options
+  var nameVar = "";
+  if (township == true) { nameVar = 'township_name:taf'; }
+  else { nameVar = 'state_name:taf'; }
   d3.select(unitSelector)
     .select("#areaSelector")
     .selectAll("select")
@@ -18,8 +21,8 @@ function setAreaLevel(targetDataset, unitSelector) {
     .data(targetDataset)
     .enter()
     .append("option")
-    .attr("value", function(d) { return d.name; } )
-    .text(function(d) { return d.name; });
+    .attr("value", function(d) { return d[nameVar]; } )
+    .text(function(d) { return d[nameVar]; });
 }
 
 /* Call this func whenever the data changes to update RadarChart */
@@ -44,12 +47,14 @@ function changeRadar(selector, otherSelector, township) {
   // Prepare chart
   var radarChartOptions = {
     w: 400,
-    h: 500,
+    h: 400,
     maxValue: 10,
-    levels: 5,
+    levels: 3,
+    ExtraWidthX: 250,
+    TranslateX: 125,
     roundStrokes: false,
   };
-  RadarChart(".radarChart", radarData, radarChartOptions);
+  RadarChart.draw(".radarChart", radarData, radarChartOptions);
 
 }
 
@@ -58,8 +63,8 @@ function changeRadar(selector, otherSelector, township) {
 @Returns only the rows specified by the list of areas */
 function subsetSummaryByArea(areaList, data, nameVar) {
   var returnData = [];
-  for (i in areaList) {
-    for (j in data) {
+  for (var i in areaList) {
+    for (var j in data) {
       if (areaList[i] == data[j][nameVar]) {
         returnData.push(data[j]);
       }
@@ -71,19 +76,23 @@ function subsetSummaryByArea(areaList, data, nameVar) {
 /* @Given a list of rows,
 @Returns a list of list of dicts as required by RadarChart.js*/
 function reshapeForRadar(origData) {
+
   var radarData = [];
+  if (origData.length == undefined) {
+    origData = [origData];
+  }
   var keys = Object.keys(origData[0]);
 
   // We don't need to use all data fields for radarChart,
   // so we remove some columns
-  keys.splice(0,2);
+  keys.splice(0,subDataSpliceIndex);
 
   for (i in origData) {
     radarData.push([]);
     // TODO: Get rid of non axes
     for (j in keys) {
       var value = +origData[i][keys[j]];
-      radarData[i].push({"axis": keys[j],
+      radarData[i].push({"axis": keyTranslationsEN[keys[j]],
         "value": value});
     }
   }

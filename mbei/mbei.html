@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="variables.js"></script>
+    <script src="geoVariables.js"></script>
+    <script src="radarChart.js"></script>
+    <script src="unit1.js"></script>
+    <script src="unit2.js"></script>
+    <script src="unit3.js"></script>
+  </head>
+  <body>
+    <div class="unit intro">
+      <span class="subunit mainImage"></span>
+      <span class="subunit about">
+        <table>
+          <tr>
+            <td>
+              and there and here and there and here and there and here and there and
+              there and here and there and here
+              there and here and there and here
+              there and here and there and here
+              here and there and here and go to this link if you want to
+              <a id="aboutLink" href="https://www.opendevelopmentmyanmar.net/ycdc2019">
+              read more</a>
+            </td>
+          </tr>
+        </table>
+      </span>
+    </div>
+
+    <div class="unit donors">
+      <span class="subunit donorLogo"></span>
+      <span class="subunit donorLogo"></span>
+    </div>
+
+    <div class="unit unit1">
+      <button type="button" onclick="drawNationChart(false, 'unit1RadarChart');">States/Regions</button> |
+      <button type="button" onclick="drawNationChart(true, 'unit1RadarChart');">Townships</button>
+      <div class="subunit unit1RadarChart"></div>
+    </div>
+
+    <div class="unit unit2">
+      <div>
+      <select id="subnationalDropdown" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
+      <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown');">States/Regions</button> |
+      <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown');">Townships</button>
+    </div>
+      <div class="subunit mapSelector"></div>
+      <div class="subunit unit2RadarChart"></div>
+    </div>
+
+    <div class="unit unit3">
+      <h2>Compare the business environments between two states/regions</h2>
+      <div id="areaSelector">
+        <select id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
+        <select id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
+      </div>
+      <div id="areaLevelSelector">
+        <button type="button" onclick="unit3Township = false; setAreaLevel(srData, '.unit3', false); changeRadar('#select1','#select2', false);">States/Regions</button> |
+        <button type="button" onclick="unit3Township = true; setAreaLevel(tspData, '.unit3', true); changeRadar('#select1','#select2', true);">Townships</button>
+      </div>
+      <div class="radarChart" align="center"></div>
+    </div>
+
+    <div class="unit unit4">
+    </div>
+    <script>
+
+    /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+    /* @@@@           Initializing         @@@@ */
+    /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+    var srData = d3.csv.parse(mbei_stateregion);
+    var tspData = d3.csv.parse(mbei_township);
+    var subDataSpliceIndex = 3;
+    //Unit 1
+    drawNationChart(false, '.unit1RadarChart');
+    //Unit 2
+    drawMap();
+    var unit2Township = false;
+    populateSubnationalDropdown(unit2Township, '#subnationalDropdown');
+    drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');
+    // Unit 3
+    var unit3Township = false;
+    setAreaLevel(srData, '.unit3');
+    changeRadar('#select1', '#select2', unit3Township);
+
+    /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+    /* @@@@ General purpose functions here @@@@ */
+    /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+    // NOTE: Function will break if township or stateregion values are not unique
+    function lookup(toFind, searchVar, returnVar, township) {
+      var returnList = [];
+      var data = {};
+      if (township == true) {
+        data = tspData;
+      } else {
+        data = srData;
+      }
+      for (var i in toFind) { returnList.push(0); }
+      // Loop through the data table
+      for (i in data) {
+        var item = data[i][searchVar];
+        // See if each line contains the items we want to find
+        for (var j in toFind) {
+          if (item == toFind[j]) {
+           // When found, return a list of translated items
+           returnList[j] = data[i][returnVar];
+          }
+        }
+      }
+      return returnList;
+    }
+  </script>
+  </body>
+</html>

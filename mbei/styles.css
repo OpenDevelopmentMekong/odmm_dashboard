@@ -1,0 +1,47 @@
+.subunit {
+  margin-left: 5%;
+}
+
+.unit {
+  margin-bottom: 20px;
+}
+
+/* *** INTRO and DONORS *** */
+/* Table height MUST be the same as .mainImage height */
+.mainImage{
+  display: inline-block;
+  width: 20%;
+  height: 200px;
+  border: solid;
+  border-width: 1px;
+}
+
+table {
+  height: 200px;
+}
+
+.about {
+  display: inline-block;
+  width: 45%;
+}
+
+.donors {
+  display: flex;
+  justify-content: center;
+}
+.donorLogo {
+  border: solid;
+  border-width: 1px;
+  width: 20%;
+  height: 80px;
+  margin: 0 10% 0 10%; //tweak this for the spread between logos
+}
+
+/* *** UNIT 1 *** */
+/* *** UNIT 2 *** */
+.mapSelector {
+  display: inline-block;
+}
+.unit2RadarChart {
+  display: inline-block;
+}
