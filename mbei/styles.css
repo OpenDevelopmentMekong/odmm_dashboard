@@ -2,8 +2,16 @@
   margin-left: 5%;
 }
 
+.subunit > h3 {
+  text-align: center;
+}
+
 .unit {
   margin-bottom: 20px;
+}
+
+button {
+  height: 36px;
 }
 
 /* *** INTRO and DONORS *** */
@@ -32,16 +40,45 @@ table {
 .donorLogo {
   border: solid;
   border-width: 1px;
-  width: 20%;
-  height: 80px;
-  margin: 0 10% 0 10%; //tweak this for the spread between logos
+  width: 15%;
+  height: 60px;
+  margin: 20px 10% 20px 10%; //tweak this for the spread between logos
 }
 
 /* *** UNIT 1 *** */
+.unit1RadarChart {
+  display: inline-block;
+}
+
+.unit1BarChart {
+  display: inline-block;
+  text-align: center;
+}
+
 /* *** UNIT 2 *** */
 .mapSelector {
   display: inline-block;
 }
 .unit2RadarChart {
+  display: inline-block;
+}
+.unit2BarChart {
+  display: none;
+}
+.unit2 > select {
+  width: 15%;
+  display: block;
+}
+/* *** UNIT 3 *** */
+#areaSelector > select {
+  width: 15%;
+}
+/* *** UNIT 4 *** */
+.unit4Buttons {
+  width: 30%;
+  display: inline-block;
+}
+
+.unit4BarChart {
   display: inline-block;
 }

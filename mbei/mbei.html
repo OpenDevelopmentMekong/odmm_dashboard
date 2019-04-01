@@ -1,13 +1,22 @@
 <html>
   <head>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="variables.js"></script>
-    <script src="geoVariables.js"></script>
-    <script src="radarChart.js"></script>
-    <script src="unit1.js"></script>
-    <script src="unit2.js"></script>
-    <script src="unit3.js"></script>
+    <script src="https://d3js.org/d3.v3.js"></script>
+
+    <script src="https://d3js.org/d3-axis.v1.min.js"></script>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale.v3.min.js"></script>
+    <script src="https://d3js.org/d3-transition.v1.min.js"></script>
+    <script src="https://d3js.org/d3-timer.v1.min.js"></script>
+
+    <script class="internal" src="variables.js"></script>
+    <script class="internal" src="geoVariables.js"></script>
+    <script class="internal" src="radarChart.js"></script>
+    <script class="internal" src="barChart.js"></script>
+    <script class="internal" src="unit1.js"></script>
+    <script class="internal" src="unit2.js"></script>
+    <script class="internal" src="unit3.js"></script>
+    <script class="internal" src="unit4.js"></script>
   </head>
   <body>
     <div class="unit intro">
@@ -35,23 +44,34 @@
     </div>
 
     <div class="unit unit1">
-      <button type="button" onclick="drawNationChart(false, 'unit1RadarChart');">States/Regions</button> |
+    <!--  <button type="button" onclick="drawNationChart(false, 'unit1RadarChart');">States/Regions</button> |
       <button type="button" onclick="drawNationChart(true, 'unit1RadarChart');">Townships</button>
-      <div class="subunit unit1RadarChart"></div>
+    -->
+    <div class="subunit unit1RadarChart">
+      <h3>Median National Subindex Scores</h3>
     </div>
+    <div class="subunit unit1BarChart">
+      <h3>National MBEI Rankings</h3>
+    </div>
+
+    </div>
+
+    <hr/>
 
     <div class="unit unit2">
-      <div>
       <select id="subnationalDropdown" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
-      <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown');">States/Regions</button> |
-      <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown');">Townships</button>
-    </div>
-      <div class="subunit mapSelector"></div>
-      <div class="subunit unit2RadarChart"></div>
+      <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">States/Regions</button> |
+      <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">Townships</button>
+      <div class="subunit charts">
+        <div class="subunit mapSelector"></div>
+        <div class="subunit unit2RadarChart"></div>
+        <div class="subunit unit2BarChart"></div>
+      </div>
     </div>
 
+    <hr/>
+
     <div class="unit unit3">
-      <h2>Compare the business environments between two states/regions</h2>
       <div id="areaSelector">
         <select id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
         <select id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
@@ -63,7 +83,13 @@
       <div class="radarChart" align="center"></div>
     </div>
 
+    <hr/>
+
     <div class="unit unit4">
+      <div class="subunit unit4Buttons">
+      </div>
+      <div class="subunit unit4BarChart">
+      </div>
     </div>
     <script>
 
@@ -72,18 +98,25 @@
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
     var srData = d3.csv.parse(mbei_stateregion);
     var tspData = d3.csv.parse(mbei_township);
-    var subDataSpliceIndex = 3;
+    var subDataSpliceIndex = 4; // how many columns to skip to reach 'sub1'
     //Unit 1
     drawNationChart(false, '.unit1RadarChart');
+    var unit1BarData = reshapeForUnit1BarChart(srData);
+    barChart(unit1BarData, '.unit1BarChart', {baseWidth: 400, baseHeight: 400});
     //Unit 2
     drawMap();
     var unit2Township = false;
     populateSubnationalDropdown(unit2Township, '#subnationalDropdown');
     drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');
+    drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');
     // Unit 3
     var unit3Township = false;
     setAreaLevel(srData, '.unit3');
     changeRadar('#select1', '#select2', unit3Township);
+    // Unit 4
+    var currentSubindex = 'sub1';
+    var unit4Township = false;
+    generateSubindexButtons('.unit4Buttons');
 
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
     /* @@@@ General purpose functions here @@@@ */

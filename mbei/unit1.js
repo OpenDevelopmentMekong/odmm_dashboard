@@ -4,7 +4,7 @@ function drawNationChart(township, id) {
     w: 300,
     h: 300,
     maxValue: 10,
-    levels: 3,
+    levels: 5,
     ExtraWidthX: 250,
     TranslateX: 125,
     roundStrokes: false,
@@ -16,10 +16,8 @@ function drawNationChart(township, id) {
 function generateMedians(township) {
   var data;
   if (township == true) {
-    console.log('township medians');
     data = tspData;
   } else {
-    console.log('state medians');
     data = srData;
   }
 
@@ -33,6 +31,20 @@ function generateMedians(township) {
     });
     medianData[0].push({'axis': keyTranslationsEN[keys[i]], 'value': medianValue});
   }
-  console.log(medianData[0]);
   return medianData;
+}
+
+function reshapeForUnit1BarChart(data) {
+  var retData = [];
+  var nameAccessor = 'state_name:taf';
+  var valueAccessor = 'score';
+
+  for (var i in data) {
+    var row = {};
+    row.label = data[i][nameAccessor];
+    row.value = data[i][valueAccessor];
+    retData.push(row);
+  }
+
+  return retData;
 }

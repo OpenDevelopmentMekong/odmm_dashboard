@@ -39,7 +39,7 @@ var RadarChart = {
 	var allAxis = (d[0].map(function(i, j){return i.axis}));
 	var total = allAxis.length;
 	var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
-	var Format = d3.format('%');
+	var Format = d3.format('1f'); // can add % here, but I removed it
 	d3.select(id).select("svg").remove();
 
 	var g = d3.select(id)
@@ -84,7 +84,7 @@ var RadarChart = {
 	   .style("font-size", "10px")
 	   .attr("transform", "translate(" + (cfg.w/2-levelFactor + cfg.ToRight) + ", " + (cfg.h/2-levelFactor) + ")")
 	   .attr("fill", "#737373")
-	   .text(Format((j+1)*cfg.maxValue/cfg.levels));
+	   .text(Format((j+1)*cfg.maxValue/cfg.levels)); // percentage formatting
 	}
 
 	series = 0;
@@ -146,15 +146,15 @@ var RadarChart = {
 					 .on('mouseover', function (d){
 										z = "polygon."+d3.select(this).attr("class");
 										g.selectAll("polygon")
-										 .transition(200)
+										 //.transition(200)
 										 .style("fill-opacity", 0.1);
 										g.selectAll(z)
-										 .transition(200)
+										 //.transition(200)
 										 .style("fill-opacity", .7);
 									  })
 					 .on('mouseout', function(){
 										g.selectAll("polygon")
-										 .transition(200)
+										 //.transition(200)
 										 .style("fill-opacity", cfg.opacityArea);
 					 });
 	  series++;
@@ -189,23 +189,23 @@ var RadarChart = {
 						.attr('x', newX)
 						.attr('y', newY)
 						.text(Format(d.value))
-						.transition(200)
+						//.transition(200)
 						.style('opacity', 1);
 
 					z = "polygon."+d3.select(this).attr("class");
 					g.selectAll("polygon")
-						.transition(200)
+						//.transition(200)
 						.style("fill-opacity", 0.1);
 					g.selectAll(z)
-						.transition(200)
+						//.transition(200)
 						.style("fill-opacity", .7);
 				  })
 		.on('mouseout', function(){
 					tooltip
-						.transition(200)
+						//.transition(200)
 						.style('opacity', 0);
 					g.selectAll("polygon")
-						.transition(200)
+						//.transition(200)
 						.style("fill-opacity", cfg.opacityArea);
 				  })
 		.append("svg:title")
