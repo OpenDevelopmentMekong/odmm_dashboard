@@ -1,19 +1,52 @@
 function drawNationChart(township, id) {
   var medianData = generateMedians(township);
   var radarChartOptions = {
-    w: 300,
-    h: 300,
     maxValue: 10,
     levels: 5,
-    ExtraWidthX: 250,
-    TranslateX: 125,
     roundStrokes: false,
-    median: false
+    median: false,
+    tiers: true
   }
   RadarChart.draw(id, medianData, radarChartOptions);
 
 }
+function drawLegend() {
+  var legend = d3.select(".unit1BarChart")
+    .append("svg")
+    .attr("width", "100px")
+    .attr("height", "200px")
+    .append("g");
 
+  var legendData = [
+    { name: "High", color: "#89cfc9" },
+    { name: "Middle", color: "#67b1b3" },
+    { name: "Low", color: "#297588" },
+    { name: "Bottom", color: "#045971" }
+  ]
+
+  legend.selectAll(".legendRect")
+    .data(legendData)
+    .enter()
+    .append("svg:rect")
+    .attr("class", "legendRect")
+    .attr("width", "20px")
+    .attr("height", "20px")
+    .attr("fill", (d)=>(d.color))
+    .attr("y", (d,i)=>(i*30))
+    .attr("x", 0)
+
+  legend.selectAll(".legendText")
+    .data(legendData)
+    .enter()
+    .append("svg:text")
+    .attr("class", "legendText")
+    .attr("x", 30)
+    .attr("font-size", "12px")
+    .attr("y", (d,i)=>(i*30))
+    .text((d)=>(d.name))
+    .attr("transform", "translate(0,15)");
+
+}
 function generateMedians(township) {
   var data;
   if (township == true) {
@@ -39,11 +72,13 @@ function reshapeForUnit1BarChart(data) {
   var retData = [];
   var nameAccessor = 'state_name:taf';
   var valueAccessor = 'score';
+  var tierAccessor = 'tier';
 
   for (var i in data) {
     var row = {};
     row.label = data[i][nameAccessor];
     row.value = data[i][valueAccessor];
+    row.tier = data[i][tierAccessor];
     retData.push(row);
   }
 

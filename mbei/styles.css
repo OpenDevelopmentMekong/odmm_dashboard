@@ -2,6 +2,10 @@
   margin-left: 5%;
 }
 
+* {
+  font-family: Raleway;
+}
+
 .subunit > h3 {
   text-align: center;
 }
@@ -17,43 +21,43 @@ select {
 button {
   height: 36px;
   margin-bottom: 15px;
+  padding-bottom: 25px;
 }
 
 /* *** INTRO and DONORS *** */
 /* Table height MUST be the same as .mainImage height */
-.mainImage{
-  display: inline-block;
-  width: 20%;
-  height: 200px;
-  border: solid;
-  border-width: 1px;
-}
-
-table {
-  height: 200px;
-}
-
-.about {
-  display: inline-block;
-  width: 45%;
-}
-
-.donors {
-  display: flex;
-  justify-content: center;
-}
 .donorLogo {
   margin: 20px 10% 20px 10%; //tweak this for the spread between logos
 }
 
 /* *** UNIT 1 *** */
+.unit1 {
+  text-align: center;
+}
+.intro {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.donors {
+  text-align: center;
+}
+.donors > img {
+  display: inline-block;
+  margin: 0 auto;
+}
+#dana {
+  transform: translate(0,-12px);
+}
+#taf {
+  transform: translate(0, 8px);
+}
 .unit1RadarChart {
   display: inline-block;
 }
 
 .unit1BarChart {
   display: inline-block;
-  text-align: center;
 }
 
 /* *** UNIT 2 *** */
@@ -80,7 +84,9 @@ table {
 }
 #areaSelector > select {
   display: inline-block;
-  margin: 0 20 15 20;
+  margin: 0 auto;
+  margin-left: 10px;
+  margin-right: 10px;
   font-size: 15px;
 }
 
@@ -88,6 +94,8 @@ table {
   width: 20px;
   height: 20px;
   display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 #select1Color {
@@ -101,11 +109,13 @@ table {
 .unit4 {
   text-align: center;
 }
-.unit4Buttons {
-  width: 30%;
-  display: inline-block;
-}
 
+#subindexSelector {
+  display: inline-block;
+  margin: 0 20 15 20;
+  font-size: 15px;
+  width: 30%;
+}
 .unit4BarChart {
   display: inline-block;
 }

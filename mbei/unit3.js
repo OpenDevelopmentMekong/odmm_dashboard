@@ -46,12 +46,8 @@ function changeRadar(selector, otherSelector, township) {
 
   // Prepare chart
   var radarChartOptions = {
-    w: 400,
-    h: 400,
     maxValue: 10,
     levels: 5,
-    ExtraWidthX: 250,
-    TranslateX: 125,
     roundStrokes: false,
     spider: true
   };

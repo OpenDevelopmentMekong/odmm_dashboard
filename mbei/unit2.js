@@ -35,8 +35,9 @@ function drawMap() {
   areas.selectAll('path')
     .data([])
     .exit()
-    .remove
+    .remove();
 
+  var scrollOffset = -45;
 areas.selectAll('path')
     .data(mapStateRegion.features)
     .enter()
@@ -51,7 +52,8 @@ areas.selectAll('path')
         d3.select('#subnationalDropdown').property('value', '${tafName}');
         drawSubnationBar("${tafName}", false, '.unit2BarChart');
         changeSelected('#${d3.select(this).attr('id')}');
-        window.scrollBy(0, );`;
+        window.scrollTo(0, document.getElementsByClassName('unit2RadarChart')[0]
+          .offsetTop + ${scrollOffset});`;
 
       return onClickFunc;
     })
@@ -99,12 +101,8 @@ function drawSubNationChart(areaName, township, id) {
     areaRadarData[0][k].median = medianData['sub'+subindexNum];
   }
   var radarChartOptions = {
-    w: 300,
-    h: 300,
     maxValue: 10,
     levels: 5,
-    ExtraWidthX: 250,
-    TranslateX: 125,
     roundStrokes: false,
     median: true,
     spider: false

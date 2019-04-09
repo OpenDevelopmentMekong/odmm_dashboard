@@ -12,8 +12,8 @@ var RadarChart = {
   draw: function(id, d, options){
   var cfg = {
 	 radius: 5,
-	 w: 600,
-	 h: 600,
+	 w: 250,
+	 h: 250,
 	 factor: 1,
 	 factorLegend: 1.2,
 	 levels: 10,
@@ -21,13 +21,16 @@ var RadarChart = {
 	 radians: 2 * Math.PI,
 	 opacityArea: 0.5,
 	 ToRight: 5,
-	 TranslateX: 80,
+	 TranslateX: 97,
 	 TranslateY: 30,
-	 ExtraWidthX: 100,
+	 ExtraWidthX: 190,
 	 ExtraWidthY: 100,
    median: false,
    spider: false,
-	 color: []
+	 color: [],
+   labelFontSize: '70%',
+   valueFontSize: '70%',
+   fontFamily: 'Montserrat'
 	};
 
 	if('undefined' !== typeof options){
@@ -65,25 +68,24 @@ var RadarChart = {
 			.attr("height", cfg.h+cfg.ExtraWidthY)
 			.append("g")
 			.attr("transform", "translate(" + cfg.TranslateX + "," + cfg.TranslateY + ")");
-			;
 
 	var tooltip;
 
   // Concentric circles
-	for(var j=0; j<cfg.levels; j++){ // removed minus 1
-	  var levelFactor = cfg.factor*radius*((j+1)/cfg.levels);
 	  g.selectAll(".levels")
 	   .data(allAxis)
 	   .enter()
      .append("svg:circle")
+     .attr('class', 'levels')
      .attr("cx", cfg.w/2)
      .attr("cy", cfg.h/2)
-     .attr("r", levelFactor)
+     .attr("r", function(d,i) {
+       return cfg.factor*radius*((i+1)/cfg.levels);
+     })
      .style("fill", "none")
      .style("stroke", "grey")
      .style("stroke-width", "1px")
-     .style("stroke-opacity", "0.05");
-   }
+     .style("stroke-opacity", "0.5");
 
 	//Text indicating at what % each level is
 	/*for(var j=0; j<cfg.levels; j++){
@@ -152,10 +154,11 @@ var RadarChart = {
   /* Note: Text placement can be a little tricky.
      cfg.factorLegend more or less controls placement along radius
      and transate(0, +/- y) adjusts for some off-kilterness*/
+  var legendSliceIndex = 7;
   axis.append("svg:text")
-  	.text(function(d){return d})
-  	.style("font-family", "sans-serif")
-  	.style("font-size", "14px")
+  	.text((d)=>(d))
+  	.style("font-family", cfg.fontFamily)
+  	.style("font-size", cfg.labelFontSize)
   	.style("word-wrap", "normal")
   	.attr("text-anchor", function(d,i) {
       if (i<5) { return "start";}
@@ -196,7 +199,8 @@ var RadarChart = {
     burst.append("svg:text")
       .text(function(d) { return Format(d.value);})
       .attr("fill", "white")
-      .attr("font-size", "12px")
+      .attr("font-size", cfg.valueFontSize)
+      .style('font-family', cfg.fontFamily)
       .attr("x", function(d,i) { return centroids[i][0]*labelSpread;})
       .attr("y", function(d,i) { return centroids[i][1]*labelSpread;})
       .attr("text-anchor", "middle")

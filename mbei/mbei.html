@@ -1,6 +1,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Raleway" rel="stylesheet">
     <script src="https://d3js.org/d3.v3.js"></script>
 
     <script src="https://d3js.org/d3-axis.v1.min.js"></script>
@@ -27,28 +28,13 @@
       <i class="fa fa-download"></i>Download
     </a> -->
     <div class="unit intro">
-      <span class="subunit mainImage"></span>
-      <span class="subunit about">
-        <table>
-          <tr>
-            <td>
-              and there and here and there and here and there and here and there and
-              there and here and there and here
-              there and here and there and here
-              there and here and there and here
-              here and there and here and go to this link if you want to
-              <a id="aboutLink" href="https://www.opendevelopmentmyanmar.net/ycdc2019">
-              read more</a>
-            </td>
-          </tr>
-        </table>
-      </span>
+    Introducing you to MBEI with text here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there
     </div>
 
     <div class="unit donors">
-      <img width="160px" height="160px" src="donorLogos/ukaid.png"/></span>
-      <img width="240px" height="160px" src="donorLogos/dana.png"/>
-      <img width="240px" height="160px" src="donorLogos/taf.png"/>
+      <img id="ukaid" width="96px" height="96px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/ukaid.png"/>
+      <img id="dana" width="96px" height="64px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/dana.png"/>
+      <img id="taf" width="134px" height="90px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/taf.png"/>
     </div>
 
     <div class="unit unit1">
@@ -68,14 +54,15 @@
 
     <div class="unit unit2">
       <h3>Explore subindex scores for states and regions or townships</h3>
+      <div>
       <select id="subnationalDropdown" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
       <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">States/Regions</button> |
       <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">Townships</button>
-      <div class="subunit charts">
-        <div class="subunit mapSelector"></div>
-        <div class="subunit unit2RadarChart"></div>
-        <div class="subunit unit2BarChart"></div>
-      </div>
+    </div>
+      <div class="subunit mapSelector"></div>
+      <div class="subunit unit2RadarChart"></div>
+  <!--<div class="subunit unit2BarChart"></div>-->
+
     </div>
 
     <hr/>
@@ -97,11 +84,11 @@
 
     <div class="unit unit4">
       <h3>Performance rankings for each subindicator</h3>
+      <div class="subunit unit4Buttons">
+      </div>
       <div class="subunit unit4Switch">
         <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');">States/Regions</button> |
         <button type="button" onclick="unit4Township = true; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');">Townships</button>
-      </div>
-      <div class="subunit unit4Buttons">
       </div>
       <div class="subunit unit4BarChart">
         <h4><a class="subindexName"></a></h4>
@@ -114,11 +101,12 @@
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
     var srData = d3.csv.parse(mbei_stateregion);
     var tspData = d3.csv.parse(mbei_township);
-    var subDataSpliceIndex = 4;      // how many columns to skip to reach 'sub1'
+    var subDataSpliceIndex = 5;      // how many columns to skip to reach 'sub1'
     //Unit 1
     drawNationChart(false, '.unit1RadarChart');
     var unit1BarData = reshapeForUnit1BarChart(srData);
     barChart(unit1BarData, '.unit1BarChart', {tiers: true});
+    drawLegend();
     //Unit 2
     drawMap();
     var unit2Township = false;
@@ -133,8 +121,8 @@
     var currentSubindex = 'sub1';
     var unit4Township = false;
     generateSubindexButtons('.unit4Buttons');
-    drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1'));
-    changeSubindexTitle('sub1');
+    drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score'));
+    changeSubindexTitle('Overall Score');
 
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
     /* @@@@ General purpose functions here @@@@ */

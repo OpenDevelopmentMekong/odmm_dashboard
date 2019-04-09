@@ -34,3 +34,16 @@ function lookup(toFind, searchVar, returnVar, township) {
   }
   return returnList;
 }
+
+function drawDonorLogos() {
+  d3.select('.donors')
+    .append('svg')
+    .append('g')
+    .selectAll('.donorLogo')
+    .data(['ukaid', 'dana', 'taf'])
+    .enter()
+    .append('svg:image')
+    .attr('xlink:href', function (d) {
+      return 'donorLogos/'+ d + '.png';
+    });
+}

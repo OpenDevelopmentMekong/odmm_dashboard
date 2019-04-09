@@ -5,10 +5,12 @@ function barChart(data, id, options) {
     mRight: 30,
     mBottom: 80,
     mLeft: 40,
-    baseWidth: 500,
+    baseWidth: 350,
     baseHeight: 300,
     circleRadius: 6,
-    tiers: false
+    tiers: false,
+    tierColors: {1: '#89cfc9', 2: '#67b1b3',
+      3: '#297588', 4: '#045971'}
   };
 
   if('undefined' !== typeof options){
@@ -46,7 +48,7 @@ function barChart(data, id, options) {
     .attr("width", cfg.width)
     .attr("x", 0)
     .attr("y", 0)
-    .attr("fill", "#e4e4e4");
+    .attr("fill", "none");
 
   /* Build x axis */
   var yScale = d3.scale.linear()
@@ -76,7 +78,7 @@ function barChart(data, id, options) {
     .attr('font-size', '12px');
 
   /* Build lines */
-  var barWidth = cfg.width / data.length;
+  var barWidth = cfg.width / data.length * 0.6;
 
   var yScalePositive = d3.scale.linear()
     .domain([0, maxValue])
@@ -89,13 +91,20 @@ function barChart(data, id, options) {
     .attr("y", function(d) {
       return yScale(d.value);
     })
-    .attr("width", 0.8*barWidth)
+    .attr("width", barWidth)
     .attr("height", function(d) {
       return yScalePositive(d.value);
     })
     .attr("transform", function(d) {
-      var xTranslate = xScale(d.label) - 0.8*barWidth/2;
+      var xTranslate = xScale(d.label) - barWidth/2;
       return `translate(${xTranslate}, 0)`;
+    })
+    .attr("fill", function(d) {
+      if (cfg.tiers == true) {
+        return cfg.tierColors[d.tier];
+      } else {
+        return cfg.tierColors[1];
+      }
     });
   /*svg.selectAll('myline')
     .data(data)

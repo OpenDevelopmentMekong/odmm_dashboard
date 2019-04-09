@@ -1,35 +1,54 @@
 function generateSubindexButtons(id) {
   var barChartId = '.unit4BarChart';
-  var subIndices = Object.keys(keyTranslationsEN);
-  d3.select(id).selectAll('button').remove();
+  var subIndices = ['Overall Score'];
+  var keys = Object.keys(keyTranslationsEN);
+  for (var i in keys) {
+    subIndices.push(keys[i]);
+  }
+  d3.select(id).selectAll('select').remove();
 
   d3.select(id)
-    .selectAll('button')
+    .append('select')
+    .attr('id', 'subindexSelector')
+    .attr("onchange", function (d) {
+      return `var barData = buildBarData(unit4Township, findCurrSubindex());
+      drawSubindexBar('${barChartId}', barData);
+      changeSubindexTitle(findCurrSubindex());`;
+    })
+    .selectAll('option')
     .data(subIndices)
     .enter()
-    .append('button')
-    .attr("onclick", function (d) {
-      return `var barData = buildBarData(unit4Township, '${d}');
-      drawSubindexBar('${barChartId}', barData);
-      changeSubindexTitle('${d}');`;
+    .append('option')
+    .text(function(d) {
+      if (d == 'Overall Score') {
+        return d;
+      } else {
+      return keyTranslationsEN[d];
+      }
     })
-    .text(function(d) { return keyTranslationsEN[d];})
-    .style('display', 'block')
-    .style('margin', '5px 0 0 0')
-    .style('width', '80%');
+    .attr("value", (d)=>(d));
 }
-
+function findCurrSubindex() {
+  return d3.select('#subindexSelector').property('value');
+}
 function changeSubindexTitle(subindex) {
-  d3.select('.subindexName')
-    .text(keyTranslationsEN[subindex]);
+  if (subindex == "Overall Score") {
+    d3.select('.subindexName').text("Overall Score");
+  } else {
+    d3.select('.subindexName').text(keyTranslationsEN[subindex]);
+  }
 }
 
 function drawSubindexBar(id, data) {
-  var options = {};
+  var options = { hover: true,
+    tiers: false };
   barChart(data, id, options);
 }
 
 function buildBarData(township, subindex) {
+  if (subindex == "Overall Score") {
+    subindex = 'score';
+  }
   var data, nameAccessor, barData = [];
   if (township == true) {
     data = tspData;
