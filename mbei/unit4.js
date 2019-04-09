@@ -10,7 +10,8 @@ function generateSubindexButtons(id) {
     .append('button')
     .attr("onclick", function (d) {
       return `var barData = buildBarData(unit4Township, '${d}');
-      drawSubindexBar('${barChartId}', barData, unit4Township, '${d}');`
+      drawSubindexBar('${barChartId}', barData);
+      changeSubindexTitle('${d}');`;
     })
     .text(function(d) { return keyTranslationsEN[d];})
     .style('display', 'block')
@@ -18,7 +19,12 @@ function generateSubindexButtons(id) {
     .style('width', '80%');
 }
 
-function drawSubindexBar(id, data, township, subindex) {
+function changeSubindexTitle(subindex) {
+  d3.select('.subindexName')
+    .text(keyTranslationsEN[subindex]);
+}
+
+function drawSubindexBar(id, data) {
   var options = {};
   barChart(data, id, options);
 }

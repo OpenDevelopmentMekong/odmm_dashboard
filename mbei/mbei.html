@@ -6,8 +6,10 @@
     <script src="https://d3js.org/d3-axis.v1.min.js"></script>
     <script src="https://d3js.org/d3-selection.v1.min.js"></script>
     <script src="https://d3js.org/d3-scale.v3.min.js"></script>
-    <script src="https://d3js.org/d3-transition.v1.min.js"></script>
+    <!--<script src="https://d3js.org/d3-transition.v1.min.js"></script>-->
     <script src="https://d3js.org/d3-timer.v1.min.js"></script>
+    <script src="https://d3js.org/d3-path.v1.min.js"></script>
+    <script src="https://d3js.org/d3-shape.v1.min.js"></script>
 
     <script class="internal" src="variables.js"></script>
     <script class="internal" src="geoVariables.js"></script>
@@ -19,6 +21,11 @@
     <script class="internal" src="unit4.js"></script>
   </head>
   <body>
+    <!-- <a class="wpckan_dataset_resource_url button download"
+      href="https://data.opendevelopmentmekong.net/dataset/217c73e8-f456-4392-a43e-1ba2a0694a92/resource/9d40f3cb-e45a-43d3-b771-93aa6ba5a540/download/mmrairport2015.zip"
+      data-ga-event="Dataset|resource_download|217c73e8-f456-4392-a43e-1ba2a0694a92/9d40f3cb-e45a-43d3-b771-93aa6ba5a540">
+      <i class="fa fa-download"></i>Download
+    </a> -->
     <div class="unit intro">
       <span class="subunit mainImage"></span>
       <span class="subunit about">
@@ -39,8 +46,9 @@
     </div>
 
     <div class="unit donors">
-      <span class="subunit donorLogo"></span>
-      <span class="subunit donorLogo"></span>
+      <img width="160px" height="160px" src="donorLogos/ukaid.png"/></span>
+      <img width="240px" height="160px" src="donorLogos/dana.png"/>
+      <img width="240px" height="160px" src="donorLogos/taf.png"/>
     </div>
 
     <div class="unit unit1">
@@ -59,6 +67,7 @@
     <hr/>
 
     <div class="unit unit2">
+      <h3>Explore subindex scores for states and regions or townships</h3>
       <select id="subnationalDropdown" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
       <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">States/Regions</button> |
       <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">Townships</button>
@@ -72,9 +81,10 @@
     <hr/>
 
     <div class="unit unit3">
+      <h3>Compare subindex scores between two areas</h3>
       <div id="areaSelector">
-        <select id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
-        <select id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
+        <div id="select1Color"></div><select id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
+        <div id="select2Color"></div><select id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
       </div>
       <div id="areaLevelSelector">
         <button type="button" onclick="unit3Township = false; setAreaLevel(srData, '.unit3', false); changeRadar('#select1','#select2', false);">States/Regions</button> |
@@ -86,9 +96,15 @@
     <hr/>
 
     <div class="unit unit4">
+      <h3>Performance rankings for each subindicator</h3>
+      <div class="subunit unit4Switch">
+        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');">States/Regions</button> |
+        <button type="button" onclick="unit4Township = true; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');">Townships</button>
+      </div>
       <div class="subunit unit4Buttons">
       </div>
       <div class="subunit unit4BarChart">
+        <h4><a class="subindexName"></a></h4>
       </div>
     </div>
     <script>
@@ -98,11 +114,11 @@
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
     var srData = d3.csv.parse(mbei_stateregion);
     var tspData = d3.csv.parse(mbei_township);
-    var subDataSpliceIndex = 4; // how many columns to skip to reach 'sub1'
+    var subDataSpliceIndex = 4;      // how many columns to skip to reach 'sub1'
     //Unit 1
     drawNationChart(false, '.unit1RadarChart');
     var unit1BarData = reshapeForUnit1BarChart(srData);
-    barChart(unit1BarData, '.unit1BarChart', {baseWidth: 400, baseHeight: 400});
+    barChart(unit1BarData, '.unit1BarChart', {tiers: true});
     //Unit 2
     drawMap();
     var unit2Township = false;
@@ -117,6 +133,8 @@
     var currentSubindex = 'sub1';
     var unit4Township = false;
     generateSubindexButtons('.unit4Buttons');
+    drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1'));
+    changeSubindexTitle('sub1');
 
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
     /* @@@@ General purpose functions here @@@@ */

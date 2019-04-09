@@ -8,7 +8,8 @@ function drawNationChart(township, id) {
     ExtraWidthX: 250,
     TranslateX: 125,
     roundStrokes: false,
-  };
+    median: false
+  }
   RadarChart.draw(id, medianData, radarChartOptions);
 
 }
@@ -29,7 +30,7 @@ function generateMedians(township) {
     var medianValue = d3.median(data, function (d) {
        return d[keys[i]];
     });
-    medianData[0].push({'axis': keyTranslationsEN[keys[i]], 'value': medianValue});
+    medianData[0].push({'axis': starburstLegendEN[keys[i]], 'value': medianValue});
   }
   return medianData;
 }

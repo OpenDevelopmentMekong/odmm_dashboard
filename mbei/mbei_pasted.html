@@ -13,6 +13,15 @@
   margin-bottom: 20px;
 }
 
+select {
+  height: 28px;
+  width: 30%;
+}
+button {
+  height: 36px;
+  margin-bottom: 15px;
+}
+
 /* *** INTRO and DONORS *** */
 /* Table height MUST be the same as .mainImage height */
 .mainImage{
@@ -37,10 +46,6 @@ table {
   justify-content: center;
 }
 .donorLogo {
-  border: solid;
-  border-width: 1px;
-  width: 15%;
-  height: 60px;
   margin: 20px 10% 20px 10%; //tweak this for the spread between logos
 }
 
@@ -55,6 +60,9 @@ table {
 }
 
 /* *** UNIT 2 *** */
+.unit2 {
+  text-align: center;
+}
 .mapSelector {
   display: inline-block;
 }
@@ -64,15 +72,38 @@ table {
 .unit2BarChart {
   display: none;
 }
-.unit2 > select {
-  width: 15%;
+#subnationalDropdown {
   display: block;
+  margin: 0 auto;
+  margin-bottom: 15px;
 }
 /* *** UNIT 3 *** */
+.unit3 {
+  text-align: center;
+}
 #areaSelector > select {
-  width: 15%;
+  display: inline-block;
+  margin: 0 20 15 20;
+  font-size: 15px;
+}
+
+#select1Color, #select2Color {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+#select1Color {
+  background-color: rgba(4,89,113,1);
+}
+
+#select2Color {
+  background-color: rgba(228,61,78,1);
 }
 /* *** UNIT 4 *** */
+.unit4 {
+  text-align: center;
+}
 .unit4Buttons {
   width: 30%;
   display: inline-block;
@@ -81,14 +112,20 @@ table {
 .unit4BarChart {
   display: inline-block;
 }
+
+.subindexName {
+  text-transform: uppercase;
+}
 </style>
     <script src="https://d3js.org/d3.v3.js"></script>
 
     <script src="https://d3js.org/d3-axis.v1.min.js"></script>
     <script src="https://d3js.org/d3-selection.v1.min.js"></script>
     <script src="https://d3js.org/d3-scale.v3.min.js"></script>
-    <script src="https://d3js.org/d3-transition.v1.min.js"></script>
+    <!--<script src="https://d3js.org/d3-transition.v1.min.js"></script>-->
     <script src="https://d3js.org/d3-timer.v1.min.js"></script>
+    <script src="https://d3js.org/d3-path.v1.min.js"></script>
+    <script src="https://d3js.org/d3-shape.v1.min.js"></script>
 
 <script>
 var mbei_stateregion = `state_name:taf,state_name:mm,state_pcode,score,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10
@@ -188,6 +225,22 @@ var keyTranslationsEN = { 'sub1': 'Entry Costs', 'sub2': 'Land Access & Security
 'sub3': 'Post-Registration Regulation', 'sub4': 'Informal Charges',
 'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Policy Bias',
 'sub8': 'Environmental Compliance', 'sub9': 'Labor Quality', 'sub10': 'Law & Order'};
+
+var starburstLegendEN = { 'sub1': 'Entry', 'sub2': 'Land',
+'sub3': 'Regulations', 'sub4': 'Payments',
+'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Favoritism',
+'sub8': 'Environment', 'sub9': 'Labor', 'sub10': 'Law'};
+
+var starburstIcon = { 'sub1': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon1.png',
+'sub2': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon2.png',
+'sub3': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon3.png',
+'sub4': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon4.png',
+'sub5': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon5.png',
+'sub6': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon6.png',
+'sub7': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon7.png',
+'sub8': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon8.png',
+'sub9': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon9.png',
+'sub10': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon10.png'};
 </script>
 <script>
 var mapStateRegion = {
@@ -231,8 +284,8 @@ var RadarChart = {
 	 w: 600,
 	 h: 600,
 	 factor: 1,
-	 factorLegend: .85,
-	 levels: 3,
+	 factorLegend: 1.2,
+	 levels: 10,
 	 maxValue: 0,
 	 radians: 2 * Math.PI,
 	 opacityArea: 0.5,
@@ -241,7 +294,9 @@ var RadarChart = {
 	 TranslateY: 30,
 	 ExtraWidthX: 100,
 	 ExtraWidthY: 100,
-	 color: d3.scale.category10()
+   median: false,
+   spider: false,
+	 color: []
 	};
 
 	if('undefined' !== typeof options){
@@ -251,6 +306,21 @@ var RadarChart = {
 		}
 	  }
 	}
+
+  // OVERRIDE SOME CONFIG options
+  cfg.levels = 10;
+  cfg.color = ['#045971',
+    '#b6af9d',
+    '#d9212d',
+    '#b9a431',
+    '#81cfcc',
+    '#b2222b',
+    '#e9aa22',
+    '#05713a',
+    '#f58020',
+    '#e43d4e' ];
+  // END MANUAL OVERRIDE
+
 	cfg.maxValue = Math.max(cfg.maxValue, d3.max(d, function(i){return d3.max(i.map(function(o){return o.value;}))}));
 	var allAxis = (d[0].map(function(i, j){return i.axis}));
 	var total = allAxis.length;
@@ -268,26 +338,24 @@ var RadarChart = {
 
 	var tooltip;
 
-	//Circular segments
-	for(var j=0; j<cfg.levels-1; j++){
+  // Concentric circles
+	for(var j=0; j<cfg.levels; j++){ // removed minus 1
 	  var levelFactor = cfg.factor*radius*((j+1)/cfg.levels);
 	  g.selectAll(".levels")
 	   .data(allAxis)
 	   .enter()
-	   .append("svg:line")
-	   .attr("x1", function(d, i){return levelFactor*(1-cfg.factor*Math.sin(i*cfg.radians/total));})
-	   .attr("y1", function(d, i){return levelFactor*(1-cfg.factor*Math.cos(i*cfg.radians/total));})
-	   .attr("x2", function(d, i){return levelFactor*(1-cfg.factor*Math.sin((i+1)*cfg.radians/total));})
-	   .attr("y2", function(d, i){return levelFactor*(1-cfg.factor*Math.cos((i+1)*cfg.radians/total));})
-	   .attr("class", "line")
-	   .style("stroke", "grey")
-	   .style("stroke-opacity", "0.75")
-	   .style("stroke-width", "0.3px")
-	   .attr("transform", "translate(" + (cfg.w/2-levelFactor) + ", " + (cfg.h/2-levelFactor) + ")");
-	}
+     .append("svg:circle")
+     .attr("cx", cfg.w/2)
+     .attr("cy", cfg.h/2)
+     .attr("r", levelFactor)
+     .style("fill", "none")
+     .style("stroke", "grey")
+     .style("stroke-width", "1px")
+     .style("stroke-opacity", "0.05");
+   }
 
 	//Text indicating at what % each level is
-	for(var j=0; j<cfg.levels; j++){
+	/*for(var j=0; j<cfg.levels; j++){
 	  var levelFactor = cfg.factor*radius*((j+1)/cfg.levels);
 	  g.selectAll(".levels")
 	   .data([1]) //dummy data
@@ -301,7 +369,7 @@ var RadarChart = {
 	   .attr("transform", "translate(" + (cfg.w/2-levelFactor + cfg.ToRight) + ", " + (cfg.h/2-levelFactor) + ")")
 	   .attr("fill", "#737373")
 	   .text(Format((j+1)*cfg.maxValue/cfg.levels)); // percentage formatting
-	}
+	}*/
 
 	series = 0;
 
@@ -311,35 +379,135 @@ var RadarChart = {
 			.append("g")
 			.attr("class", "axis");
 
+  var axisOffset = 0;
 	axis.append("line")
 		.attr("x1", cfg.w/2)
 		.attr("y1", cfg.h/2)
-		.attr("x2", function(d, i){return cfg.w/2*(1-cfg.factor*Math.sin(i*cfg.radians/total));})
-		.attr("y2", function(d, i){return cfg.h/2*(1-cfg.factor*Math.cos(i*cfg.radians/total));})
+		.attr("x2", function(d, i){return cfg.w/2*(1-cfg.factor*Math.sin((i+axisOffset)*cfg.radians/total));})
+		.attr("y2", function(d, i){return cfg.h/2*(1-cfg.factor*Math.cos((i+axisOffset)*cfg.radians/total));})
 		.attr("class", "line")
 		.style("stroke", "grey")
+    .style("stroke-opacity", "0.7")
 		.style("stroke-width", "1px");
 
-	axis.append("text")
+// Note that the width/height of svg:image is half the factor of radius on svg:circle
+	/*axis.append("svg:circle")
 		.attr("class", "legend")
-		.text(function(d){return d})
-		.style("font-family", "sans-serif")
-		.style("font-size", "12px")
-		.style("word-wrap", "normal")
-		.attr("text-anchor", "middle")
-		.attr("dy", "1.5em")
-		.attr("transform", function(d, i){return "translate(0, -10)"})
-		.attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-60*Math.sin(i*cfg.radians/total);})
-		.attr("y", function(d, i){return cfg.h/2*(1-Math.cos(i*cfg.radians/total))-20*Math.cos(i*cfg.radians/total);});
+		//.attr("transform", function(d, i){return "translate(0, -10)"})
+    .attr("r", 0.05 * cfg.w)
+		.attr("cx", function(d, i){return cfg.w/2*(1-cfg.factor*Math.sin(i*cfg.radians/total));})
+		.attr("cy", function(d, i){return cfg.h/2*(1-cfg.factor*Math.cos(i*cfg.radians/total));})
+    .attr("transform", function(d) {return `rotate(18,${cfg.w/2},${cfg.h/2})`})
+    .attr("fill", "pink");*/
+  var iconWidth = 0.1 * cfg.w;
+  var iconHeight = 0.1 * cfg.h;
+  var placementOffset = 0.5;
 
+  g.selectAll(".icon")
+    .data(Object.keys(starburstIcon))
+    .enter()
+    .append("g")
+    .attr("class", "icon")
+    .append("svg:image")
+    .attr("x", function(d, i){return cfg.w/2*(1-cfg.factor*Math.sin(-(i+placementOffset)*cfg.radians/total)) - 0.5*iconWidth;})
+    .attr("y", function(d, i){return cfg.h/2*(1-cfg.factor*Math.cos(-(i+placementOffset)*cfg.radians/total)) - 0.5*iconHeight;})
+  //  .attr("transform", function(d) {return `rotate(18,${cfg.w/2},${cfg.h/2})`})
+    .attr("width", 0.12 * cfg.w)
+    .attr("height", 0.12 * cfg.h)
+    .attr("xlink:href", function(d) {
+      return starburstIcon[d];
+    });
+
+  /* Note: Text placement can be a little tricky.
+     cfg.factorLegend more or less controls placement along radius
+     and transate(0, +/- y) adjusts for some off-kilterness*/
+  axis.append("svg:text")
+  	.text(function(d){return d})
+  	.style("font-family", "sans-serif")
+  	.style("font-size", "14px")
+  	.style("word-wrap", "normal")
+  	.attr("text-anchor", function(d,i) {
+      if (i<5) { return "start";}
+      else { return "end";}
+    })
+  	.attr("dy", "1.5em")
+  	.attr("transform", function(d, i){return "translate(0, -8)"})
+  	.attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(-(i+placementOffset)*cfg.radians/total));})
+  	.attr("y", function(d, i){return cfg.h/2*(1-cfg.factorLegend*Math.cos(-(i+placementOffset)*cfg.radians/total));});
+
+  if (cfg.spider == false) { // Draw bursts if not spider
+    var burst = g.selectAll(".burst")
+  	  .data(d[0])
+  	  .enter()
+  	  .append("g")
+  	  .attr("class", "burst");
+
+    var centroids = [];
+    burst.append("svg:path")
+      .attr("d", function(d,i) {
+        var arc = d3.arc()
+          .innerRadius(0)
+          .outerRadius(d.value/cfg.maxValue * radius)
+          .startAngle(i*0.2*Math.PI)
+          .endAngle((i+1)*0.2*Math.PI);
+
+        centroids.push(arc.centroid());
+        return arc();
+      })
+      .attr("transform", `translate(${cfg.w/2},${cfg.h/2})`)
+      .attr("opacity", "1")
+      .attr("fill", function(d,i) {
+        return cfg.color[i];
+      }); //TODO: define color scale for MBEI subindices
+
+    var Format = d3.format('.1f');
+    var labelSpread = 1.7; // Determines how far the labels are from the center
+    burst.append("svg:text")
+      .text(function(d) { return Format(d.value);})
+      .attr("fill", "white")
+      .attr("font-size", "12px")
+      .attr("x", function(d,i) { return centroids[i][0]*labelSpread;})
+      .attr("y", function(d,i) { return centroids[i][1]*labelSpread;})
+      .attr("text-anchor", "middle")
+      .attr("transform", `translate(${cfg.w/2},${cfg.h/2})`);
+    if (cfg.median == true) {
+      var medianArc = g.selectAll(".medianArc")
+        .data(d[0])
+        .enter()
+        .append("g")
+        .attr("class", "medianArc")
+
+      medianArc.append("svg:path")
+        .attr("d", function(d,i) {
+          var thickness = 1.5;
+          var outerRadius = d.median/cfg.maxValue * radius;
+          var innerRadius = outerRadius - thickness;
+
+          var arc = d3.arc()
+            .innerRadius(innerRadius)
+            .outerRadius(outerRadius)
+            .startAngle(i*0.2*Math.PI)
+            .endAngle((i+1)*0.2*Math.PI);
+
+          return arc();
+        })
+        .attr("transform", `translate(${cfg.w/2},${cfg.h/2})`)
+        .attr("opacity", "0.6")
+        .attr("fill", "black");
+    }
+  } else { // Draw spider if not bursts
+
+
+
+    //  .attr("transform", function(d) {return `rotate(36,${cfg.h},${cfg.w})`});
 
 	d.forEach(function(y, x){
 	  dataValues = [];
 	  g.selectAll(".nodes")
 		.data(y, function(j, i){
 		  dataValues.push([
-			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
-			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))
+			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin((i+0.5)*cfg.radians/total)),
+			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos((i+0.5)*cfg.radians/total))
 		  ]);
 		});
 	  dataValues.push(dataValues[0]);
@@ -349,7 +517,7 @@ var RadarChart = {
 					 .append("polygon")
 					 .attr("class", "radar-chart-serie"+series)
 					 .style("stroke-width", "2px")
-					 .style("stroke", cfg.color(series))
+					 .style("stroke", function(d,i) { if (series == 0) {return cfg.color[0]} else if (series == 1) {return cfg.color[9]} })
 					 .attr("points",function(d) {
 						 var str="";
 						 for(var pti=0;pti<d.length;pti++){
@@ -357,7 +525,7 @@ var RadarChart = {
 						 }
 						 return str;
 					  })
-					 .style("fill", function(j, i){return cfg.color(series)})
+					 .style("fill", function(d,i) { if (series == 0) {return cfg.color[0]} else if (series == 1) {return cfg.color[9]} })
 					 .style("fill-opacity", cfg.opacityArea)
 					 .on('mouseover', function (d){
 										z = "polygon."+d3.select(this).attr("class");
@@ -387,26 +555,19 @@ var RadarChart = {
 		.attr("alt", function(j){return Math.max(j.value, 0)})
 		.attr("cx", function(j, i){
 		  dataValues.push([
-			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
-			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))
+			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin((i+0.5)*cfg.radians/total)),
+			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos((i+0.5)*cfg.radians/total))
 		]);
-		return cfg.w/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total));
+		return cfg.w/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.sin((i+0.5)*cfg.radians/total));
 		})
 		.attr("cy", function(j, i){
-		  return cfg.h/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total));
+		  return cfg.h/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.cos((i+0.5)*cfg.radians/total));
 		})
 		.attr("data-id", function(j){return j.axis})
-		.style("fill", cfg.color(series)).style("fill-opacity", .9)
+		.style("fill", function(d,i) { if (series == 0) {return cfg.color[0]} else if (series == 1) {return cfg.color[9]} }).style("fill-opacity", .9)
 		.on('mouseover', function (d){
 					newX =  parseFloat(d3.select(this).attr('cx')) - 10;
 					newY =  parseFloat(d3.select(this).attr('cy')) - 5;
-
-					tooltip
-						.attr('x', newX)
-						.attr('y', newY)
-						.text(Format(d.value))
-						//.transition(200)
-						.style('opacity', 1);
 
 					z = "polygon."+d3.select(this).attr("class");
 					g.selectAll("polygon")
@@ -415,13 +576,11 @@ var RadarChart = {
 					g.selectAll(z)
 						//.transition(200)
 						.style("fill-opacity", .7);
+
+
 				  })
 		.on('mouseout', function(){
-					tooltip
-						//.transition(200)
-						.style('opacity', 0);
 					g.selectAll("polygon")
-						//.transition(200)
 						.style("fill-opacity", cfg.opacityArea);
 				  })
 		.append("svg:title")
@@ -429,11 +588,7 @@ var RadarChart = {
 
 	  series++;
 	});
-	//Tooltip
-	tooltip = g.append('text')
-			   .style('opacity', 0)
-			   .style('font-family', 'sans-serif')
-			   .style('font-size', '13px');
+    }
   }
 };
 </script>
@@ -443,11 +598,12 @@ function barChart(data, id, options) {
   var cfg = {
     mTop: 10,
     mRight: 30,
-    mBottom: 40,
-    mLeft: 150,
-    baseWidth: 460,
-    baseHeight: 500,
-    circleRadius: 6
+    mBottom: 80,
+    mLeft: 40,
+    baseWidth: 500,
+    baseHeight: 300,
+    circleRadius: 6,
+    tiers: false
   };
 
   if('undefined' !== typeof options){
@@ -479,25 +635,35 @@ function barChart(data, id, options) {
       .attr("transform",
             `translate(${cfg.mLeft},${cfg.mTop})`);
 
+  svg.append("g")
+    .append("svg:rect")
+    .attr("height", cfg.height)
+    .attr("width", cfg.width)
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("fill", "#e4e4e4");
+
   /* Build x axis */
-  var xScale = d3.scale.linear()
+  var yScale = d3.scale.linear()
     .domain([0, maxValue])
-    .range([0, cfg.width]);
+    .range([cfg.height, 0]);
+
+  var xScale = d3.scaleBand()
+    .range([0, cfg.width])
+    .domain(data.map( function (d) {
+      return d.label;
+    }))
+    .padding(1);
 
   svg.append('g')
     .attr('transform', `translate(0,${cfg.height})`)
     .call(d3.axisBottom(xScale))
     .selectAll("text") //not sure what this does
-    .attr('transform', 'translate(-10,0)rotate(-45)')
+    .attr('transform', 'translate(-15,15)rotate(-90)')
     .style('text-anchor', 'end');
 
   /* Build y axis */
-  var yScale = d3.scaleBand()
-    .range([0, cfg.height])
-    .domain(data.map( function (d) {
-      return d.label;
-    }))
-    .padding(1);
+
 
   svg.append('g')
     .call(d3.axisLeft(yScale))
@@ -505,35 +671,58 @@ function barChart(data, id, options) {
     .attr('font-size', '12px');
 
   /* Build lines */
-  svg.selectAll('myline')
+  var barWidth = cfg.width / data.length;
+
+  var yScalePositive = d3.scale.linear()
+    .domain([0, maxValue])
+    .range([0, cfg.height]);
+  svg.selectAll('myBar')
+    .data(data)
+    .enter()
+    .append("svg:rect")
+    .attr("x", "0")
+    .attr("y", function(d) {
+      return yScale(d.value);
+    })
+    .attr("width", 0.8*barWidth)
+    .attr("height", function(d) {
+      return yScalePositive(d.value);
+    })
+    .attr("transform", function(d) {
+      var xTranslate = xScale(d.label) - 0.8*barWidth/2;
+      return `translate(${xTranslate}, 0)`;
+    });
+  /*svg.selectAll('myline')
     .data(data)
     .enter()
     .append('line')
-    .attr('x1', xScale(0))
+    .attr('x1', function(d) {
+      return xScale(d.label);
+    })
     .attr('x2', function (d) {
-      return xScale(d.value);
+      return xScale(d.label);
     })
     .attr('y1', function (d) {
-      return yScale(d.label);
+      return yScale(0);
     })
     .attr('y2', function (d) {
-      return yScale(d.label);
+      return yScale(d.value);
     })
-    .attr('stroke', 'grey');
+    .attr('stroke', 'grey');*/
 
-  svg.selectAll('mycircle')
+  /*svg.selectAll('mycircle')
     .data(data)
     .enter()
     .append('circle')
     .attr('cx', function (d) {
-      return xScale(d.value);
+      return xScale(d.label);
     })
     .attr('cy', function (d) {
-      return yScale(d.label);
+      return yScale(d.value);
     })
     .attr('r', `${cfg.circleRadius}`)
     .style('fill', '#69b3a2')
-    .attr('stroke', 'black');
+    .attr('stroke', 'black');*/
 
 }
 </script>
@@ -548,7 +737,8 @@ function drawNationChart(township, id) {
     ExtraWidthX: 250,
     TranslateX: 125,
     roundStrokes: false,
-  };
+    median: false
+  }
   RadarChart.draw(id, medianData, radarChartOptions);
 
 }
@@ -569,7 +759,7 @@ function generateMedians(township) {
     var medianValue = d3.median(data, function (d) {
        return d[keys[i]];
     });
-    medianData[0].push({'axis': keyTranslationsEN[keys[i]], 'value': medianValue});
+    medianData[0].push({'axis': starburstLegendEN[keys[i]], 'value': medianValue});
   }
   return medianData;
 }
@@ -590,8 +780,24 @@ function reshapeForUnit1BarChart(data) {
 }
 </script>
 <script>
+// Global fills
+var selectedArea;
+var selectedFill = '#05713a', normalFill = '#b6af9d', activeFill = 'rgb(5, 113, 58, 0.6)',
+    boundaryFill = '#eeeeee';
+
+function changeSelected(id) {
+
+  if (selectedArea != undefined) {
+    d3.select(selectedArea)
+      .attr('fill', normalFill);
+  }
+  d3.select(id)
+    .attr('fill', selectedFill);
+  selectedArea = id;
+}
+
 function drawMap() {
-  var mapWidth = 200, mapHeight = 500;
+  var mapWidth = 220, mapHeight = 500;
   var mapSvg = d3.select('.mapSelector')
     .append('svg')
     .attr('width', mapWidth)
@@ -599,7 +805,7 @@ function drawMap() {
 
   var areas = mapSvg.append('g');
   var mercProjection = d3.geo.mercator()
-    .scale(1100)
+    .scale(1200)
     .center([96.0785, 19.7633])
     .translate([mapWidth/2, mapHeight/2]);
   var geoPath = d3.geo.path().projection(mercProjection);
@@ -617,22 +823,29 @@ areas.selectAll('path')
     .data(mapStateRegion.features)
     .enter()
     .append('path')
-    .attr('id', (d) => (d.properties[accessorForAreaName]))
-    .attr('fill', '#110000')
-    .attr('stroke', '#aabbcc')
+    .attr('id', (d) => (d.properties[accessorForAreaName].replace(/ /g, "")))
+    .attr('fill', normalFill)
+    .attr('stroke', boundaryFill)
     .attr('onclick', function(d) {
       var tafName=pcodeToTAF(d.properties[accessorForPcode]);
       var onClickFunc =
         `drawSubNationChart("${tafName}", false, '.unit2RadarChart');
         d3.select('#subnationalDropdown').property('value', '${tafName}');
-        drawSubnationBar("${tafName}", false, '.unit2BarChart');`;
+        drawSubnationBar("${tafName}", false, '.unit2BarChart');
+        changeSelected('#${d3.select(this).attr('id')}');
+        window.scrollBy(0, );`;
+
       return onClickFunc;
     })
     .on('mouseover', function(d,i) {
-      d3.select(this).attr('fill', '#00ee00');
+      if (selectedArea != '#'+d3.select(this).attr('id')) {
+        d3.select(this).attr('fill', activeFill);
+      }
     })
     .on('mouseout', function(d,i) {
-      d3.select(this).attr('fill', '#110000');
+      if (selectedArea != '#'+d3.select(this).attr('id')) {
+        d3.select(this).attr('fill', normalFill);
+      }
     })
     .attr('d', geoPath);
 }
@@ -646,14 +859,27 @@ function drawSubNationChart(areaName, township, id) {
     data = srData;
     nameAccessor = 'state_name:taf';
   }
-
-  for (var i in data) {
-    if (data[i][nameAccessor] == areaName) {
-      var areaData = data[i];
+  // Find medians across all areas in level
+  var medianData = {};
+  var keys = Object.keys(data[0]);
+  keys.splice(0, subDataSpliceIndex);
+  for (var i in keys) {
+    var medianValue = d3.median(data, function (d) {
+       return d[keys[i]];
+    });
+    medianData[keys[i]] = medianValue;
+  }
+  // Find area-specific data
+  for (var j in data) {
+    if (data[j][nameAccessor] == areaName) {
+      var areaData = data[j];
     }
   }
-
   var areaRadarData = reshapeForRadar(areaData);
+  for (var k in areaRadarData[0]) {
+    var subindexNum = +k+1;
+    areaRadarData[0][k].median = medianData['sub'+subindexNum];
+  }
   var radarChartOptions = {
     w: 300,
     h: 300,
@@ -662,6 +888,8 @@ function drawSubNationChart(areaName, township, id) {
     ExtraWidthX: 250,
     TranslateX: 125,
     roundStrokes: false,
+    median: true,
+    spider: false
   };
   RadarChart.draw(id, areaRadarData, radarChartOptions);
 }
@@ -825,6 +1053,7 @@ function changeRadar(selector, otherSelector, township) {
     ExtraWidthX: 250,
     TranslateX: 125,
     roundStrokes: false,
+    spider: true
   };
   RadarChart.draw(".radarChart", radarData, radarChartOptions);
 
@@ -864,7 +1093,7 @@ function reshapeForRadar(origData) {
     // TODO: Get rid of non axes
     for (j in keys) {
       var value = +origData[i][keys[j]];
-      radarData[i].push({"axis": keyTranslationsEN[keys[j]],
+      radarData[i].push({"axis": starburstLegendEN[keys[j]],
         "value": value});
     }
   }
@@ -884,7 +1113,8 @@ function generateSubindexButtons(id) {
     .append('button')
     .attr("onclick", function (d) {
       return `var barData = buildBarData(unit4Township, '${d}');
-      drawSubindexBar('${barChartId}', barData, unit4Township, '${d}');`
+      drawSubindexBar('${barChartId}', barData);
+      changeSubindexTitle('${d}');`;
     })
     .text(function(d) { return keyTranslationsEN[d];})
     .style('display', 'block')
@@ -892,7 +1122,12 @@ function generateSubindexButtons(id) {
     .style('width', '80%');
 }
 
-function drawSubindexBar(id, data, township, subindex) {
+function changeSubindexTitle(subindex) {
+  d3.select('.subindexName')
+    .text(keyTranslationsEN[subindex]);
+}
+
+function drawSubindexBar(id, data) {
   var options = {};
   barChart(data, id, options);
 }
@@ -919,6 +1154,11 @@ function buildBarData(township, subindex) {
 </script>
   </head>
   <body>
+    <!-- <a class="wpckan_dataset_resource_url button download"
+      href="https://data.opendevelopmentmekong.net/dataset/217c73e8-f456-4392-a43e-1ba2a0694a92/resource/9d40f3cb-e45a-43d3-b771-93aa6ba5a540/download/mmrairport2015.zip"
+      data-ga-event="Dataset|resource_download|217c73e8-f456-4392-a43e-1ba2a0694a92/9d40f3cb-e45a-43d3-b771-93aa6ba5a540">
+      <i class="fa fa-download"></i>Download
+    </a> -->
     <div class="unit intro">
       <span class="subunit mainImage"></span>
       <span class="subunit about">
@@ -939,8 +1179,9 @@ function buildBarData(township, subindex) {
     </div>
 
     <div class="unit donors">
-      <span class="subunit donorLogo"></span>
-      <span class="subunit donorLogo"></span>
+      <img width="160px" height="160px" src="donorLogos/ukaid.png"/></span>
+      <img width="240px" height="160px" src="donorLogos/dana.png"/>
+      <img width="240px" height="160px" src="donorLogos/taf.png"/>
     </div>
 
     <div class="unit unit1">
@@ -959,6 +1200,7 @@ function buildBarData(township, subindex) {
     <hr/>
 
     <div class="unit unit2">
+      <h3>Explore subindex scores for states and regions or townships</h3>
       <select id="subnationalDropdown" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
       <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">States/Regions</button> |
       <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">Townships</button>
@@ -972,9 +1214,10 @@ function buildBarData(township, subindex) {
     <hr/>
 
     <div class="unit unit3">
+      <h3>Compare subindex scores between two areas</h3>
       <div id="areaSelector">
-        <select id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
-        <select id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
+        <div id="select1Color"></div><select id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
+        <div id="select2Color"></div><select id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
       </div>
       <div id="areaLevelSelector">
         <button type="button" onclick="unit3Township = false; setAreaLevel(srData, '.unit3', false); changeRadar('#select1','#select2', false);">States/Regions</button> |
@@ -986,9 +1229,15 @@ function buildBarData(township, subindex) {
     <hr/>
 
     <div class="unit unit4">
+      <h3>Performance rankings for each subindicator</h3>
+      <div class="subunit unit4Switch">
+        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');">States/Regions</button> |
+        <button type="button" onclick="unit4Township = true; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');">Townships</button>
+      </div>
       <div class="subunit unit4Buttons">
       </div>
       <div class="subunit unit4BarChart">
+        <h4><a class="subindexName"></a></h4>
       </div>
     </div>
     <script>
@@ -998,11 +1247,11 @@ function buildBarData(township, subindex) {
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
     var srData = d3.csv.parse(mbei_stateregion);
     var tspData = d3.csv.parse(mbei_township);
-    var subDataSpliceIndex = 4; // how many columns to skip to reach 'sub1'
+    var subDataSpliceIndex = 4;      // how many columns to skip to reach 'sub1'
     //Unit 1
     drawNationChart(false, '.unit1RadarChart');
     var unit1BarData = reshapeForUnit1BarChart(srData);
-    barChart(unit1BarData, '.unit1BarChart', {baseWidth: 400, baseHeight: 400});
+    barChart(unit1BarData, '.unit1BarChart', {tiers: true});
     //Unit 2
     drawMap();
     var unit2Township = false;
@@ -1017,6 +1266,8 @@ function buildBarData(township, subindex) {
     var currentSubindex = 'sub1';
     var unit4Township = false;
     generateSubindexButtons('.unit4Buttons');
+    drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1'));
+    changeSubindexTitle('sub1');
 
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
     /* @@@@ General purpose functions here @@@@ */

@@ -53,6 +53,7 @@ function changeRadar(selector, otherSelector, township) {
     ExtraWidthX: 250,
     TranslateX: 125,
     roundStrokes: false,
+    spider: true
   };
   RadarChart.draw(".radarChart", radarData, radarChartOptions);
 
@@ -92,7 +93,7 @@ function reshapeForRadar(origData) {
     // TODO: Get rid of non axes
     for (j in keys) {
       var value = +origData[i][keys[j]];
-      radarData[i].push({"axis": keyTranslationsEN[keys[j]],
+      radarData[i].push({"axis": starburstLegendEN[keys[j]],
         "value": value});
     }
   }

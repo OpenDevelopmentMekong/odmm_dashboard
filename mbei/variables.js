@@ -95,3 +95,19 @@ var keyTranslationsEN = { 'sub1': 'Entry Costs', 'sub2': 'Land Access & Security
 'sub3': 'Post-Registration Regulation', 'sub4': 'Informal Charges',
 'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Policy Bias',
 'sub8': 'Environmental Compliance', 'sub9': 'Labor Quality', 'sub10': 'Law & Order'};
+
+var starburstLegendEN = { 'sub1': 'Entry', 'sub2': 'Land',
+'sub3': 'Regulations', 'sub4': 'Payments',
+'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Favoritism',
+'sub8': 'Environment', 'sub9': 'Labor', 'sub10': 'Law'};
+
+var starburstIcon = { 'sub1': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon1.png',
+'sub2': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon2.png',
+'sub3': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon3.png',
+'sub4': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon4.png',
+'sub5': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon5.png',
+'sub6': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon6.png',
+'sub7': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon7.png',
+'sub8': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon8.png',
+'sub9': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon9.png',
+'sub10': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon10.png'};

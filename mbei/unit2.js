@@ -1,5 +1,21 @@
+// Global fills
+var selectedArea;
+var selectedFill = '#05713a', normalFill = '#b6af9d', activeFill = 'rgb(5, 113, 58, 0.6)',
+    boundaryFill = '#eeeeee';
+
+function changeSelected(id) {
+
+  if (selectedArea != undefined) {
+    d3.select(selectedArea)
+      .attr('fill', normalFill);
+  }
+  d3.select(id)
+    .attr('fill', selectedFill);
+  selectedArea = id;
+}
+
 function drawMap() {
-  var mapWidth = 200, mapHeight = 500;
+  var mapWidth = 220, mapHeight = 500;
   var mapSvg = d3.select('.mapSelector')
     .append('svg')
     .attr('width', mapWidth)
@@ -7,7 +23,7 @@ function drawMap() {
 
   var areas = mapSvg.append('g');
   var mercProjection = d3.geo.mercator()
-    .scale(1100)
+    .scale(1200)
     .center([96.0785, 19.7633])
     .translate([mapWidth/2, mapHeight/2]);
   var geoPath = d3.geo.path().projection(mercProjection);
@@ -25,22 +41,29 @@ areas.selectAll('path')
     .data(mapStateRegion.features)
     .enter()
     .append('path')
-    .attr('id', (d) => (d.properties[accessorForAreaName]))
-    .attr('fill', '#110000')
-    .attr('stroke', '#aabbcc')
+    .attr('id', (d) => (d.properties[accessorForAreaName].replace(/ /g, "")))
+    .attr('fill', normalFill)
+    .attr('stroke', boundaryFill)
     .attr('onclick', function(d) {
       var tafName=pcodeToTAF(d.properties[accessorForPcode]);
       var onClickFunc =
         `drawSubNationChart("${tafName}", false, '.unit2RadarChart');
         d3.select('#subnationalDropdown').property('value', '${tafName}');
-        drawSubnationBar("${tafName}", false, '.unit2BarChart');`;
+        drawSubnationBar("${tafName}", false, '.unit2BarChart');
+        changeSelected('#${d3.select(this).attr('id')}');
+        window.scrollBy(0, );`;
+
       return onClickFunc;
     })
     .on('mouseover', function(d,i) {
-      d3.select(this).attr('fill', '#00ee00');
+      if (selectedArea != '#'+d3.select(this).attr('id')) {
+        d3.select(this).attr('fill', activeFill);
+      }
     })
     .on('mouseout', function(d,i) {
-      d3.select(this).attr('fill', '#110000');
+      if (selectedArea != '#'+d3.select(this).attr('id')) {
+        d3.select(this).attr('fill', normalFill);
+      }
     })
     .attr('d', geoPath);
 }
@@ -54,14 +77,27 @@ function drawSubNationChart(areaName, township, id) {
     data = srData;
     nameAccessor = 'state_name:taf';
   }
-
-  for (var i in data) {
-    if (data[i][nameAccessor] == areaName) {
-      var areaData = data[i];
+  // Find medians across all areas in level
+  var medianData = {};
+  var keys = Object.keys(data[0]);
+  keys.splice(0, subDataSpliceIndex);
+  for (var i in keys) {
+    var medianValue = d3.median(data, function (d) {
+       return d[keys[i]];
+    });
+    medianData[keys[i]] = medianValue;
+  }
+  // Find area-specific data
+  for (var j in data) {
+    if (data[j][nameAccessor] == areaName) {
+      var areaData = data[j];
     }
   }
-
   var areaRadarData = reshapeForRadar(areaData);
+  for (var k in areaRadarData[0]) {
+    var subindexNum = +k+1;
+    areaRadarData[0][k].median = medianData['sub'+subindexNum];
+  }
   var radarChartOptions = {
     w: 300,
     h: 300,
@@ -70,6 +106,8 @@ function drawSubNationChart(areaName, township, id) {
     ExtraWidthX: 250,
     TranslateX: 125,
     roundStrokes: false,
+    median: true,
+    spider: false
   };
   RadarChart.draw(id, areaRadarData, radarChartOptions);
 }
