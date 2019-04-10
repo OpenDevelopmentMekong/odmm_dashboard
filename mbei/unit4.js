@@ -1,7 +1,7 @@
 function generateSubindexButtons(id) {
   var barChartId = '.unit4BarChart';
   var subIndices = ['Overall Score'];
-  var keys = Object.keys(keyTranslationsEN);
+  var keys = Object.keys(keyTranslations[lang]);
   for (var i in keys) {
     subIndices.push(keys[i]);
   }
@@ -21,9 +21,10 @@ function generateSubindexButtons(id) {
     .append('option')
     .text(function(d) {
       if (d == 'Overall Score') {
+        if (lang == 'MM') { return "မြန့်မာ့စီးပွားရေးဝန်းကျင် ညွှန်းကိန်းရမှတ်"; }
         return d;
       } else {
-      return keyTranslationsEN[d];
+      return keyTranslations[lang][d];
       }
     })
     .attr("value", (d)=>(d));
@@ -33,9 +34,13 @@ function findCurrSubindex() {
 }
 function changeSubindexTitle(subindex) {
   if (subindex == "Overall Score") {
-    d3.select('.subindexName').text("Overall Score");
+    if (lang == 'EN') {
+      d3.select('.subindexName').text("Overall Score");
+    } else if (lang == 'MM') {
+      d3.select('.subindexName').text("မြန့်မာ့စီးပွားရေးဝန်းကျင် ညွှန်းကိန်းရမှတ်");
+    }
   } else {
-    d3.select('.subindexName').text(keyTranslationsEN[subindex]);
+    d3.select('.subindexName').text(keyTranslations[lang][subindex]);
   }
 }
 
@@ -53,9 +58,11 @@ function buildBarData(township, subindex) {
   if (township == true) {
     data = tspData;
     nameAccessor = 'township_name:taf';
+    if (lang == 'MM') { nameAccessor = 'township_name:mm';}
   } else {
     data = srData;
     nameAccessor = 'state_name:taf';
+    if (lang == 'MM') { nameAccessor = 'state_name:mm';}
   }
 
   for (var i in data) {

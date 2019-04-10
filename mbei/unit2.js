@@ -51,9 +51,7 @@ areas.selectAll('path')
         `drawSubNationChart("${tafName}", false, '.unit2RadarChart');
         d3.select('#subnationalDropdown').property('value', '${tafName}');
         drawSubnationBar("${tafName}", false, '.unit2BarChart');
-        changeSelected('#${d3.select(this).attr('id')}');
-        window.scrollTo(0, document.getElementsByClassName('unit2RadarChart')[0]
-          .offsetTop + ${scrollOffset});`;
+        changeSelected('#${d3.select(this).attr('id')}');`;
 
       return onClickFunc;
     })
@@ -116,13 +114,17 @@ function populateSubnationalDropdown(township, id) {
     .exit()
     .remove();
 
-  var data, nameAccessor;
+  var data, nameAccessor, textAccessor;
   if (township == true) {
     data = tspData;
     nameAccessor = 'township_name:taf';
+    textAccessor = nameAccessor;
+    if (lang == 'MM') { textAccessor = 'township_name:mm'; }
   } else {
     data = srData;
     nameAccessor = 'state_name:taf';
+    textAccessor = nameAccessor;
+    if (lang == 'MM') { textAccessor = 'state_name:mm'; }
   }
 
   d3.select(id)
@@ -134,7 +136,7 @@ function populateSubnationalDropdown(township, id) {
       return d[nameAccessor];
     })
     .text(function (d) {
-      return d[nameAccessor];
+      return d[textAccessor];
     })
 }
 
@@ -186,7 +188,7 @@ function drawSubnationBar(areaName, township, id) {
   var barData = [];
   for (var j in keys) {
     var barRow = {};
-    barRow.label = keyTranslationsEN[keys[j]];
+    barRow.label = keyTranslations[lang][keys[j]];
     barRow.value = +row[keys[j]];
     barData.push(barRow);
   }

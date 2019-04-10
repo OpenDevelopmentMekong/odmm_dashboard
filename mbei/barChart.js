@@ -3,10 +3,10 @@ function barChart(data, id, options) {
   var cfg = {
     mTop: 10,
     mRight: 30,
-    mBottom: 80,
+    mBottom: 130,
     mLeft: 40,
-    baseWidth: 350,
-    baseHeight: 300,
+    baseWidth: 375,
+    baseHeight: 350,
     circleRadius: 6,
     tiers: false,
     tierColors: {1: '#89cfc9', 2: '#67b1b3',
@@ -67,6 +67,7 @@ function barChart(data, id, options) {
     .call(d3.axisBottom(xScale))
     .selectAll("text") //not sure what this does
     .attr('transform', 'translate(-15,15)rotate(-90)')
+    .attr('font-size', '1.2em')
     .style('text-anchor', 'end');
 
   /* Build y axis */
@@ -75,7 +76,7 @@ function barChart(data, id, options) {
   svg.append('g')
     .call(d3.axisLeft(yScale))
     .selectAll("text")
-    .attr('font-size', '12px');
+    .attr('font-size', '1.25em');
 
   /* Build lines */
   var barWidth = cfg.width / data.length * 0.6;

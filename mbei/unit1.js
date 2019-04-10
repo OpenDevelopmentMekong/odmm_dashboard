@@ -14,14 +14,14 @@ function drawLegend() {
   var legend = d3.select(".unit1BarChart")
     .append("svg")
     .attr("width", "100px")
-    .attr("height", "200px")
+    .attr("height", "250px")
     .append("g");
 
   var legendData = [
-    { name: "High", color: "#89cfc9" },
-    { name: "Middle", color: "#67b1b3" },
-    { name: "Low", color: "#297588" },
-    { name: "Bottom", color: "#045971" }
+    { name: "High", mmname: "အမြင့်", color: "#89cfc9" },
+    { name: "Middle", mmname: "အလယ်", color: "#67b1b3" },
+    { name: "Low", mmname: "နိမ့်", color: "#297588" },
+    { name: "Bottom", mmname: "အောက်ဆုံး", color: "#045971" }
   ]
 
   legend.selectAll(".legendRect")
@@ -43,7 +43,10 @@ function drawLegend() {
     .attr("x", 30)
     .attr("font-size", "12px")
     .attr("y", (d,i)=>(i*30))
-    .text((d)=>(d.name))
+    .text(function(d) {
+      if (lang == 'EN') { return d.name; }
+      else if (lang == 'MM') { return d.mmname; }
+    })
     .attr("transform", "translate(0,15)");
 
 }
@@ -63,14 +66,16 @@ function generateMedians(township) {
     var medianValue = d3.median(data, function (d) {
        return d[keys[i]];
     });
-    medianData[0].push({'axis': starburstLegendEN[keys[i]], 'value': medianValue});
+    medianData[0].push({'axis': starburstLegend[lang][keys[i]], 'value': medianValue});
   }
   return medianData;
 }
 
 function reshapeForUnit1BarChart(data) {
   var retData = [];
-  var nameAccessor = 'state_name:taf';
+  var nameAccessor;
+  if (lang == 'EN') { nameAccessor = 'state_name:taf'; }
+  else if (lang == 'MM') { nameAccessor = 'state_name:mm'; }
   var valueAccessor = 'score';
   var tierAccessor = 'tier';
 
@@ -83,4 +88,38 @@ function reshapeForUnit1BarChart(data) {
   }
 
   return retData;
+}
+
+function renderText(lang) {
+  d3.select('.unit2')
+    .selectAll('button')
+    .text( function(d,i) {
+      if (i==0) { return copy.stateregion[lang]; }
+      else { return copy.township[lang]; }
+    });
+
+  d3.select('.unit3').select('#areaLevelSelector')
+    .selectAll('button')
+    .text( function(d,i) {
+      if (i==0) { return copy.stateregion[lang]; }
+      else { return copy.township[lang]; }
+    });
+
+  d3.select('.unit4').select('.unit4Switch')
+    .selectAll('button')
+    .text( function(d,i) {
+      if (i==0) { return copy.stateregion[lang]; }
+      else { return copy.township[lang]; }
+    });
+
+  d3.select('.intro').select('p')
+    .text(copy.about[lang]);
+
+  d3.select('.unit1RadarChart').select('h3')
+    .text(copy.medianStarburst[lang]);
+
+  d3.select('.unit1BarChart').select('h3')
+    .text(copy.nationalRankings[lang]);
+
+
 }

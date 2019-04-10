@@ -30,7 +30,7 @@ var RadarChart = {
 	 color: [],
    labelFontSize: '70%',
    valueFontSize: '70%',
-   fontFamily: 'Montserrat'
+   fontFamily: 'Pyidaungsu'
 	};
 
 	if('undefined' !== typeof options){
@@ -161,11 +161,30 @@ var RadarChart = {
   	.style("font-size", cfg.labelFontSize)
   	.style("word-wrap", "normal")
   	.attr("text-anchor", function(d,i) {
-      if (i<5) { return "start";}
-      else { return "end";}
+      if (i<5) { return "middle";}
+      else { return "middle";}
     })
-  	.attr("dy", "1.5em")
-  	.attr("transform", function(d, i){return "translate(0, -8)"})
+  	.attr("transform", function(d, i){
+      if (i==0 | i==1 | i==8 | i==9){
+        if (i==0 | i==9) {
+          return "translate(0,5)";
+        }
+        return "translate(0,0)";
+      } else {
+        if (i==4 | i==5) {
+          return "translate(0,7)";
+        }
+        if (i==3 | i==6)  {
+          return "translate(0,12)";
+        }
+        if (i==2) {
+          return "translate(-20,28)";
+        }
+        if (i==7) {
+          return "translate(20,28)";
+        }
+      }
+    })
   	.attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(-(i+placementOffset)*cfg.radians/total));})
   	.attr("y", function(d, i){return cfg.h/2*(1-cfg.factorLegend*Math.cos(-(i+placementOffset)*cfg.radians/total));});
 
@@ -194,17 +213,7 @@ var RadarChart = {
         return cfg.color[i];
       }); //TODO: define color scale for MBEI subindices
 
-    var Format = d3.format('.1f');
-    var labelSpread = 1.7; // Determines how far the labels are from the center
-    burst.append("svg:text")
-      .text(function(d) { return Format(d.value);})
-      .attr("fill", "white")
-      .attr("font-size", cfg.valueFontSize)
-      .style('font-family', cfg.fontFamily)
-      .attr("x", function(d,i) { return centroids[i][0]*labelSpread;})
-      .attr("y", function(d,i) { return centroids[i][1]*labelSpread;})
-      .attr("text-anchor", "middle")
-      .attr("transform", `translate(${cfg.w/2},${cfg.h/2})`);
+
     if (cfg.median == true) {
       var medianArc = g.selectAll(".medianArc")
         .data(d[0])
@@ -230,6 +239,24 @@ var RadarChart = {
         .attr("opacity", "0.6")
         .attr("fill", "black");
     }
+
+    var Format = d3.format('.1f');
+    var labelSpread = 1.7; // Determines how far the labels are from the center
+    var label = g.selectAll('.label')
+      .data(d[0])
+      .enter()
+      .append('g')
+      .attr('class', 'label');
+
+    label.append("svg:text")
+      .text(function(d) { return Format(d.value);})
+      .attr("fill", "white")
+      .attr("font-size", cfg.valueFontSize)
+      .style('font-family', cfg.fontFamily)
+      .attr("x", function(d,i) { return centroids[i][0]*labelSpread;})
+      .attr("y", function(d,i) { return centroids[i][1]*labelSpread;})
+      .attr("text-anchor", "middle")
+      .attr("transform", `translate(${cfg.w/2},${cfg.h/2})`);
   } else { // Draw spider if not bursts
 
 

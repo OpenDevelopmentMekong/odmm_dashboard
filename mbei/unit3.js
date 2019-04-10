@@ -2,9 +2,17 @@
 based on the given dataset */
 function setAreaLevel(targetDataset, unitSelector, township) {
   // Empty out the old dropdown options
-  var nameVar = "";
-  if (township == true) { nameVar = 'township_name:taf'; }
-  else { nameVar = 'state_name:taf'; }
+  var nameVar, textVar;
+  if (township == true) {
+    nameVar = 'township_name:taf';
+    textVar = nameVar;
+    if (lang=='MM') { textVar = 'township_name:mm';}
+  } else {
+    nameVar = 'state_name:taf';
+    textVar = nameVar;
+    if (lang == 'MM') { textVar = 'state_name:mm';}
+  }
+
   d3.select(unitSelector)
     .select("#areaSelector")
     .selectAll("select")
@@ -22,7 +30,7 @@ function setAreaLevel(targetDataset, unitSelector, township) {
     .enter()
     .append("option")
     .attr("value", function(d) { return d[nameVar]; } )
-    .text(function(d) { return d[nameVar]; });
+    .text(function(d) { return d[textVar]; });
 }
 
 /* Call this func whenever the data changes to update RadarChart */
@@ -89,7 +97,7 @@ function reshapeForRadar(origData) {
     // TODO: Get rid of non axes
     for (j in keys) {
       var value = +origData[i][keys[j]];
-      radarData[i].push({"axis": starburstLegendEN[keys[j]],
+      radarData[i].push({"axis": starburstLegend[lang][keys[j]],
         "value": value});
     }
   }

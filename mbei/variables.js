@@ -91,15 +91,100 @@ Subindex 8: Environmental Compliance,8,sub8,Environmental Compliance
 Subindex 9: Labor Quality,9,sub9,Labor Quality
 Subindex 10: Law & Order,10,sub10,Law & Order`;
 
-var keyTranslationsEN = { 'sub1': 'Entry Costs', 'sub2': 'Land Access & Security',
-'sub3': 'Post-Registration Regulation', 'sub4': 'Informal Charges',
-'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Policy Bias',
-'sub8': 'Environmental Compliance', 'sub9': 'Labor Quality', 'sub10': 'Law & Order'};
+var keyTranslations = {
+  'EN' : {
+    'sub1': 'Entry Costs', 'sub2': 'Land Access & Security',
+    'sub3': 'Post-Registration Regulation', 'sub4': 'Informal Charges',
+    'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Policy Bias',
+    'sub8': 'Environmental Compliance', 'sub9': 'Labor Quality',
+    'sub10': 'Law & Order'
+  },
 
-var starburstLegendEN = { 'sub1': 'Entry', 'sub2': 'Land',
-'sub3': 'Regulations', 'sub4': 'Payments',
-'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Favoritism',
-'sub8': 'Environment', 'sub9': 'Labor', 'sub10': 'Law'};
+  'MM' : {
+    'sub1': 'ကနဦးကုန်ကျစရိတ်', 'sub2': 'မြေယာအသုံးချနိုင်မှုနှင့် လုံခြုံမှု',
+    'sub3': 'မှတ်ပုံတင်ခြင်းအလွန် စည်းမျဉ်းစည်းကမ်းများ', 'sub4': 'အကျင့်ပျက်ခြင်းနှင့် လာဘ်စားခြင်း',
+    'sub5': 'အခြေခံအဆောက်အအုံ', 'sub6': 'ပွင့်လင်းမြင်သာမှု', 'sub7': 'ယှဉ်ပြိုင်မှုတွင် ဘက်လိုက်ခြင်း',
+    'sub8': 'သဘာဝပတ်ဝန်းကျင်နှင့် ကိုက်ညီမှုရှိခြင်း', 'sub9': 'အလုပ်သမားစည်းမျဉ်းစည်းကမ်းများ',
+    'sub10': 'ဥပဒေနှင့်အမိန့်'
+  }
+};
+
+var starburstLegend = {
+  'EN' : {
+    'sub1': 'Entry', 'sub2': 'Land',
+    'sub3': 'Regulations', 'sub4': 'Payments',
+    'sub5': 'Infrastructure', 'sub6': 'Transparency',
+    'sub7': 'Favoritism', 'sub8': 'Environment',
+    'sub9': 'Labor', 'sub10': 'Law'
+  },
+
+  'MM' : {
+    'sub1': 'ကနဦးကုန်ကျစရိတ်', 'sub2': 'မြေယာ',
+    'sub3': 'စည်းမျဉ်းစည်းကမ်း', 'sub4': 'လာဘ်စားခြင်း',
+    'sub5': 'အခြေခံအဆောက်အအုံ', 'sub6': 'ပွင့်လင်းမြင်သာမှု',
+    'sub7': 'ဘက်လိုက်ခြင်း', 'sub8': 'သဘာဝပတ်ဝန်းကျင်',
+    'sub9': 'အလုပ်သမား', 'sub10': 'ဥပဒေနှင့်အမိန့်'
+  }
+};
+
+var aboutText = {
+  'EN' : `The MBEI is a comprehensive diagnostic tool that has
+been specially adapted to evaluate and improve Myanmar’s
+subnational business environment. To generate the index,
+the Foundation surveyed nearly 5,000 businesses across
+all 14 states and regions and Nay Pyi Taw Union Territory
+and gather data on licensing, land access, government
+transparency, and more.`,
+
+  'MM' : `မြန်မာ့စီးပွားရေးဝန်းကျင်ညွှန်ကိန်းသည် မြန်မာနိုင်ငံ၏ ဒေသန္တရ စီးပွားရေး ပတ်ဝန်းကျင်ကို
+လေ့လာ သုံးသပ်ပြီး တိုးတက်ကောင်းမွန်စေရန် အထူးလိုက်လျော ညီထွေစွာ ဖော်ဆောင်
+ထားသည့် စစ်တမ်းကောက်ယူမှု အစီအစဉ် တစ်ခုဖြစ်ပါသည်။ ညွှန်းကိန်း ဖော်ထုတ်နိုင်ရန်
+အတွက် အာရှဖောင်ဒေးရှင်းသည် ပြည်နယ်နှင့် တိုင်းဒေသကြီး ၁၄ ခု နှင့် နေပြည်တော်
+ပြည်ထောင်စုနယ်မြေမှ လုပ်ငန်းပေါင်း ၅ဝဝဝ နီးပါးကို လိုင်စင်ပြုလုပ်ခြင်း၊ မြေယာအသုံးချ
+နိုင်မှု၊ အစိုးရ၏ ပွင့်လင်းမြင်သာမှုနှင့် တခြားသော အကြောင်းအရာများနှင့် သက်ဆိုင်သည့်
+အချက်အလက်များ မေးမြန်းစုဆောင်းသွားမည်ဖြစ်သည်။`
+}
+
+var copy = {
+  township: {
+    EN : 'Townships',
+    MM : 'မြို့နယ်များ'
+  },
+
+  stateregion: {
+    EN : 'States/Regions',
+    MM : `တိုင်းဒေသကြီး(သို့)ပြည်နယ်များ`
+  },
+
+  about : {
+    EN : `The MBEI is a comprehensive diagnostic tool that has
+  been specially adapted to evaluate and improve Myanmar’s
+  subnational business environment. To generate the index,
+  the Foundation surveyed nearly 5,000 businesses across
+  all 14 states and regions and Nay Pyi Taw Union Territory
+  and gather data on licensing, land access, government
+  transparency, and more.`,
+
+    MM : `မြန်မာ့စီးပွားရေးဝန်းကျင်ညွှန်ကိန်းသည် မြန်မာနိုင်ငံ၏ ဒေသန္တရ စီးပွားရေး ပတ်ဝန်းကျင်ကို
+  လေ့လာ သုံးသပ်ပြီး တိုးတက်ကောင်းမွန်စေရန် အထူးလိုက်လျော ညီထွေစွာ ဖော်ဆောင်
+  ထားသည့် စစ်တမ်းကောက်ယူမှု အစီအစဉ် တစ်ခုဖြစ်ပါသည်။ ညွှန်းကိန်း ဖော်ထုတ်နိုင်ရန်
+  အတွက် အာရှဖောင်ဒေးရှင်းသည် ပြည်နယ်နှင့် တိုင်းဒေသကြီး ၁၄ ခု နှင့် နေပြည်တော်
+  ပြည်ထောင်စုနယ်မြေမှ လုပ်ငန်းပေါင်း ၅ဝဝဝ နီးပါးကို လိုင်စင်ပြုလုပ်ခြင်း၊ မြေယာအသုံးချ
+  နိုင်မှု၊ အစိုးရ၏ ပွင့်လင်းမြင်သာမှုနှင့် တခြားသော အကြောင်းအရာများနှင့် သက်ဆိုင်သည့်
+  အချက်အလက်များ မေးမြန်းစုဆောင်းသွားမည်ဖြစ်သည်။`
+},
+
+  medianStarburst: {
+    EN : 'Median National Subindex Scores',
+    MM : `နိုင်ငံလုံးဆိုင်ရာ အညွှန်းခွဲရမှတ်များ
+    (အလယ်ဗဟိုလ်ကိန်းဂဏန်း)`
+  },
+
+  nationalRankings: {
+    EN : 'National MBEI Rankings',
+    MM : `တိုင်းဒေသကြီးနှင့်ပြည်နယ်များ၏ အဆင့်လိုက်ညွှန်းကိန်းရမှတ်များ`
+  }
+}
 
 var starburstIcon = { 'sub1': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon1.png',
 'sub2': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon2.png',

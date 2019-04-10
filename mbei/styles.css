@@ -3,7 +3,7 @@
 }
 
 * {
-  font-family: Raleway;
+  font-family: Pyidaungsu;
 }
 
 .subunit > h3 {
@@ -24,12 +24,6 @@ button {
   padding-bottom: 25px;
 }
 
-/* *** INTRO and DONORS *** */
-/* Table height MUST be the same as .mainImage height */
-.donorLogo {
-  margin: 20px 10% 20px 10%; //tweak this for the spread between logos
-}
-
 /* *** UNIT 1 *** */
 .unit1 {
   text-align: center;
@@ -41,13 +35,15 @@ button {
 
 .donors {
   text-align: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 0 10% 0 10%;
 }
-.donors > img {
-  display: inline-block;
-  margin: 0 auto;
-}
+
 #dana {
-  transform: translate(0,-12px);
+  /*transform: translate(0,-12px);*/
+  margin: 13px 0 13px 0;
 }
 #taf {
   transform: translate(0, 8px);
@@ -87,6 +83,7 @@ button {
   margin: 0 auto;
   margin-left: 10px;
   margin-right: 10px;
+  margin-bottom: 10px;
   font-size: 15px;
 }
 
@@ -114,7 +111,7 @@ button {
   display: inline-block;
   margin: 0 20 15 20;
   font-size: 15px;
-  width: 30%;
+  width: 35%;
 }
 .unit4BarChart {
   display: inline-block;
