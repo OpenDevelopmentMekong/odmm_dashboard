@@ -22,6 +22,7 @@ function setAreaLevel(targetDataset, unitSelector, township) {
     .remove();
 
   // Populate the dropdown options with new data
+  console.log(targetDataset[0][nameVar]);
   d3.select(unitSelector)
     .select("#areaSelector")
     .selectAll("select")

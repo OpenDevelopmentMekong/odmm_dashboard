@@ -121,5 +121,13 @@ function renderText(lang) {
   d3.select('.unit1BarChart').select('h3')
     .text(copy.nationalRankings[lang]);
 
+  d3.select('.unit2').select('h3')
+    .text(copy.unit2Header[lang]);
+
+  d3.select('.unit3').select('h3')
+    .text(copy.unit3Header[lang]);
+
+  d3.select('.unit4').select('h3')
+    .text(copy.unit4Header[lang]);
 
 }

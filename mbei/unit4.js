@@ -10,7 +10,8 @@ function generateSubindexButtons(id) {
   d3.select(id)
     .append('select')
     .attr('id', 'subindexSelector')
-    .attr("onchange", function (d) {
+    .attr('class', 'copy')
+    .attr("oninput", function (d) {
       return `var barData = buildBarData(unit4Township, findCurrSubindex());
       drawSubindexBar('${barChartId}', barData);
       changeSubindexTitle(findCurrSubindex());`;
@@ -21,7 +22,7 @@ function generateSubindexButtons(id) {
     .append('option')
     .text(function(d) {
       if (d == 'Overall Score') {
-        if (lang == 'MM') { return "မြန့်မာ့စီးပွားရေးဝန်းကျင် ညွှန်းကိန်းရမှတ်"; }
+        if (lang == 'MM') { return "မြန့်မာ့စီးပွားရေးဝန်းကျင် ညွန်းကိန်းရမှတ်"; }
         return d;
       } else {
       return keyTranslations[lang][d];
@@ -37,7 +38,7 @@ function changeSubindexTitle(subindex) {
     if (lang == 'EN') {
       d3.select('.subindexName').text("Overall Score");
     } else if (lang == 'MM') {
-      d3.select('.subindexName').text("မြန့်မာ့စီးပွားရေးဝန်းကျင် ညွှန်းကိန်းရမှတ်");
+      d3.select('.subindexName').text("မြန့်မာ့စီးပွားရေးဝန်းကျင် ညွန်းကိန်းရမှတ်");
     }
   } else {
     d3.select('.subindexName').text(keyTranslations[lang][subindex]);
@@ -46,7 +47,8 @@ function changeSubindexTitle(subindex) {
 
 function drawSubindexBar(id, data) {
   var options = { hover: true,
-    tiers: false };
+    tiers: false,
+    slider: unit4Township };
   barChart(data, id, options);
 }
 

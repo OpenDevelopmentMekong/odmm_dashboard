@@ -176,13 +176,28 @@ var copy = {
 
   medianStarburst: {
     EN : 'Median National Subindex Scores',
-    MM : `နိုင်ငံလုံးဆိုင်ရာ အညွှန်းခွဲရမှတ်များ
+    MM : `နိုင်ငံလုံးဆိုင်ရာ အညွန်းခွဲရမှတ်များ
     (အလယ်ဗဟိုလ်ကိန်းဂဏန်း)`
   },
 
   nationalRankings: {
     EN : 'National MBEI Rankings',
-    MM : `တိုင်းဒေသကြီးနှင့်ပြည်နယ်များ၏ အဆင့်လိုက်ညွှန်းကိန်းရမှတ်များ`
+    MM : `တိုင်းဒေသကြီးနှင့်ပြည်နယ်များ၏ အဆင့်လိုက်ညွန်းကိန်းရမှတ်များ`
+  },
+
+  unit2Header: {
+    EN : 'Explore subindex scores for states and regions or townships',
+    MM : 'နေရာအလိုက် ညွန်းခွဲရမှတ်များ'
+  },
+
+  unit3Header: {
+    EN : 'Compare subindex scores between two areas',
+    MM : 'နေရာအလိုက် ညွန်းခွဲရမှတ်များ ယှဉ်ကြည့်ရန်'
+  },
+
+  unit4Header: {
+    EN : 'Performance rankings for each subindicator',
+    MM : 'အဆင့်လိုက်ညွန်းခွဲရမှတ်များ'
   }
 }
 

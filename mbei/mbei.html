@@ -29,36 +29,36 @@
       data-ga-event="Dataset|resource_download|217c73e8-f456-4392-a43e-1ba2a0694a92/9d40f3cb-e45a-43d3-b771-93aa6ba5a540">
       <i class="fa fa-download"></i>Download
     </a> -->
-    <div class="unit intro">
+    <div class="unit intro copy">
       <p></p>
     </div>
 
     <div class="unit donors">
       <img id="dana" width="96px" height="64px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/dana.png"/>
       <img id="ukaid" width="96px" height="96px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/ukaid.png"/>
-      <img id="taf" width="134px" height="90px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/taf.png"/>
+      <img id="taf" width="150px" height="100px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/taf.png"/>
     </div>
 
-    <div class="unit unit1">
+    <div class="unit unit1 copy">
     <!--  <button type="button" onclick="drawNationChart(false, 'unit1RadarChart');">States/Regions</button> |
       <button type="button" onclick="drawNationChart(true, 'unit1RadarChart');">Townships</button>
     -->
     <div class="subunit unit1RadarChart">
-      <h3>Median National Subindex Scores</h3>
+      <h3 class="copy"></h3>
     </div>
     <div class="subunit unit1BarChart">
-      <h3>National MBEI Rankings</h3>
+      <h3 class="copy"></h3>
     </div>
 
     </div>
 
     <hr/>
 
-    <div class="unit unit2">
-      <h3>Explore subindex scores for states and regions or townships</h3>
+    <div class="unit unit2 copy">
+      <h3 class="copy"></h3>
       <div>
-      <select id="subnationalDropdown" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
-      <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');"></button> |
+      <select id="subnationalDropdown" class="copy" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
+      <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart'); drawMap();"></button> |
       <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');"></button>
     </div>
       <div class="subunit mapSelector"></div>
@@ -69,11 +69,11 @@
 
     <hr/>
 
-    <div class="unit unit3">
-      <h3>Compare subindex scores between two areas</h3>
+    <div class="unit unit3 copy">
+      <h3 class="copy">Compare subindex scores between two areas</h3>
       <div id="areaSelector">
-        <div id="select1Color"></div><select id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
-        <div id="select2Color"></div><select id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
+        <div id="select1Color"></div><select class="copy" id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
+        <div id="select2Color"></div><select class="copy" id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
       </div>
       <div id="areaLevelSelector">
         <button type="button" onclick="unit3Township = false; setAreaLevel(srData, '.unit3', false); changeRadar('#select1','#select2', false);"></button> |
@@ -84,16 +84,22 @@
 
     <hr/>
 
-    <div class="unit unit4">
-      <h3>Performance rankings for each subindicator</h3>
+    <div class="unit unit4 copy">
+      <h3 class="copy">Performance rankings for each subindicator</h3>
       <div class="subunit unit4Buttons">
       </div>
       <div class="subunit unit4Switch">
-        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');"></button> |
-        <button type="button" onclick="unit4Township = true; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');"></button>
+        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score');"></button> |
+        <button type="button" onclick="unit4Township = true; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score');"></button>
       </div>
       <div class="subunit unit4BarChart">
-        <h4><a class="subindexName"></a></h4>
+        <h4><a class="subindexName copy"></a></h4>
+      </div>
+      <div class="subunit unit4Slider">
+      </div>
+      <div class="subunit">
+        <button class="copy" type="button" onclick="document.getElementById('#unit4Slider').stepUp();"/>
+        <button class="copy" type="button" onclick="document.getElementById('#unit4Slider').stepDown();"/>
       </div>
     </div>
     <script>
@@ -104,9 +110,15 @@
     var srData = d3.csv.parse(mbei_stateregion);
     var tspData = d3.csv.parse(mbei_township);
     var subDataSpliceIndex = 5;      // how many columns to skip to reach 'sub1'
-    var lang = 'MM';
+    var lang = 'EN';
 
     renderText(lang);
+    if (lang == 'MM') {
+      d3.selectAll('.copy').style('font-family', 'Pyidaungsu !important');
+    } else if (lang == 'EN') {
+      d3.selectAll('.copy').style('font-family', 'Montserrat');
+
+    }
     //Unit 1
     drawNationChart(false, '.unit1RadarChart');
     var unit1BarData = reshapeForUnit1BarChart(srData);

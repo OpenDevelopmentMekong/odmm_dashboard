@@ -9,6 +9,7 @@ function barChart(data, id, options) {
     baseHeight: 350,
     circleRadius: 6,
     tiers: false,
+    slider: false,
     tierColors: {1: '#89cfc9', 2: '#67b1b3',
       3: '#297588', 4: '#045971'}
   };
@@ -34,11 +35,12 @@ function barChart(data, id, options) {
     return b.value - a.value;
   });
   /* Build SVG */
-  var svg = d3.select(id)
+  var parentSVG = d3.select(id)
     .append("svg")
       .attr("width", cfg.width + cfg.mLeft + cfg.mRight)
       .attr("height", cfg.height + cfg.mTop + cfg.mBottom)
-    .append("g")
+
+  var svg = parentSVG.append("g")
       .attr("transform",
             `translate(${cfg.mLeft},${cfg.mTop})`);
 
@@ -62,13 +64,14 @@ function barChart(data, id, options) {
     }))
     .padding(1);
 
-  svg.append('g')
+  var bottomLabels = svg.append('g')
     .attr('transform', `translate(0,${cfg.height})`)
     .call(d3.axisBottom(xScale))
     .selectAll("text") //not sure what this does
     .attr('transform', 'translate(-15,15)rotate(-90)')
     .attr('font-size', '1.2em')
-    .style('text-anchor', 'end');
+    .style('text-anchor', 'end')
+    .attr("class", "copy");
 
   /* Build y axis */
 
@@ -84,10 +87,12 @@ function barChart(data, id, options) {
   var yScalePositive = d3.scale.linear()
     .domain([0, maxValue])
     .range([0, cfg.height]);
+
   svg.selectAll('myBar')
     .data(data)
     .enter()
     .append("svg:rect")
+    .attr('class', 'bar')
     .attr("x", "0")
     .attr("y", function(d) {
       return yScale(d.value);
@@ -107,36 +112,52 @@ function barChart(data, id, options) {
         return cfg.tierColors[1];
       }
     });
-  /*svg.selectAll('myline')
-    .data(data)
-    .enter()
-    .append('line')
-    .attr('x1', function(d) {
-      return xScale(d.label);
-    })
-    .attr('x2', function (d) {
-      return xScale(d.label);
-    })
-    .attr('y1', function (d) {
-      return yScale(0);
-    })
-    .attr('y2', function (d) {
-      return yScale(d.value);
-    })
-    .attr('stroke', 'grey');*/
 
-  /*svg.selectAll('mycircle')
-    .data(data)
-    .enter()
-    .append('circle')
-    .attr('cx', function (d) {
-      return xScale(d.label);
-    })
-    .attr('cy', function (d) {
-      return yScale(d.value);
-    })
-    .attr('r', `${cfg.circleRadius}`)
-    .style('fill', '#69b3a2')
-    .attr('stroke', 'black');*/
+  if (cfg.slider == true) {
+    bottomLabels.remove();
+    d3.select('.unit4Slider').select('input').remove();
+    d3.select('.unit4Slider').select('h4').remove();
 
+    parentSVG.attr("height", cfg.baseHeight - 0.7*cfg.mBottom);
+    var Format = d3.format('.1f');
+    var describe = d3.select('.unit4Slider').append('h4');
+    var slider = d3.select('.unit4Slider')
+      .append('input')
+      .data([data])
+      .attr('id', 'unit4Slider')
+      .attr('type', 'range')
+      .attr('step', 1)
+      .style('width', '35em')
+      .attr('min', 1)
+      .attr('max', data.length)
+      .attr('value', 1)
+      .on('change', function(d) {
+        var index = document.getElementById('unit4Slider').value -1;
+        svg.selectAll('.bar')
+          .attr("fill", function(d,i) {
+            if (i == index) {
+              return '#f58020';
+            } else {
+              return cfg.tierColors[1];
+            }
+          });
+        if (lang == 'EN') {
+          describe.text(`${d[index].label} has a rank of ${index+1} with a score of ${Format(d[index].value)}`);
+        } else if (lang == 'MM') {
+          describe.text(`${d[index].label} သည် အဆင့် (${index+1}) ဖြစ်ပြီး ရမှတ် ${Format(d[index].value)} ရှိပါသည်`);
+        }
+      });
+
+    describe.text(function() {
+      if (lang == 'EN') {
+        return `${data[0].label} has a rank of 1 with a score of ${Format(data[0].value)}`;
+      } else if (lang == 'MM') {
+        return `${data[0].label} သည် အဆင့်(1) ဖြစ်ပြီး ရမှတ် ${Format(data[0].value)} ရှိပါသည်`;
+      }
+    });
+
+    svg.select('.bar')
+      .attr("fill", "#f58020");
+
+  }
 }

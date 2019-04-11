@@ -1,12 +1,9 @@
 <html>
   <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <style>
 .subunit {
   margin-left: 5%;
-}
-
-* {
-  font-family: Raleway;
 }
 
 .subunit > h3 {
@@ -34,6 +31,7 @@ button {
 .intro {
   width: 70%;
   margin: 0 auto;
+  text-align: justify;
 }
 
 .donors {
@@ -114,7 +112,7 @@ button {
   display: inline-block;
   margin: 0 20 15 20;
   font-size: 15px;
-  width: 30%;
+  width: 35%;
 }
 .unit4BarChart {
   display: inline-block;
@@ -123,8 +121,48 @@ button {
 .subindexName {
   text-transform: uppercase;
 }
+
+.unit4Slider {
+  width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+#unit4Slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 25px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+#unit4Slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+#unit4Slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #81cfcc; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+#unit4Slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #81cfcc; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
 </style>
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Raleway" rel="stylesheet">
+    <link href='https://mmwebfonts.comquas.com/fonts/?font=pyidaungsu' rel="stylesheet" />
     <script src="https://d3js.org/d3.v3.js"></script>
 
     <script src="https://d3js.org/d3-axis.v1.min.js"></script>
@@ -229,15 +267,115 @@ Subindex 8: Environmental Compliance,8,sub8,Environmental Compliance
 Subindex 9: Labor Quality,9,sub9,Labor Quality
 Subindex 10: Law & Order,10,sub10,Law & Order`;
 
-var keyTranslationsEN = { 'sub1': 'Entry Costs', 'sub2': 'Land Access & Security',
-'sub3': 'Post-Registration Regulation', 'sub4': 'Informal Charges',
-'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Policy Bias',
-'sub8': 'Environmental Compliance', 'sub9': 'Labor Quality', 'sub10': 'Law & Order'};
+var keyTranslations = {
+  'EN' : {
+    'sub1': 'Entry Costs', 'sub2': 'Land Access & Security',
+    'sub3': 'Post-Registration Regulation', 'sub4': 'Informal Charges',
+    'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Policy Bias',
+    'sub8': 'Environmental Compliance', 'sub9': 'Labor Quality',
+    'sub10': 'Law & Order'
+  },
 
-var starburstLegendEN = { 'sub1': 'Entry', 'sub2': 'Land',
-'sub3': 'Regulations', 'sub4': 'Payments',
-'sub5': 'Infrastructure', 'sub6': 'Transparency', 'sub7': 'Favoritism',
-'sub8': 'Environment', 'sub9': 'Labor', 'sub10': 'Law'};
+  'MM' : {
+    'sub1': 'ကနဦးကုန်ကျစရိတ်', 'sub2': 'မြေယာအသုံးချနိုင်မှုနှင့် လုံခြုံမှု',
+    'sub3': 'မှတ်ပုံတင်ခြင်းအလွန် စည်းမျဉ်းစည်းကမ်းများ', 'sub4': 'အကျင့်ပျက်ခြင်းနှင့် လာဘ်စားခြင်း',
+    'sub5': 'အခြေခံအဆောက်အအုံ', 'sub6': 'ပွင့်လင်းမြင်သာမှု', 'sub7': 'ယှဉ်ပြိုင်မှုတွင် ဘက်လိုက်ခြင်း',
+    'sub8': 'သဘာဝပတ်ဝန်းကျင်နှင့် ကိုက်ညီမှုရှိခြင်း', 'sub9': 'အလုပ်သမားစည်းမျဉ်းစည်းကမ်းများ',
+    'sub10': 'ဥပဒေနှင့်အမိန့်'
+  }
+};
+
+var starburstLegend = {
+  'EN' : {
+    'sub1': 'Entry', 'sub2': 'Land',
+    'sub3': 'Regulations', 'sub4': 'Payments',
+    'sub5': 'Infrastructure', 'sub6': 'Transparency',
+    'sub7': 'Favoritism', 'sub8': 'Environment',
+    'sub9': 'Labor', 'sub10': 'Law'
+  },
+
+  'MM' : {
+    'sub1': 'ကနဦးကုန်ကျစရိတ်', 'sub2': 'မြေယာ',
+    'sub3': 'စည်းမျဉ်းစည်းကမ်း', 'sub4': 'လာဘ်စားခြင်း',
+    'sub5': 'အခြေခံအဆောက်အအုံ', 'sub6': 'ပွင့်လင်းမြင်သာမှု',
+    'sub7': 'ဘက်လိုက်ခြင်း', 'sub8': 'သဘာဝပတ်ဝန်းကျင်',
+    'sub9': 'အလုပ်သမား', 'sub10': 'ဥပဒေနှင့်အမိန့်'
+  }
+};
+
+var aboutText = {
+  'EN' : `The MBEI is a comprehensive diagnostic tool that has
+been specially adapted to evaluate and improve Myanmar’s
+subnational business environment. To generate the index,
+the Foundation surveyed nearly 5,000 businesses across
+all 14 states and regions and Nay Pyi Taw Union Territory
+and gather data on licensing, land access, government
+transparency, and more.`,
+
+  'MM' : `မြန်မာ့စီးပွားရေးဝန်းကျင်ညွှန်ကိန်းသည် မြန်မာနိုင်ငံ၏ ဒေသန္တရ စီးပွားရေး ပတ်ဝန်းကျင်ကို
+လေ့လာ သုံးသပ်ပြီး တိုးတက်ကောင်းမွန်စေရန် အထူးလိုက်လျော ညီထွေစွာ ဖော်ဆောင်
+ထားသည့် စစ်တမ်းကောက်ယူမှု အစီအစဉ် တစ်ခုဖြစ်ပါသည်။ ညွှန်းကိန်း ဖော်ထုတ်နိုင်ရန်
+အတွက် အာရှဖောင်ဒေးရှင်းသည် ပြည်နယ်နှင့် တိုင်းဒေသကြီး ၁၄ ခု နှင့် နေပြည်တော်
+ပြည်ထောင်စုနယ်မြေမှ လုပ်ငန်းပေါင်း ၅ဝဝဝ နီးပါးကို လိုင်စင်ပြုလုပ်ခြင်း၊ မြေယာအသုံးချ
+နိုင်မှု၊ အစိုးရ၏ ပွင့်လင်းမြင်သာမှုနှင့် တခြားသော အကြောင်းအရာများနှင့် သက်ဆိုင်သည့်
+အချက်အလက်များ မေးမြန်းစုဆောင်းသွားမည်ဖြစ်သည်။`
+}
+
+var copy = {
+  township: {
+    EN : 'Townships',
+    MM : 'မြို့နယ်များ'
+  },
+
+  stateregion: {
+    EN : 'States/Regions',
+    MM : `တိုင်းဒေသကြီး(သို့)ပြည်နယ်များ`
+  },
+
+  about : {
+    EN : `The MBEI is a comprehensive diagnostic tool that has
+  been specially adapted to evaluate and improve Myanmar’s
+  subnational business environment. To generate the index,
+  the Foundation surveyed nearly 5,000 businesses across
+  all 14 states and regions and Nay Pyi Taw Union Territory
+  and gather data on licensing, land access, government
+  transparency, and more.`,
+
+    MM : `မြန်မာ့စီးပွားရေးဝန်းကျင်ညွှန်ကိန်းသည် မြန်မာနိုင်ငံ၏ ဒေသန္တရ စီးပွားရေး ပတ်ဝန်းကျင်ကို
+  လေ့လာ သုံးသပ်ပြီး တိုးတက်ကောင်းမွန်စေရန် အထူးလိုက်လျော ညီထွေစွာ ဖော်ဆောင်
+  ထားသည့် စစ်တမ်းကောက်ယူမှု အစီအစဉ် တစ်ခုဖြစ်ပါသည်။ ညွှန်းကိန်း ဖော်ထုတ်နိုင်ရန်
+  အတွက် အာရှဖောင်ဒေးရှင်းသည် ပြည်နယ်နှင့် တိုင်းဒေသကြီး ၁၄ ခု နှင့် နေပြည်တော်
+  ပြည်ထောင်စုနယ်မြေမှ လုပ်ငန်းပေါင်း ၅ဝဝဝ နီးပါးကို လိုင်စင်ပြုလုပ်ခြင်း၊ မြေယာအသုံးချ
+  နိုင်မှု၊ အစိုးရ၏ ပွင့်လင်းမြင်သာမှုနှင့် တခြားသော အကြောင်းအရာများနှင့် သက်ဆိုင်သည့်
+  အချက်အလက်များ မေးမြန်းစုဆောင်းသွားမည်ဖြစ်သည်။`
+},
+
+  medianStarburst: {
+    EN : 'Median National Subindex Scores',
+    MM : `နိုင်ငံလုံးဆိုင်ရာ အညွန်းခွဲရမှတ်များ
+    (အလယ်ဗဟိုလ်ကိန်းဂဏန်း)`
+  },
+
+  nationalRankings: {
+    EN : 'National MBEI Rankings',
+    MM : `တိုင်းဒေသကြီးနှင့်ပြည်နယ်များ၏ အဆင့်လိုက်ညွန်းကိန်းရမှတ်များ`
+  },
+
+  unit2Header: {
+    EN : 'Explore subindex scores for states and regions or townships',
+    MM : 'နေရာအလိုက် ညွန်းခွဲရမှတ်များ'
+  },
+
+  unit3Header: {
+    EN : 'Compare subindex scores between two areas',
+    MM : 'နေရာအလိုက် ညွန်းခွဲရမှတ်များ ယှဉ်ကြည့်ရန်'
+  },
+
+  unit4Header: {
+    EN : 'Performance rankings for each subindicator',
+    MM : 'အဆင့်လိုက်ညွန်းခွဲရမှတ်များ'
+  }
+}
 
 var starburstIcon = { 'sub1': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon1.png',
 'sub2': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon2.png',
@@ -289,8 +427,8 @@ var RadarChart = {
   draw: function(id, d, options){
   var cfg = {
 	 radius: 5,
-	 w: 250,
-	 h: 250,
+	 w: 275,
+	 h: 275,
 	 factor: 1,
 	 factorLegend: 1.2,
 	 levels: 10,
@@ -307,7 +445,7 @@ var RadarChart = {
 	 color: [],
    labelFontSize: '70%',
    valueFontSize: '70%',
-   fontFamily: 'Montserrat'
+   fontFamily: 'Pyidaungsu'
 	};
 
 	if('undefined' !== typeof options){
@@ -438,11 +576,30 @@ var RadarChart = {
   	.style("font-size", cfg.labelFontSize)
   	.style("word-wrap", "normal")
   	.attr("text-anchor", function(d,i) {
-      if (i<5) { return "start";}
-      else { return "end";}
+      if (i<5) { return "middle";}
+      else { return "middle";}
     })
-  	.attr("dy", "1.5em")
-  	.attr("transform", function(d, i){return "translate(0, -8)"})
+  	.attr("transform", function(d, i){
+      if (i==0 | i==1 | i==8 | i==9){
+        if (i==0 | i==9) {
+          return "translate(0,5)";
+        }
+        return "translate(0,0)";
+      } else {
+        if (i==4 | i==5) {
+          return "translate(0,7)";
+        }
+        if (i==3 | i==6)  {
+          return "translate(0,15)";
+        }
+        if (i==2) {
+          return "translate(-10,30)";
+        }
+        if (i==7) {
+          return "translate(10,30)";
+        }
+      }
+    })
   	.attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(-(i+placementOffset)*cfg.radians/total));})
   	.attr("y", function(d, i){return cfg.h/2*(1-cfg.factorLegend*Math.cos(-(i+placementOffset)*cfg.radians/total));});
 
@@ -526,8 +683,8 @@ var RadarChart = {
 	  g.selectAll(".nodes")
 		.data(y, function(j, i){
 		  dataValues.push([
-			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin((i+0.5)*cfg.radians/total)),
-			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos((i+0.5)*cfg.radians/total))
+			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(-(i+0.5)*cfg.radians/total)),
+			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(-(i+0.5)*cfg.radians/total))
 		  ]);
 		});
 	  dataValues.push(dataValues[0]);
@@ -575,13 +732,13 @@ var RadarChart = {
 		.attr("alt", function(j){return Math.max(j.value, 0)})
 		.attr("cx", function(j, i){
 		  dataValues.push([
-			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin((i+0.5)*cfg.radians/total)),
-			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos((i+0.5)*cfg.radians/total))
+			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(-(i+0.5)*cfg.radians/total)),
+			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(-(i+0.5)*cfg.radians/total))
 		]);
-		return cfg.w/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.sin((i+0.5)*cfg.radians/total));
+		return cfg.w/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.sin(-(i+0.5)*cfg.radians/total));
 		})
 		.attr("cy", function(j, i){
-		  return cfg.h/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.cos((i+0.5)*cfg.radians/total));
+		  return cfg.h/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.cos(-(i+0.5)*cfg.radians/total));
 		})
 		.attr("data-id", function(j){return j.axis})
 		.style("fill", function(d,i) { if (series == 0) {return cfg.color[0]} else if (series == 1) {return cfg.color[9]} }).style("fill-opacity", .9)
@@ -618,12 +775,13 @@ function barChart(data, id, options) {
   var cfg = {
     mTop: 10,
     mRight: 30,
-    mBottom: 80,
+    mBottom: 130,
     mLeft: 40,
-    baseWidth: 350,
-    baseHeight: 300,
+    baseWidth: 375,
+    baseHeight: 350,
     circleRadius: 6,
     tiers: false,
+    slider: false,
     tierColors: {1: '#89cfc9', 2: '#67b1b3',
       3: '#297588', 4: '#045971'}
   };
@@ -649,11 +807,12 @@ function barChart(data, id, options) {
     return b.value - a.value;
   });
   /* Build SVG */
-  var svg = d3.select(id)
+  var parentSVG = d3.select(id)
     .append("svg")
       .attr("width", cfg.width + cfg.mLeft + cfg.mRight)
       .attr("height", cfg.height + cfg.mTop + cfg.mBottom)
-    .append("g")
+
+  var svg = parentSVG.append("g")
       .attr("transform",
             `translate(${cfg.mLeft},${cfg.mTop})`);
 
@@ -677,12 +836,14 @@ function barChart(data, id, options) {
     }))
     .padding(1);
 
-  svg.append('g')
+  var bottomLabels = svg.append('g')
     .attr('transform', `translate(0,${cfg.height})`)
     .call(d3.axisBottom(xScale))
     .selectAll("text") //not sure what this does
     .attr('transform', 'translate(-15,15)rotate(-90)')
-    .style('text-anchor', 'end');
+    .attr('font-size', '1.2em')
+    .style('text-anchor', 'end')
+    .attr("class", "copy");
 
   /* Build y axis */
 
@@ -690,7 +851,7 @@ function barChart(data, id, options) {
   svg.append('g')
     .call(d3.axisLeft(yScale))
     .selectAll("text")
-    .attr('font-size', '12px');
+    .attr('font-size', '1.25em');
 
   /* Build lines */
   var barWidth = cfg.width / data.length * 0.6;
@@ -698,10 +859,12 @@ function barChart(data, id, options) {
   var yScalePositive = d3.scale.linear()
     .domain([0, maxValue])
     .range([0, cfg.height]);
+
   svg.selectAll('myBar')
     .data(data)
     .enter()
     .append("svg:rect")
+    .attr('class', 'bar')
     .attr("x", "0")
     .attr("y", function(d) {
       return yScale(d.value);
@@ -721,38 +884,54 @@ function barChart(data, id, options) {
         return cfg.tierColors[1];
       }
     });
-  /*svg.selectAll('myline')
-    .data(data)
-    .enter()
-    .append('line')
-    .attr('x1', function(d) {
-      return xScale(d.label);
-    })
-    .attr('x2', function (d) {
-      return xScale(d.label);
-    })
-    .attr('y1', function (d) {
-      return yScale(0);
-    })
-    .attr('y2', function (d) {
-      return yScale(d.value);
-    })
-    .attr('stroke', 'grey');*/
 
-  /*svg.selectAll('mycircle')
-    .data(data)
-    .enter()
-    .append('circle')
-    .attr('cx', function (d) {
-      return xScale(d.label);
-    })
-    .attr('cy', function (d) {
-      return yScale(d.value);
-    })
-    .attr('r', `${cfg.circleRadius}`)
-    .style('fill', '#69b3a2')
-    .attr('stroke', 'black');*/
+  if (cfg.slider == true) {
+    bottomLabels.remove();
+    d3.select('.unit4Slider').select('input').remove();
+    d3.select('.unit4Slider').select('h4').remove();
 
+    parentSVG.attr("height", cfg.baseHeight - 0.7*cfg.mBottom);
+    var Format = d3.format('.1f');
+    var describe = d3.select('.unit4Slider').append('h4');
+    var slider = d3.select('.unit4Slider')
+      .append('input')
+      .data([data])
+      .attr('id', 'unit4Slider')
+      .attr('type', 'range')
+      .attr('step', 1)
+      .style('width', '35em')
+      .attr('min', 1)
+      .attr('max', data.length)
+      .attr('value', 1)
+      .on('change', function(d) {
+        var index = document.getElementById('unit4Slider').value -1;
+        svg.selectAll('.bar')
+          .attr("fill", function(d,i) {
+            if (i == index) {
+              return '#f58020';
+            } else {
+              return cfg.tierColors[1];
+            }
+          });
+        if (lang == 'EN') {
+          describe.text(`${d[index].label} has a rank of ${index+1} with a score of ${Format(d[index].value)}`);
+        } else if (lang == 'MM') {
+          describe.text(`${d[index].label} သည် အဆင့် (${index+1}) ဖြစ်ပြီး ရမှတ် ${Format(d[index].value)} ရှိပါသည်`);
+        }
+      });
+
+    describe.text(function() {
+      if (lang == 'EN') {
+        return `${data[0].label} has a rank of 1 with a score of ${Format(data[0].value)}`;
+      } else if (lang == 'MM') {
+        return `${data[0].label} သည် အဆင့်(၁) ဖြစ်ပြီး ရမှတ် ${Format(data[0].value)} ရှိပါသည်`;
+      }
+    });
+
+    svg.select('.bar')
+      .attr("fill", "#f58020");
+
+  }
 }
 </script>
 <script>
@@ -772,14 +951,14 @@ function drawLegend() {
   var legend = d3.select(".unit1BarChart")
     .append("svg")
     .attr("width", "100px")
-    .attr("height", "200px")
+    .attr("height", "250px")
     .append("g");
 
   var legendData = [
-    { name: "High", color: "#89cfc9" },
-    { name: "Middle", color: "#67b1b3" },
-    { name: "Low", color: "#297588" },
-    { name: "Bottom", color: "#045971" }
+    { name: "High", mmname: "အမြင့်", color: "#89cfc9" },
+    { name: "Middle", mmname: "အလယ်", color: "#67b1b3" },
+    { name: "Low", mmname: "နိမ့်", color: "#297588" },
+    { name: "Bottom", mmname: "အောက်ဆုံး", color: "#045971" }
   ]
 
   legend.selectAll(".legendRect")
@@ -801,7 +980,10 @@ function drawLegend() {
     .attr("x", 30)
     .attr("font-size", "12px")
     .attr("y", (d,i)=>(i*30))
-    .text((d)=>(d.name))
+    .text(function(d) {
+      if (lang == 'EN') { return d.name; }
+      else if (lang == 'MM') { return d.mmname; }
+    })
     .attr("transform", "translate(0,15)");
 
 }
@@ -821,14 +1003,16 @@ function generateMedians(township) {
     var medianValue = d3.median(data, function (d) {
        return d[keys[i]];
     });
-    medianData[0].push({'axis': starburstLegendEN[keys[i]], 'value': medianValue});
+    medianData[0].push({'axis': starburstLegend[lang][keys[i]], 'value': medianValue});
   }
   return medianData;
 }
 
 function reshapeForUnit1BarChart(data) {
   var retData = [];
-  var nameAccessor = 'state_name:taf';
+  var nameAccessor;
+  if (lang == 'EN') { nameAccessor = 'state_name:taf'; }
+  else if (lang == 'MM') { nameAccessor = 'state_name:mm'; }
   var valueAccessor = 'score';
   var tierAccessor = 'tier';
 
@@ -841,6 +1025,48 @@ function reshapeForUnit1BarChart(data) {
   }
 
   return retData;
+}
+
+function renderText(lang) {
+  d3.select('.unit2')
+    .selectAll('button')
+    .text( function(d,i) {
+      if (i==0) { return copy.stateregion[lang]; }
+      else { return copy.township[lang]; }
+    });
+
+  d3.select('.unit3').select('#areaLevelSelector')
+    .selectAll('button')
+    .text( function(d,i) {
+      if (i==0) { return copy.stateregion[lang]; }
+      else { return copy.township[lang]; }
+    });
+
+  d3.select('.unit4').select('.unit4Switch')
+    .selectAll('button')
+    .text( function(d,i) {
+      if (i==0) { return copy.stateregion[lang]; }
+      else { return copy.township[lang]; }
+    });
+
+  d3.select('.intro').select('p')
+    .text(copy.about[lang]);
+
+  d3.select('.unit1RadarChart').select('h3')
+    .text(copy.medianStarburst[lang]);
+
+  d3.select('.unit1BarChart').select('h3')
+    .text(copy.nationalRankings[lang]);
+
+  d3.select('.unit2').select('h3')
+    .text(copy.unit2Header[lang]);
+
+  d3.select('.unit3').select('h3')
+    .text(copy.unit3Header[lang]);
+
+  d3.select('.unit4').select('h3')
+    .text(copy.unit4Header[lang]);
+
 }
 </script>
 <script>
@@ -860,8 +1086,9 @@ function changeSelected(id) {
   selectedArea = id;
 }
 
-function drawMap() {
+function drawMap(township) {
   var mapWidth = 220, mapHeight = 500;
+  d3.select('.mapSelector').selectAll('svg').remove();
   var mapSvg = d3.select('.mapSelector')
     .append('svg')
     .attr('width', mapWidth)
@@ -897,9 +1124,7 @@ areas.selectAll('path')
         `drawSubNationChart("${tafName}", false, '.unit2RadarChart');
         d3.select('#subnationalDropdown').property('value', '${tafName}');
         drawSubnationBar("${tafName}", false, '.unit2BarChart');
-        changeSelected('#${d3.select(this).attr('id')}');
-        window.scrollTo(0, document.getElementsByClassName('unit2RadarChart')[0]
-          .offsetTop + ${scrollOffset});`;
+        changeSelected('#${d3.select(this).attr('id')}');`;
 
       return onClickFunc;
     })
@@ -962,13 +1187,17 @@ function populateSubnationalDropdown(township, id) {
     .exit()
     .remove();
 
-  var data, nameAccessor;
+  var data, nameAccessor, textAccessor;
   if (township == true) {
     data = tspData;
     nameAccessor = 'township_name:taf';
+    textAccessor = nameAccessor;
+    if (lang == 'MM') { textAccessor = 'township_name:mm'; }
   } else {
     data = srData;
     nameAccessor = 'state_name:taf';
+    textAccessor = nameAccessor;
+    if (lang == 'MM') { textAccessor = 'state_name:mm'; }
   }
 
   d3.select(id)
@@ -980,7 +1209,7 @@ function populateSubnationalDropdown(township, id) {
       return d[nameAccessor];
     })
     .text(function (d) {
-      return d[nameAccessor];
+      return d[textAccessor];
     })
 }
 
@@ -1032,7 +1261,7 @@ function drawSubnationBar(areaName, township, id) {
   var barData = [];
   for (var j in keys) {
     var barRow = {};
-    barRow.label = keyTranslationsEN[keys[j]];
+    barRow.label = keyTranslations[lang][keys[j]];
     barRow.value = +row[keys[j]];
     barData.push(barRow);
   }
@@ -1064,9 +1293,17 @@ function reshapeForUnit2BarChart(data, township) {
 based on the given dataset */
 function setAreaLevel(targetDataset, unitSelector, township) {
   // Empty out the old dropdown options
-  var nameVar = "";
-  if (township == true) { nameVar = 'township_name:taf'; }
-  else { nameVar = 'state_name:taf'; }
+  var nameVar, textVar;
+  if (township == true) {
+    nameVar = 'township_name:taf';
+    textVar = nameVar;
+    if (lang=='MM') { textVar = 'township_name:mm';}
+  } else {
+    nameVar = 'state_name:taf';
+    textVar = nameVar;
+    if (lang == 'MM') { textVar = 'state_name:mm';}
+  }
+
   d3.select(unitSelector)
     .select("#areaSelector")
     .selectAll("select")
@@ -1076,6 +1313,7 @@ function setAreaLevel(targetDataset, unitSelector, township) {
     .remove();
 
   // Populate the dropdown options with new data
+  console.log(targetDataset[0][nameVar]);
   d3.select(unitSelector)
     .select("#areaSelector")
     .selectAll("select")
@@ -1084,7 +1322,7 @@ function setAreaLevel(targetDataset, unitSelector, township) {
     .enter()
     .append("option")
     .attr("value", function(d) { return d[nameVar]; } )
-    .text(function(d) { return d[nameVar]; });
+    .text(function(d) { return d[textVar]; });
 }
 
 /* Call this func whenever the data changes to update RadarChart */
@@ -1151,7 +1389,7 @@ function reshapeForRadar(origData) {
     // TODO: Get rid of non axes
     for (j in keys) {
       var value = +origData[i][keys[j]];
-      radarData[i].push({"axis": starburstLegendEN[keys[j]],
+      radarData[i].push({"axis": starburstLegend[lang][keys[j]],
         "value": value});
     }
   }
@@ -1162,7 +1400,7 @@ function reshapeForRadar(origData) {
 function generateSubindexButtons(id) {
   var barChartId = '.unit4BarChart';
   var subIndices = ['Overall Score'];
-  var keys = Object.keys(keyTranslationsEN);
+  var keys = Object.keys(keyTranslations[lang]);
   for (var i in keys) {
     subIndices.push(keys[i]);
   }
@@ -1171,7 +1409,8 @@ function generateSubindexButtons(id) {
   d3.select(id)
     .append('select')
     .attr('id', 'subindexSelector')
-    .attr("onchange", function (d) {
+    .attr('class', 'copy')
+    .attr("oninput", function (d) {
       return `var barData = buildBarData(unit4Township, findCurrSubindex());
       drawSubindexBar('${barChartId}', barData);
       changeSubindexTitle(findCurrSubindex());`;
@@ -1182,9 +1421,10 @@ function generateSubindexButtons(id) {
     .append('option')
     .text(function(d) {
       if (d == 'Overall Score') {
+        if (lang == 'MM') { return "မြန့်မာ့စီးပွားရေးဝန်းကျင် ညွန်းကိန်းရမှတ်"; }
         return d;
       } else {
-      return keyTranslationsEN[d];
+      return keyTranslations[lang][d];
       }
     })
     .attr("value", (d)=>(d));
@@ -1194,15 +1434,20 @@ function findCurrSubindex() {
 }
 function changeSubindexTitle(subindex) {
   if (subindex == "Overall Score") {
-    d3.select('.subindexName').text("Overall Score");
+    if (lang == 'EN') {
+      d3.select('.subindexName').text("Overall Score");
+    } else if (lang == 'MM') {
+      d3.select('.subindexName').text("မြန့်မာ့စီးပွားရေးဝန်းကျင် ညွန်းကိန်းရမှတ်");
+    }
   } else {
-    d3.select('.subindexName').text(keyTranslationsEN[subindex]);
+    d3.select('.subindexName').text(keyTranslations[lang][subindex]);
   }
 }
 
 function drawSubindexBar(id, data) {
   var options = { hover: true,
-    tiers: false };
+    tiers: false,
+    slider: unit4Township };
   barChart(data, id, options);
 }
 
@@ -1214,9 +1459,11 @@ function buildBarData(township, subindex) {
   if (township == true) {
     data = tspData;
     nameAccessor = 'township_name:taf';
+    if (lang == 'MM') { nameAccessor = 'township_name:mm';}
   } else {
     data = srData;
     nameAccessor = 'state_name:taf';
+    if (lang == 'MM') { nameAccessor = 'state_name:mm';}
   }
 
   for (var i in data) {
@@ -1236,37 +1483,37 @@ function buildBarData(township, subindex) {
       data-ga-event="Dataset|resource_download|217c73e8-f456-4392-a43e-1ba2a0694a92/9d40f3cb-e45a-43d3-b771-93aa6ba5a540">
       <i class="fa fa-download"></i>Download
     </a> -->
-    <div class="unit intro">
-    Introducing you to MBEI with text here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there and here and there
+    <div class="unit intro copy">
+      <p></p>
     </div>
 
     <div class="unit donors">
-      <img id="ukaid" width="96px" height="96px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/ukaid.png"/>
       <img id="dana" width="96px" height="64px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/dana.png"/>
-      <img id="taf" width="134px" height="90px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/taf.png"/>
+      <img id="ukaid" width="96px" height="96px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/ukaid.png"/>
+      <img id="taf" width="150px" height="100px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/taf.png"/>
     </div>
 
-    <div class="unit unit1">
+    <div class="unit unit1 copy">
     <!--  <button type="button" onclick="drawNationChart(false, 'unit1RadarChart');">States/Regions</button> |
       <button type="button" onclick="drawNationChart(true, 'unit1RadarChart');">Townships</button>
     -->
     <div class="subunit unit1RadarChart">
-      <h3>Median National Subindex Scores</h3>
+      <h3 class="copy"></h3>
     </div>
     <div class="subunit unit1BarChart">
-      <h3>National MBEI Rankings</h3>
+      <h3 class="copy"></h3>
     </div>
 
     </div>
 
     <hr/>
 
-    <div class="unit unit2">
-      <h3>Explore subindex scores for states and regions or townships</h3>
+    <div class="unit unit2 copy">
+      <h3 class="copy"></h3>
       <div>
-      <select id="subnationalDropdown" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
-      <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">States/Regions</button> |
-      <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');">Townships</button>
+      <select id="subnationalDropdown" class="copy" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
+      <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart'); drawMap();"></button> |
+      <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');"></button>
     </div>
       <div class="subunit mapSelector"></div>
       <div class="subunit unit2RadarChart"></div>
@@ -1276,31 +1523,33 @@ function buildBarData(township, subindex) {
 
     <hr/>
 
-    <div class="unit unit3">
-      <h3>Compare subindex scores between two areas</h3>
+    <div class="unit unit3 copy">
+      <h3 class="copy">Compare subindex scores between two areas</h3>
       <div id="areaSelector">
-        <div id="select1Color"></div><select id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
-        <div id="select2Color"></div><select id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
+        <div id="select1Color"></div><select class="copy" id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
+        <div id="select2Color"></div><select class="copy" id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
       </div>
       <div id="areaLevelSelector">
-        <button type="button" onclick="unit3Township = false; setAreaLevel(srData, '.unit3', false); changeRadar('#select1','#select2', false);">States/Regions</button> |
-        <button type="button" onclick="unit3Township = true; setAreaLevel(tspData, '.unit3', true); changeRadar('#select1','#select2', true);">Townships</button>
+        <button type="button" onclick="unit3Township = false; setAreaLevel(srData, '.unit3', false); changeRadar('#select1','#select2', false);"></button> |
+        <button type="button" onclick="unit3Township = true; setAreaLevel(tspData, '.unit3', true); changeRadar('#select1','#select2', true);"></button>
       </div>
       <div class="radarChart" align="center"></div>
     </div>
 
     <hr/>
 
-    <div class="unit unit4">
-      <h3>Performance rankings for each subindicator</h3>
+    <div class="unit unit4 copy">
+      <h3 class="copy">Performance rankings for each subindicator</h3>
       <div class="subunit unit4Buttons">
       </div>
       <div class="subunit unit4Switch">
-        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');">States/Regions</button> |
-        <button type="button" onclick="unit4Township = true; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'sub1')); changeSubindexTitle('sub1');">Townships</button>
+        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score');"></button> |
+        <button type="button" onclick="unit4Township = true; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score');"></button>
       </div>
       <div class="subunit unit4BarChart">
-        <h4><a class="subindexName"></a></h4>
+        <h4><a class="subindexName copy"></a></h4>
+      </div>
+      <div class="subunit unit4Slider">
       </div>
     </div>
     <script>
@@ -1311,6 +1560,15 @@ function buildBarData(township, subindex) {
     var srData = d3.csv.parse(mbei_stateregion);
     var tspData = d3.csv.parse(mbei_township);
     var subDataSpliceIndex = 5;      // how many columns to skip to reach 'sub1'
+    var lang = 'MM';
+
+    renderText(lang);
+    if (lang == 'MM') {
+      d3.selectAll('.copy').style('font-family', 'Pyidaungsu !important');
+    } else if (lang == 'EN') {
+      d3.selectAll('.copy').style('font-family', 'Montserrat');
+
+    }
     //Unit 1
     drawNationChart(false, '.unit1RadarChart');
     var unit1BarData = reshapeForUnit1BarChart(srData);

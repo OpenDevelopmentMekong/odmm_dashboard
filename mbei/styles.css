@@ -2,10 +2,6 @@
   margin-left: 5%;
 }
 
-* {
-  font-family: Pyidaungsu;
-}
-
 .subunit > h3 {
   text-align: center;
 }
@@ -31,6 +27,7 @@ button {
 .intro {
   width: 70%;
   margin: 0 auto;
+  text-align: justify;
 }
 
 .donors {
@@ -119,4 +116,43 @@ button {
 
 .subindexName {
   text-transform: uppercase;
+}
+
+.unit4Slider {
+  width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+#unit4Slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 25px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+#unit4Slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+#unit4Slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #81cfcc; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+#unit4Slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #81cfcc; /* Green background */
+  cursor: pointer; /* Cursor on hover */
 }

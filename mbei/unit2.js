@@ -14,8 +14,9 @@ function changeSelected(id) {
   selectedArea = id;
 }
 
-function drawMap() {
+function drawMap(township) {
   var mapWidth = 220, mapHeight = 500;
+  d3.select('.mapSelector').selectAll('svg').remove();
   var mapSvg = d3.select('.mapSelector')
     .append('svg')
     .attr('width', mapWidth)

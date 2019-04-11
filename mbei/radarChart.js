@@ -12,8 +12,8 @@ var RadarChart = {
   draw: function(id, d, options){
   var cfg = {
 	 radius: 5,
-	 w: 250,
-	 h: 250,
+	 w: 275,
+	 h: 275,
 	 factor: 1,
 	 factorLegend: 1.2,
 	 levels: 10,
@@ -175,13 +175,13 @@ var RadarChart = {
           return "translate(0,7)";
         }
         if (i==3 | i==6)  {
-          return "translate(0,12)";
+          return "translate(0,15)";
         }
         if (i==2) {
-          return "translate(-20,28)";
+          return "translate(-10,30)";
         }
         if (i==7) {
-          return "translate(20,28)";
+          return "translate(10,30)";
         }
       }
     })
@@ -268,8 +268,8 @@ var RadarChart = {
 	  g.selectAll(".nodes")
 		.data(y, function(j, i){
 		  dataValues.push([
-			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin((i+0.5)*cfg.radians/total)),
-			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos((i+0.5)*cfg.radians/total))
+			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(-(i+0.5)*cfg.radians/total)),
+			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(-(i+0.5)*cfg.radians/total))
 		  ]);
 		});
 	  dataValues.push(dataValues[0]);
@@ -317,13 +317,13 @@ var RadarChart = {
 		.attr("alt", function(j){return Math.max(j.value, 0)})
 		.attr("cx", function(j, i){
 		  dataValues.push([
-			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin((i+0.5)*cfg.radians/total)),
-			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos((i+0.5)*cfg.radians/total))
+			cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(-(i+0.5)*cfg.radians/total)),
+			cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(-(i+0.5)*cfg.radians/total))
 		]);
-		return cfg.w/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.sin((i+0.5)*cfg.radians/total));
+		return cfg.w/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.sin(-(i+0.5)*cfg.radians/total));
 		})
 		.attr("cy", function(j, i){
-		  return cfg.h/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.cos((i+0.5)*cfg.radians/total));
+		  return cfg.h/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.cos(-(i+0.5)*cfg.radians/total));
 		})
 		.attr("data-id", function(j){return j.axis})
 		.style("fill", function(d,i) { if (series == 0) {return cfg.color[0]} else if (series == 1) {return cfg.color[9]} }).style("fill-opacity", .9)
