@@ -131,7 +131,7 @@ function barChart(data, id, options) {
       .attr('min', 1)
       .attr('max', data.length)
       .attr('value', 1)
-      .on('change', function(d) {
+      .on('input', function(d) {
         var index = document.getElementById('unit4Slider').value -1;
         svg.selectAll('.bar')
           .attr("fill", function(d,i) {

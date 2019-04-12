@@ -76,3 +76,9 @@ function buildBarData(township, subindex) {
 
   return barData;
 }
+
+function hideSlider() {
+  d3.select('.unit4Slider').select('input').remove();
+  d3.select('.unit4Slider').select('h4').remove();
+
+}

@@ -141,7 +141,7 @@ button {
 
 /* Mouse-over effects */
 #unit4Slider:hover {
-  opacity: 1; /* Fully shown on mouse-over */
+  opacity: 1;
 }
 
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
@@ -903,7 +903,7 @@ function barChart(data, id, options) {
       .attr('min', 1)
       .attr('max', data.length)
       .attr('value', 1)
-      .on('change', function(d) {
+      .on('input', function(d) {
         var index = document.getElementById('unit4Slider').value -1;
         svg.selectAll('.bar')
           .attr("fill", function(d,i) {
@@ -924,7 +924,7 @@ function barChart(data, id, options) {
       if (lang == 'EN') {
         return `${data[0].label} has a rank of 1 with a score of ${Format(data[0].value)}`;
       } else if (lang == 'MM') {
-        return `${data[0].label} သည် အဆင့်(၁) ဖြစ်ပြီး ရမှတ် ${Format(data[0].value)} ရှိပါသည်`;
+        return `${data[0].label} သည် အဆင့်(1) ဖြစ်ပြီး ရမှတ် ${Format(data[0].value)} ရှိပါသည်`;
       }
     });
 
@@ -1475,6 +1475,12 @@ function buildBarData(township, subindex) {
 
   return barData;
 }
+
+function hideSlider() {
+  d3.select('.unit4Slider').select('input').remove();
+  d3.select('.unit4Slider').select('h4').remove();
+
+}
 </script>
   </head>
   <body>
@@ -1543,7 +1549,7 @@ function buildBarData(township, subindex) {
       <div class="subunit unit4Buttons">
       </div>
       <div class="subunit unit4Switch">
-        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score');"></button> |
+        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score'); hideSlider();"></button> |
         <button type="button" onclick="unit4Township = true; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score');"></button>
       </div>
       <div class="subunit unit4BarChart">
@@ -1560,7 +1566,7 @@ function buildBarData(township, subindex) {
     var srData = d3.csv.parse(mbei_stateregion);
     var tspData = d3.csv.parse(mbei_township);
     var subDataSpliceIndex = 5;      // how many columns to skip to reach 'sub1'
-    var lang = 'MM';
+    var lang = 'EN';
 
     renderText(lang);
     if (lang == 'MM') {

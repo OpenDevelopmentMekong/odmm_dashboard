@@ -89,17 +89,13 @@
       <div class="subunit unit4Buttons">
       </div>
       <div class="subunit unit4Switch">
-        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score');"></button> |
+        <button type="button" onclick="unit4Township = false; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score'); hideSlider();"></button> |
         <button type="button" onclick="unit4Township = true; drawSubindexBar('.unit4BarChart', buildBarData(unit4Township, 'Overall Score')); changeSubindexTitle('Overall Score');"></button>
       </div>
       <div class="subunit unit4BarChart">
         <h4><a class="subindexName copy"></a></h4>
       </div>
       <div class="subunit unit4Slider">
-      </div>
-      <div class="subunit">
-        <button class="copy" type="button" onclick="document.getElementById('#unit4Slider').stepUp();"/>
-        <button class="copy" type="button" onclick="document.getElementById('#unit4Slider').stepDown();"/>
       </div>
     </div>
     <script>
