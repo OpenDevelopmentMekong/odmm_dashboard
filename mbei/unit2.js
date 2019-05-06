@@ -13,7 +13,9 @@ function changeSelected(id) {
     .attr('fill', selectedFill);
   selectedArea = id;
 }
-
+function hideMap() {
+  d3.select('.mapSelector').selectAll('svg').remove();
+}
 function drawMap(township) {
   var mapWidth = 220, mapHeight = 500;
   d3.select('.mapSelector').selectAll('svg').remove();

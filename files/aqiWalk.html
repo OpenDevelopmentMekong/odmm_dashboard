@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <script src="https://d3js.org/d3.v4.js"></script>
+  </head>
+
+  <body>
+    <div id="map"></div>
+    <script>
+      function drawMap() {
+        var mapWidth = 220, mapHeight = 500;
+        d3.select('#map').selectAll('svg').remove();
+        var mapSvg = d3.select('#map')
+          .append('svg')
+          .attr('width', mapWidth)
+          .attr('height', mapHeight);
+
+        var areas = mapSvg.append('g');
+        var mercProjection = d3.geo.mercator()
+          .scale(1200)
+          .center([96.1951, 16.8661])
+          .translate([mapWidth/2, mapHeight/2]);
+        var geoPath = d3.geo.path().projection(mercProjection);
+
+        areas.selectAll('path')
+          .data([])
+          .exit()
+          .remove();
+
+        areas.selectAll('path')
+          .data(mapStateRegion.features)
+          .enter()
+          .append('path')
+          .attr('fill', normalFill)
+          .attr('stroke', boundaryFill)
+          .attr('d', geoPath);
+      }
+    </script>
+  </body>
+</html>

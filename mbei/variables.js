@@ -157,13 +157,7 @@ var copy = {
   },
 
   about : {
-    EN : `The MBEI is a comprehensive diagnostic tool that has
-  been specially adapted to evaluate and improve Myanmar’s
-  subnational business environment. To generate the index,
-  the Foundation surveyed nearly 5,000 businesses across
-  all 14 states and regions and Nay Pyi Taw Union Territory
-  and gather data on licensing, land access, government
-  transparency, and more.`,
+    EN : `Despite recent economic growth in Myanmar, the local business environment throughout much of the country remains poorly understood. Outdated administrative systems, vested local interests, and five decades of military rule have led to a complex patchwork of institutions governing commercial activity. A range of actors are responsible for local economic governance (LEG) in Myanmar, including national ministries, state/region offices and township offices. However, few attempts have been made to map the impact of LEG on Myanmar’s evolving business environment. The Asia Foundation (TAF) and the DaNa Facility therefore launched the three-year Department for International Development (DFID)-funded Myanmar Business Environment Index (MBEI) initiative. The MBEI aims to assess constraints affecting Myanmar’s business environment at the subnational level and identify opportunities for reform, in partnership with the Development Lab at Duke University.  `,
 
     MM : `မြန်မာ့စီးပွားရေးဝန်းကျင်ညွှန်ကိန်းသည် မြန်မာနိုင်ငံ၏ ဒေသန္တရ စီးပွားရေး ပတ်ဝန်းကျင်ကို
   လေ့လာ သုံးသပ်ပြီး တိုးတက်ကောင်းမွန်စေရန် အထူးလိုက်လျော ညီထွေစွာ ဖော်ဆောင်
@@ -171,7 +165,7 @@ var copy = {
   အတွက် အာရှဖောင်ဒေးရှင်းသည် ပြည်နယ်နှင့် တိုင်းဒေသကြီး ၁၄ ခု နှင့် နေပြည်တော်
   ပြည်ထောင်စုနယ်မြေမှ လုပ်ငန်းပေါင်း ၅ဝဝဝ နီးပါးကို လိုင်စင်ပြုလုပ်ခြင်း၊ မြေယာအသုံးချ
   နိုင်မှု၊ အစိုးရ၏ ပွင့်လင်းမြင်သာမှုနှင့် တခြားသော အကြောင်းအရာများနှင့် သက်ဆိုင်သည့်
-  အချက်အလက်များ မေးမြန်းစုဆောင်းသွားမည်ဖြစ်သည်။`
+  အချက်အလက်များ မေးမြန်းစုဆောင်းသွားမည်ဖြစ်သည်။  `
 },
 
   medianStarburst: {
@@ -180,8 +174,18 @@ var copy = {
     (အလယ်ဗဟိုလ်ကိန်းဂဏန်း)`
   },
 
+  sliderInfo: {
+    EN : 'Drag bar to highlight township!',
+    MM : 'Slider ကိုရွှေ့လျားခြင်းဖြင့် မြို့နယ်အဆင့်များကို ကြည့်ရှုနိုင်ပါသည်'
+  },
+
+  download: {
+    EN: 'Download the data here',
+    MM: 'ဒေတာအချက်အလက်များ ဒေါင်းလုပ်ဆွဲရန်'
+  },
+
   nationalRankings: {
-    EN : 'National MBEI Rankings',
+    EN : 'State and Region MBEI Rankings',
     MM : `တိုင်းဒေသကြီးနှင့်ပြည်နယ်များ၏ အဆင့်လိုက်ညွန်းကိန်းရမှတ်များ`
   },
 

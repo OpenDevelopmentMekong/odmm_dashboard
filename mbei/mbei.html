@@ -31,12 +31,13 @@
     </a> -->
     <div class="unit intro copy">
       <p></p>
+
     </div>
 
     <div class="unit donors">
+      <img id="taf" width="150px" height="100px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/taf.png"/>
       <img id="dana" width="96px" height="64px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/dana.png"/>
       <img id="ukaid" width="96px" height="96px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/ukaid.png"/>
-      <img id="taf" width="150px" height="100px" src="https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/taf.png"/>
     </div>
 
     <div class="unit unit1 copy">
@@ -49,9 +50,17 @@
     <div class="subunit unit1BarChart">
       <h3 class="copy"></h3>
     </div>
-
     </div>
 
+    <div class="unit download">
+      <h3></h3>
+      <a class="wpckan_dataset_resource_url button download" href="https://data.opendevelopmentmekong.net/dataset/085c6354-f228-4014-932b-208df573a878/resource/19ec773c-577c-4b6b-ad8c-58e991ddbac3/download/mbei-report-final-april-19-digital-version-spreads.pdf" data-ga-event="Dataset|resource_download|085c6354-f228-4014-932b-208df573a878/19ec773c-577c-4b6b-ad8c-58e991ddbac3"><i class="fa fa-download"></i>
+        MBEI Report 2019</a>
+      <a class="wpckan_dataset_resource_url button download" href="https://data.opendevelopmentmekong.net/dataset/085c6354-f228-4014-932b-208df573a878/resource/59800df1-dabc-4eff-b9f3-bb5e34254c9e/download/township_all_indicators_final.xls" data-ga-event="Dataset|resource_download|085c6354-f228-4014-932b-208df573a878/59800df1-dabc-4eff-b9f3-bb5e34254c9e"><i class="fa fa-download"></i>
+        Township-level Data</a>
+      <a class="wpckan_dataset_resource_url button download" href="https://data.opendevelopmentmekong.net/dataset/085c6354-f228-4014-932b-208df573a878/resource/344294ed-a455-41ae-86c6-05d781007efe/download/state_all_indicators_final.xls" data-ga-event="Dataset|resource_download|085c6354-f228-4014-932b-208df573a878/344294ed-a455-41ae-86c6-05d781007efe"><i class="fa fa-download"></i>
+        State/Region-level Data</a>
+    </div>
     <hr/>
 
     <div class="unit unit2 copy">
@@ -59,7 +68,7 @@
       <div>
       <select id="subnationalDropdown" class="copy" onchange="drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart');"></select>
       <button type="button" onclick="unit2Township = false; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart'); drawMap();"></button> |
-      <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart');"></button>
+      <button type="button" onclick="unit2Township = true; populateSubnationalDropdown(unit2Township, '#subnationalDropdown'); drawSubNationChart(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2RadarChart'); drawSubnationBar(areaNameFromDropdown('#subnationalDropdown'), unit2Township, '.unit2BarChart'); hideMap();"></button>
     </div>
       <div class="subunit mapSelector"></div>
       <div class="subunit unit2RadarChart"></div>

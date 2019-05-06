@@ -28,7 +28,7 @@ var RadarChart = {
    median: false,
    spider: false,
 	 color: [],
-   labelFontSize: '70%',
+   labelFontSize: '80%',
    valueFontSize: '70%',
    fontFamily: 'Pyidaungsu'
 	};

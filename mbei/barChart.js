@@ -10,8 +10,8 @@ function barChart(data, id, options) {
     circleRadius: 6,
     tiers: false,
     slider: false,
-    tierColors: {1: '#89cfc9', 2: '#67b1b3',
-      3: '#297588', 4: '#045971'}
+    tierColors: {1: 'rgba(89,57,108,1.0)', 2: 'rgba(89,57,108,0.75)',
+      3: 'rgba(89,57,108,0.40)', 4: 'rgba(89,57,108,0.2)'}
   };
 
   if('undefined' !== typeof options){
@@ -116,6 +116,7 @@ function barChart(data, id, options) {
   if (cfg.slider == true) {
     bottomLabels.remove();
     d3.select('.unit4Slider').select('input').remove();
+    d3.select('.unit4Slider').select('#sliderInfo').remove();
     d3.select('.unit4Slider').select('h4').remove();
 
     parentSVG.attr("height", cfg.baseHeight - 0.7*cfg.mBottom);
@@ -133,10 +134,11 @@ function barChart(data, id, options) {
       .attr('value', 1)
       .on('input', function(d) {
         var index = document.getElementById('unit4Slider').value -1;
+        d3.select('#sliderInfo').style('color', 'white');
         svg.selectAll('.bar')
           .attr("fill", function(d,i) {
             if (i == index) {
-              return '#f58020';
+              return '#f8bf42';
             } else {
               return cfg.tierColors[1];
             }
@@ -147,6 +149,12 @@ function barChart(data, id, options) {
           describe.text(`${d[index].label} သည် အဆင့် (${index+1}) ဖြစ်ပြီး ရမှတ် ${Format(d[index].value)} ရှိပါသည်`);
         }
       });
+
+      d3.select('.unit4Slider')
+        .append('p')
+        .attr('id', 'sliderInfo')
+        .text(copy.sliderInfo[lang])
+        .style('opacity', '0.7');
 
     describe.text(function() {
       if (lang == 'EN') {

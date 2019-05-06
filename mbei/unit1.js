@@ -18,10 +18,10 @@ function drawLegend() {
     .append("g");
 
   var legendData = [
-    { name: "High", mmname: "အမြင့်", color: "#89cfc9" },
-    { name: "Middle", mmname: "အလယ်", color: "#67b1b3" },
-    { name: "Low", mmname: "နိမ့်", color: "#297588" },
-    { name: "Bottom", mmname: "အောက်ဆုံး", color: "#045971" }
+    { name: "High", mmname: "အမြင့်", color: "rgba(89,57,108,1.0)" },
+    { name: "Middle", mmname: "အလယ်", color: "rgba(89,57,108,0.75)" },
+    { name: "Low", mmname: "နိမ့်", color: "rgba(89,57,108,0.4)" },
+    { name: "Bottom", mmname: "အောက်ဆုံး", color: "rgba(89,57,108,0.2)" }
   ]
 
   legend.selectAll(".legendRect")
@@ -91,6 +91,10 @@ function reshapeForUnit1BarChart(data) {
 }
 
 function renderText(lang) {
+  d3.select('.download')
+    .select('h3')
+    .text(copy.download[lang]);
+
   d3.select('.unit2')
     .selectAll('button')
     .text( function(d,i) {
@@ -113,7 +117,16 @@ function renderText(lang) {
     });
 
   d3.select('.intro').select('p')
-    .text(copy.about[lang]);
+    .text(copy.about[lang])
+    .append('a')
+    .attr('href', 'https://www.opendevelopmentmyanmar.net/mbei/about')
+    .text(function (d) {
+      if (lang == 'EN') {
+        return '[Read More]';
+      } else if (lang == 'MM') {
+        return '[ဆက်လက်ဖတ်ရှုရန်]';
+      }
+    });
 
   d3.select('.unit1RadarChart').select('h3')
     .text(copy.medianStarburst[lang]);
