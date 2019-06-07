@@ -34,7 +34,7 @@ function setAreaLevel(targetDataset, unitSelector, township) {
 }
 
 /* Call this func whenever the data changes to update RadarChart */
-function changeRadar(selector, otherSelector, township) {
+function changeRadar(selectorOne, selectorTwo, township) {
   var nameVar = "";
   var data = {};
   if (township == true) {
@@ -45,8 +45,9 @@ function changeRadar(selector, otherSelector, township) {
     data = srData;
   }
   // Subset original data based on selection
-  var newArea = d3.select(selector).property("value");
-  var otherArea = d3.select(otherSelector).property("value");
+  var newArea = d3.select(selectorOne).property("value");
+  var otherArea = d3.select(selectorTwo).property("value");
+  console.log(`newarea:${newArea}, otherarea:${otherArea}`);
   var newData = subsetSummaryByArea([newArea, otherArea], data, nameVar);
 
   // Reshape subset to fit to radarChart.js input

@@ -77,22 +77,6 @@
     </div>
 
     <hr/>
-
-    <div class="unit unit3 copy">
-      <h3 class="copy">Compare subindex scores between two areas</h3>
-      <div id="areaSelector">
-        <div id="select1Color"></div><select class="copy" id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
-        <div id="select2Color"></div><select class="copy" id="select2" onchange="changeRadar('#select2', '#select1', unit3Township)"></select>
-      </div>
-      <div id="areaLevelSelector">
-        <button type="button" onclick="unit3Township = false; setAreaLevel(srData, '.unit3', false); changeRadar('#select1','#select2', false);"></button> |
-        <button type="button" onclick="unit3Township = true; setAreaLevel(tspData, '.unit3', true); changeRadar('#select1','#select2', true);"></button>
-      </div>
-      <div class="radarChart" align="center"></div>
-    </div>
-
-    <hr/>
-
     <div class="unit unit4 copy">
       <h3 class="copy">Performance rankings for each subindicator</h3>
       <div class="subunit unit4Buttons">
@@ -107,6 +91,21 @@
       <div class="subunit unit4Slider">
       </div>
     </div>
+
+    <hr/>
+    <div class="unit unit3 copy">
+      <h3 class="copy">Compare subindex scores between two areas</h3>
+      <div id="areaSelector">
+        <div id="select1Color"></div><select class="copy" id="select1" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
+        <div id="select2Color"></div><select class="copy" id="select2" onchange="changeRadar('#select1', '#select2', unit3Township)"></select>
+      </div>
+      <div id="areaLevelSelector">
+        <button type="button" onclick="unit3Township = false; setAreaLevel(srData, '.unit3', false); changeRadar('#select1','#select2', false);"></button> |
+        <button type="button" onclick="unit3Township = true; setAreaLevel(tspData, '.unit3', true); changeRadar('#select1','#select2', true);"></button>
+      </div>
+      <div class="radarChart" align="center"></div>
+    </div>
+
     <script>
 
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
@@ -122,8 +121,22 @@
       d3.selectAll('.copy').style('font-family', 'Pyidaungsu !important');
     } else if (lang == 'EN') {
       d3.selectAll('.copy').style('font-family', 'Montserrat');
-
     }
+
+    var tspTextAccessor = "", srTextAccessor = "";
+    if (lang == 'MM') {
+      tspTextAccessor = "township_name:mm";
+      srTextAccessor = "state_name:mm";
+    } else if (lang == 'EN'){
+      tspTextAccessor = "township_name:taf";
+      srTextAccessor = "state_name:taf";
+    }
+    tspData.sort(function(a,b) {
+      return a[tspTextAccessor].localeCompare(b[tspTextAccessor]);
+    });
+    srData.sort(function(a,b) {
+      return a[srTextAccessor].localeCompare(b[srTextAccessor]);
+    });
     //Unit 1
     drawNationChart(false, '.unit1RadarChart');
     var unit1BarData = reshapeForUnit1BarChart(srData);

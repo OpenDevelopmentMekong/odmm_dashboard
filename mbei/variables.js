@@ -13,7 +13,7 @@ Rakhine State,ရခိုင်ပြည်နယ်,MMR012,55.74357605,4,6.05,
 Yangon Region,ရန်ကုန်ဒေသကြီး,MMR013,62.33431244,2,5.46,6.88,7.28,7.14,7.08,4.16,6.04,5.88,7.63,4.72
 Shan State,ရှမ်းပြည်နယ်,MMR222,60.52116013,3,6.86,6.85,7.51,7.67,6.49,5.28,6.75,5.12,5.39,5.24
 Ayawaddy Region,ဧရာဝတီတိုင်းဒေသကြီး,MMR017,58.22311783,4,6.36,7.91,6.87,5.86,5.31,3.89,6.04,4.9,6.37,5.02
-Nay Pyi Taw,နေပြည်တော်,MMR018,61.08465958,3,5.88,5.92,7.62,6.16,6.59,4.19,5.93,5.81,6.43,5.04`;
+Nay Pyi Taw Union Territory,နေပြည်တော် ပြည်ထောင်စုနယ်မြေ,MMR018,61.08465958,3,5.88,5.92,7.62,6.16,6.59,4.19,5.93,5.81,6.43,5.04`;
 
 var mbei_township = `township_name:taf,township_name:mm,township_pcode,score,tier,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10
 Mohnyin,မိုးညှင်း,MMR001009,62.79128265,1,6.81,7.21,7.99,8.06,5.91,4.98,6.51,5.99,6.06,4.84
@@ -170,8 +170,8 @@ var copy = {
 
   medianStarburst: {
     EN : 'Median National Subindex Scores',
-    MM : `နိုင်ငံလုံးဆိုင်ရာ အညွန်းခွဲရမှတ်များ
-    (အလယ်ဗဟိုလ်ကိန်းဂဏန်း)`
+    MM : `နိုင်ငံလုံးဆိုင်ရာ ညွှန်းခွဲရမှတ်များ
+    (အလယ်ဗဟိုကိန်းဂဏန်း)`
   },
 
   sliderInfo: {
@@ -186,22 +186,22 @@ var copy = {
 
   nationalRankings: {
     EN : 'State and Region MBEI Rankings',
-    MM : `တိုင်းဒေသကြီးနှင့်ပြည်နယ်များ၏ အဆင့်လိုက်ညွန်းကိန်းရမှတ်များ`
+    MM : `တိုင်းဒေသကြီးနှင့်ပြည်နယ်များ၏ အဆင့်လိုက်ညွှန်းကိန်းရမှတ်များ`
   },
 
   unit2Header: {
     EN : 'Explore subindex scores for states and regions or townships',
-    MM : 'နေရာအလိုက် ညွန်းခွဲရမှတ်များ'
+    MM : 'နေရာအလိုက် ညွှန်းခွဲရမှတ်များ'
   },
 
   unit3Header: {
     EN : 'Compare subindex scores between two areas',
-    MM : 'နေရာအလိုက် ညွန်းခွဲရမှတ်များ ယှဉ်ကြည့်ရန်'
+    MM : 'နေရာအလိုက် ညွှန်းခွဲရမှတ်များ ယှဉ်ကြည့်ရန်'
   },
 
   unit4Header: {
     EN : 'Performance rankings for each subindicator',
-    MM : 'အဆင့်လိုက်ညွန်းခွဲရမှတ်များ'
+    MM : 'အဆင့်လိုက်ညွှန်းခွဲရမှတ်များ'
   }
 }
 

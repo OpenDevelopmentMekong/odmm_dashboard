@@ -106,9 +106,11 @@ function barChart(data, id, options) {
       return `translate(${xTranslate}, 0)`;
     })
     .attr("fill", function(d) {
+      // Use tier colors if tiers exist
       if (cfg.tiers == true) {
         return cfg.tierColors[d.tier];
       } else {
+      // Use only ONE color if tiers do not exist
         return cfg.tierColors[1];
       }
     });
