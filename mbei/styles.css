@@ -5,7 +5,9 @@
 .unit {
   margin-bottom: 20px;
 }
-
+.subindexExplanation {
+  font-size: 0.8em;
+}
 .download {
   margin: 0 auto;
   text-align: center;

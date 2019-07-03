@@ -2,8 +2,50 @@
 var selectedArea;
 var selectedFill = '#05713a', normalFill = '#b6af9d', activeFill = 'rgb(5, 113, 58, 0.6)',
     boundaryFill = '#eeeeee';
+var selectedTsp;
 
+function moveTspCursor(isTownship) {
+  if (isTownship == false) {
+    d3.selectAll(".tspCursor").remove();
+    return;
+  } else {
+    d3.selectAll(".tspCursor").remove();
+    var mapSvg = d3.select('.mapSelector').select('svg');
+    var areas = mapSvg.append('g').attr('class', 'tspCursor');
+    var mercProjection = d3.geo.mercator()
+      .scale(1200)
+      .center([96.0785, 19.7633])
+      .translate([220/2, 500/2]);
+    var geoPath = d3.geo.path().projection(mercProjection);
+
+    var tafTspName = areaNameFromDropdown('#subnationalDropdown');
+    var mimuPcode;
+
+    for (var i in tspData) {
+      if (tspData[i]['township_name:taf'] == tafTspName) {
+        mimuPcode = tspData[i]['township_pcode'];
+      }
+    }
+
+    var coords;
+    for (var j in tspCentroids['features']) {
+      if (tspCentroids['features'][j]['properties']['TS_PCODE'] == mimuPcode) {
+        coords = tspCentroids['features'][j]['geometry']['coordinates'];
+      }
+    }
+    areas.append("circle")
+      .attr("cx", mercProjection(coords)[0])
+      .attr("cy", mercProjection(coords)[1])
+      .attr("r", '0.4em')
+      .attr("fill", "#05713a");
+  }
+}
 function changeSelected(id) {
+  // A bit hacky BUT pass id=False if id comes from dropdown
+  if (id == false & unit2Township == false) {
+    id = '#' + d3.select('#subnationalDropdown').property('value').split(' ')[0]; //.replace(/ /g, "");
+    if (id == '#Nay') { id = '#NayPyiTaw'; }
+  }
 
   if (selectedArea != undefined) {
     d3.select(selectedArea)
@@ -13,8 +55,9 @@ function changeSelected(id) {
     .attr('fill', selectedFill);
   selectedArea = id;
 }
-function hideMap() {
-  d3.select('.mapSelector').selectAll('svg').remove();
+function switchMap() {
+  d3.select(selectedArea)
+    .attr('fill', normalFill);
 }
 function drawMap(township) {
   var mapWidth = 220, mapHeight = 500;
@@ -51,9 +94,10 @@ areas.selectAll('path')
     .attr('onclick', function(d) {
       var tafName=pcodeToTAF(d.properties[accessorForPcode]);
       var onClickFunc =
-        `drawSubNationChart("${tafName}", false, '.unit2RadarChart');
+        `if (unit2Township == true) { return;}  drawSubNationChart("${tafName}", false, '.unit2RadarChart');
         d3.select('#subnationalDropdown').property('value', '${tafName}');
         drawSubnationBar("${tafName}", false, '.unit2BarChart');
+        hideMedianInfo();
         changeSelected('#${d3.select(this).attr('id')}');`;
 
       return onClickFunc;
@@ -112,10 +156,9 @@ function drawSubNationChart(areaName, township, id) {
 }
 function populateSubnationalDropdown(township, id) {
   d3.select(id)
-    .selectAll('option')
-    .data([])
-    .exit()
-    .remove();
+    .selectAll('optgroup').remove();
+  d3.select(id)
+    .selectAll('option').remove();
 
   var data, nameAccessor, textAccessor;
   if (township == true) {
@@ -123,6 +166,26 @@ function populateSubnationalDropdown(township, id) {
     nameAccessor = 'township_name:taf';
     textAccessor = nameAccessor;
     if (lang == 'MM') { textAccessor = 'township_name:mm'; }
+
+    for (var i in srData) {
+      var pcode = srData[i]['state_pcode'];
+      d3.select(id)
+        .append('optgroup')
+        .attr('label', pcodeTranslate[pcode][lang])
+        .attr('id', `optgroup${pcodeTranslate[pcode][lang].replace(/ /g, "")}`);
+    }
+
+    for (var j in tspData) {
+        var statePcode = tspData[j]['township_pcode'];
+        statePcode = statePcode.slice(0,6);
+        d3.select(`#optgroup${pcodeTranslate[statePcode][lang].replace(/ /g, "")}`)
+          .append('option')
+          .attr('value', tspData[j][nameAccessor])
+          .text(tspData[j][textAccessor]);
+    }
+
+
+    return;
   } else {
     data = srData;
     nameAccessor = 'state_name:taf';
@@ -140,7 +203,7 @@ function populateSubnationalDropdown(township, id) {
     })
     .text(function (d) {
       return d[textAccessor];
-    })
+    });
 }
 
 
@@ -216,4 +279,21 @@ function reshapeForUnit2BarChart(data, township) {
   }
 
   return retData;
+}
+
+function showMedianInfo() {
+  d3.select('.unit2RadarChart').select('svg')
+    .append('svg:text')
+    .attr('id', 'medianInfo')
+    .attr('x', (275+190) * 0.5)
+    .attr('y', 375 * 0.225)
+    .attr('text-anchor', 'middle')
+    .attr('font-style', 'italic')
+    .text(copy['medianInfo'][lang])
+    .style('font-size', '0.8em')
+    .style('display', 'inline')
+    .style('opacity', '0.8');
+}
+function hideMedianInfo() {
+  d3.select('#medianInfo').style('display','none');
 }

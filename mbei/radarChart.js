@@ -30,7 +30,8 @@ var RadarChart = {
 	 color: [],
    labelFontSize: '80%',
    valueFontSize: '70%',
-   fontFamily: 'Pyidaungsu'
+   fontFamily: 'Pyidaungsu',
+   subExplain: false
 	};
 
 	if('undefined' !== typeof options){
@@ -72,7 +73,8 @@ var RadarChart = {
 	var tooltip;
 
   // Concentric circles
-	  g.selectAll(".levels")
+  var bigCircle;
+	g.selectAll(".levels")
 	   .data(allAxis)
 	   .enter()
      .append("svg:circle")
@@ -136,12 +138,13 @@ var RadarChart = {
   var iconHeight = 0.1 * cfg.h;
   var placementOffset = 0.5;
 
-  g.selectAll(".icon")
+  var iconLoc =  g.selectAll(".icon")
     .data(Object.keys(starburstIcon))
     .enter()
     .append("g")
-    .attr("class", "icon")
-    .append("svg:image")
+    .attr("class", "icon");
+
+  var icons = iconLoc.append("svg:image")
     .attr("x", function(d, i){return cfg.w/2*(1-cfg.factor*Math.sin(-(i+placementOffset)*cfg.radians/total)) - 0.5*iconWidth;})
     .attr("y", function(d, i){return cfg.h/2*(1-cfg.factor*Math.cos(-(i+placementOffset)*cfg.radians/total)) - 0.5*iconHeight;})
   //  .attr("transform", function(d) {return `rotate(18,${cfg.w/2},${cfg.h/2})`})
@@ -150,6 +153,64 @@ var RadarChart = {
     .attr("xlink:href", function(d) {
       return starburstIcon[d];
     });
+
+  if (cfg.subExplain == true) {
+    d3.select('.subindexExplanation')
+      .text(copy['subindexExplanationTooltip'][lang])
+      .style('font-style', 'italic')
+      .style('font-size', '0.8em');
+    var selectedIcon = 100;
+    clicked = false;
+    icons.on("mouseover", function(d,i) {
+      d3.select(this).attr("width", 0.14 *cfg.w).attr("height", 0.14*cfg.h);
+    })
+    .on("click", function (d,i) {
+      console.log(`${d}, ${i}`);
+      if (clicked == true) {
+      /*  iconLoc.selectAll("circle").remove();
+        iconLoc.selectAll('text').remove();*/
+        clicked = false;
+        burst.style("display", "inline");
+        label.style("display", "inline");
+        d3.select('.subindexExplanation')
+          .text(copy['subindexExplanationTooltip'][lang]);
+        if (selectedIcon == i) {
+          return;
+        }
+      }
+      d3.select(this).attr("width", 0.14 *cfg.w).attr("height", 0.14*cfg.h);
+      d3.select('.subindexExplanation')
+        .text(starburstLegend[lang][d] + ' ⇒ ' + copy['subindexExplanation'][d][lang])
+        .style('font-style', 'italic')
+        .style('font-size', '0.8em')
+        .style('word-wrap', 'break-word');      /*
+      iconLoc.append("circle")
+        .attr("cx", cfg.w/2)
+        .attr("cy", cfg.h/2)
+        .attr("r", cfg.factor * radius *0.75)
+        .attr("fill", function(d) {
+          return cfg.color[i];
+        })
+        .style('opacity', 0.7);
+        burst.style("display", "none");
+        label.style("display", "none"); */
+      selectedIcon = i;
+      clicked = true;
+
+      /*iconLoc.append("text")
+        .attr('x', cfg.w/2)
+        .attr('y', cfg.h/2)
+        .attr('text-anchor', 'middle')
+        .style('color', 'white')
+        .style('font-size', '0.5em')
+        .text();*/
+    })
+    .on("mouseout", function(d,i) {
+      d3.select(this).attr("width", 0.12*cfg.w).attr("height", 0.12*cfg.h);
+    });
+  }
+
+
 
   /* Note: Text placement can be a little tricky.
      cfg.factorLegend more or less controls placement along radius
@@ -232,6 +293,13 @@ var RadarChart = {
             .outerRadius(outerRadius)
             .startAngle(i*0.2*Math.PI)
             .endAngle((i+1)*0.2*Math.PI);
+
+          if (i == 3) {
+            var retArc = d3.arc().innerRadius(innerRadius)
+              .outerRadius(outerRadius)
+              .startAngle(i*0.2*Math.PI)
+              .endAngle((i+1)*0.2*Math.PI);
+          }
 
           return arc();
         })

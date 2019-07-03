@@ -12,8 +12,8 @@ Mon State,မွန်ပြည်နယ်,MMR011,61.63119125,2,4.74,6.89,7.21,
 Rakhine State,ရခိုင်ပြည်နယ်,MMR012,55.74357605,4,6.05,7.04,6.94,7.85,5.03,5.02,5.85,4.14,6.15,4.82
 Yangon Region,ရန်ကုန်ဒေသကြီး,MMR013,62.33431244,2,5.46,6.88,7.28,7.14,7.08,4.16,6.04,5.88,7.63,4.72
 Shan State,ရှမ်းပြည်နယ်,MMR222,60.52116013,3,6.86,6.85,7.51,7.67,6.49,5.28,6.75,5.12,5.39,5.24
-Ayawaddy Region,ဧရာဝတီတိုင်းဒေသကြီး,MMR017,58.22311783,4,6.36,7.91,6.87,5.86,5.31,3.89,6.04,4.9,6.37,5.02
-Nay Pyi Taw Union Territory,နေပြည်တော် ပြည်ထောင်စုနယ်မြေ,MMR018,61.08465958,3,5.88,5.92,7.62,6.16,6.59,4.19,5.93,5.81,6.43,5.04`;
+Ayeyarwady Region,ဧရာဝတီတိုင်းဒေသကြီး,MMR017,58.22311783,4,6.36,7.91,6.87,5.86,5.31,3.89,6.04,4.9,6.37,5.02
+Nay Pyi Taw Union Territory,နေပြည်တော်ပြည်ထောင်စုနယ်မြေ,MMR018,61.08465958,3,5.88,5.92,7.62,6.16,6.59,4.19,5.93,5.81,6.43,5.04`;
 
 var mbei_township = `township_name:taf,township_name:mm,township_pcode,score,tier,sub1,sub2,sub3,sub4,sub5,sub6,sub7,sub8,sub9,sub10
 Mohnyin,မိုးညှင်း,MMR001009,62.79128265,1,6.81,7.21,7.99,8.06,5.91,4.98,6.51,5.99,6.06,4.84
@@ -128,21 +128,9 @@ var starburstLegend = {
 };
 
 var aboutText = {
-  'EN' : `The MBEI is a comprehensive diagnostic tool that has
-been specially adapted to evaluate and improve Myanmar’s
-subnational business environment. To generate the index,
-the Foundation surveyed nearly 5,000 businesses across
-all 14 states and regions and Nay Pyi Taw Union Territory
-and gather data on licensing, land access, government
-transparency, and more.`,
+  'EN' : `Myanmar’s private sector plays a keyrole in the country’s economic growth. Private enterprises attract investment, create jobs, and develop business models that protect communities and the environment from harm. However, a strong business environment requires good economic governance, or the set of activities through which policy-makers and administrators ensure a suitable environment for private business activity. Myanmar businesses currently face a number of complex challenges, including inadequate infrastructure and unclear licensing rules and regulations. The Asia Foundation (TAF) and the DaNa Facility, with funding from UK Aid, have therefore launched the three-year Myanmar Business Environment Index (MBEI). In partnership with the Development Lab at Duke University, the MBEI is designed to measure economic governance at the national and state/region levels. The MBEI is provided to government, businesses and other stakeholders as a tool to identify constraints and opportunities in private sector development and thereby promote sustainable and inclusive economic growth across Myanmar.`,
 
-  'MM' : `မြန်မာ့စီးပွားရေးဝန်းကျင်ညွှန်ကိန်းသည် မြန်မာနိုင်ငံ၏ ဒေသန္တရ စီးပွားရေး ပတ်ဝန်းကျင်ကို
-လေ့လာ သုံးသပ်ပြီး တိုးတက်ကောင်းမွန်စေရန် အထူးလိုက်လျော ညီထွေစွာ ဖော်ဆောင်
-ထားသည့် စစ်တမ်းကောက်ယူမှု အစီအစဉ် တစ်ခုဖြစ်ပါသည်။ ညွှန်းကိန်း ဖော်ထုတ်နိုင်ရန်
-အတွက် အာရှဖောင်ဒေးရှင်းသည် ပြည်နယ်နှင့် တိုင်းဒေသကြီး ၁၄ ခု နှင့် နေပြည်တော်
-ပြည်ထောင်စုနယ်မြေမှ လုပ်ငန်းပေါင်း ၅ဝဝဝ နီးပါးကို လိုင်စင်ပြုလုပ်ခြင်း၊ မြေယာအသုံးချ
-နိုင်မှု၊ အစိုးရ၏ ပွင့်လင်းမြင်သာမှုနှင့် တခြားသော အကြောင်းအရာများနှင့် သက်ဆိုင်သည့်
-အချက်အလက်များ မေးမြန်းစုဆောင်းသွားမည်ဖြစ်သည်။`
+  'MM' : `မြန်မာနိုင်ငံ၏ စီးပွားရေးဖွံ့ဖြိုးမှုအတွင် ပုဂ္ဂလိကလုပ်ငန်းများသည် အရေးပါဝင်သော အခန်းကဏ္ဍဖြစ် ပါဝင်နေပါသည်။ ပုဂ္ဂလိကစီးပွားရေးလုပ်ငန်းများသည် ရင်းနှီးမြှုပ်နှံမှုကို စွဲဆောင်ခြင်း၊ အလုပ်အကိုင်အခွင့်အလမ်းကို ဖန်တီးပေးခြင်း နှင့် လူမှုအသိုင်းအဝိုင်းနှင့် သဘာဝပတ်ဝန်းကျင်ကို အန္တရာယ်မှ ကာကွယ်ပေးမည့် စီးပွားရေးလုပ်ငန်းအမျိုးအစားကို ပုံဖော် ရေးဆွဲကြသည်။ သို့သော် အားကောင်းသည့် စီးပွားရေးဝန်ကျင်ဖြစ်လာစေရန်အတွက် ကောင်းမွန်သော စီးပွားရေးဆိုင်ရာ အုပ်ချုပ်မှုလိုအပ်သည် သို့မဟုတ် မူဝါဒရေးဆွဲသူများနှင့် တာဝန်ရှိများက ဖော်ေဆောင်ထားသည့် လမ်းစဉ်များက ပုဂ္ဂလိက စီးပွားရေးလုပ်ငန်းအတွက် သင့်လျော်သည့် ဝန်းကျင်ဖြစ်ရန် လိုအပ်သည်။   မြန်မာ့စီးပွားရေး လုပ်ငန်းများ သည် လမ်းပန်းဆက်သွယ်ရေး၊ အဆောက်အဦး နှင့် မရှင်းလင်းသောစည်းမျဉ်းစည်းကမ်းများစသည့် စိန်ခေါ်မှုများ နှင့် ရင်ဆိုင်နေရသည်။ အဆိုပါ ကိစ္စရပ်များကို တဖက်တလမ်းမှ ဖြည့်ဆည်းပေးသည့် အနေဖြင့် အာရှဖောင်ဒေးရှင်း သည် သုံးနှစ်စီမံကိန်းဖြစ်သည့်  မြန်မာ့စီးပွားရေးဝန်းကျင် ညွှန်းကိန်းစီမံကိန်း (Myanmar Business Environment Index-MBEI) ကို ဓန (DaNa Facility) အဖွဲ့အစည်းမှ တစ်ဆင့် ယူကေအပြည်ပြည်ဆိုင်ရာ ဖွံ့ဖြိုးရေးဌာန (DFID) မှ ထောက်ပံ့သောရန်ပုံငွေဖြင့် အကောင်အထည်ဖော် ဆောင်ရွက်လျက်ရှိသည်။ ပြည်ထောင်စုအဆင့် နှင့် တိုင်းဒေသကြီး/ ပြည်နယ် အဆင့်တွင် စီးပွားရေးဆိုင်ရာ အုပ်ချုပ်မှုစနစ်ကို တိုင်းတာနိုင်ရန် Duke တက္ကသိုလ်ရှိ Development Lab နှင့် ပူးတွဲ၍ MBEI ကို ရေးဆွဲခဲ့သည်။ MBEI သည် ပုဂ္ဂလိကလုပ်ငန်းဖွံ့ဖြိုးရေး တွင် စိန်ခေါ်မှုများ၊ အခွင့်အလမ်းများကို ဖော်ထုတ်ရန် စနစ်တစ်ခုအဖြစ် အစိုးရ၊ စီပွားရေးနှင့် ကဏ္ဍအသီးသီးမှ ပါဝင် ပတ်သတ်သူများကို ပံ့ပိုးပေးရန် ဖြစ်ပြီး မြန်မာနိုင်ငံ တစ်ဝှမ်း ရေရှည်တည်တံ့မှုကို အထောက်အကူပြုစေရန် နှင့် စီးပွားရေးဖွံ့ဖြိုးမှုတွင် အားလုံးပါဝင်စေရန် ဖြစ်ပါသည်။`
 }
 
 var copy = {
@@ -174,9 +162,33 @@ var copy = {
     (အလယ်ဗဟိုကိန်းဂဏန်း)`
   },
 
+  subindexExplanation : {
+    'sub1' : { EN: `Duration and complexity of business registration`, MM : `စီးပွားရေးလုပ်ငန်း မှတ်ပုံတင်ရာတွင် ကြာမြင့်ချိန် နှင့် လုပ်ငန်းစဉ် ရှုပ်ထွေးမှု။`},
+    'sub2' : { EN: `Land access and complexity of formalization`, MM : `မြေယာရရှိအသုံးချနိုင်မှု နှင့် တရားဝင်အသုံးချနိုင်ရန် ခက်ခဲရှုပ်ထွေးမှု။`},
+    'sub3' : { EN: `Burden of inspections, fees, paperwork, etc.`, MM : `စစ်ဆေးမှု ဝန်ထုတ်ဝန်ပိုး၊ အခကြေးငွေ၊ စာရွက်စာတမ်း..စသည့်။`},
+    'sub4' : { EN: `Burden and role of informal payments`, MM : `တရားဝင် မဟုတ်သောကုန်ကျစရိတ်များ၏ ဝန်ထုတ်ဝန်ပိုး နှင့် အခန်းကဏ္ဍ။`},
+    'sub5' : { EN: `Access to transportation, power, telecom, and other infrastructure`, MM : `လမ်းပန်းဆက်သွယ်ရေး၊ လျှပ်စစ်မီး၊ တယ်လီကွန်း နှင့် အခြားသော အခြေခံအဆောက်အအုံများကို
+    လက်လှမ်းမီအသုံးချနိုင်မှု။`},
+    'sub6' : { EN: `Predictability of and input into laws, regulations, and government plans.`, MM : `ကြိုတင်တွက်ဆနိုင်ခြင်း၊ အစိုးရအစီအစဉ်များ၊ စည်းမျဉ်းများ နှင့် ဥပဒေများတွင် ထည့်သွင်းဖော်ပြထားခြင်း။`},
+    'sub7' : { EN: `Preferential treatment and bias toward groups of firms`, MM : `မျက်နှာသာပေးခြင်း နှင့် ကုမ္ပဏီအုပ်စုများသို့ ဘက်လိုက်ခြင်း။`},
+    'sub8' : { EN: `Pollution, impact on business, and government response`, MM : `ညစ်ညမ်းမှု၊ လုပ်ငန်း၏ သက်ရောက်မှု နှင့် အစိုးရ၏ တုန့်ပြန်မှု။`},
+    'sub9' : { EN: `Ease of labor recruitment and access to human capital`, MM : `အလုပ်သမားခန့်အပ်ရန် လွယ်ကူခြင်းနှင့် လိုအပ်သည့် လူသားအရင်းအမြစ် ရရှိခြင်း။`},
+    'sub10' : { EN: `Crime prevention and business confidence in the legal system.`, MM : `မှုခင်းကာကွယ်ခြင်းနှင့် တရားဥပဒေစနစ်အပေါ်တွင် စီးပွားရေးလုပ်ငန်းများ၏ ယုံကြည်မှု။`}
+  },
+
+  subindexExplanationTooltip : {
+    EN : 'Click on an icon to learn more about a subindex',
+    MM : 'စက်ဝိုင်းသေးတွေကိုနှိပ်ပြီး ညွှန်းခွဲများအကြောင်းလေ့လာပါ'
+  },
+
   sliderInfo: {
     EN : 'Drag bar to highlight township!',
     MM : 'Slider ကိုရွှေ့လျားခြင်းဖြင့် မြို့နယ်အဆင့်များကို ကြည့်ရှုနိုင်ပါသည်'
+  },
+
+  medianInfo: {
+    EN : 'bold arc = median',
+    MM : 'အမဲရောင် မျဉ်းကွေး = အလယ်ဗဟိုကိန်း'
   },
 
   download: {
@@ -215,3 +227,25 @@ var starburstIcon = { 'sub1': 'https://opendevelopmentmyanmar.net/wp-content/upl
 'sub8': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon8.png',
 'sub9': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon9.png',
 'sub10': 'https://opendevelopmentmyanmar.net/wp-content/uploads/sites/4/2019/04/icon10.png'};
+
+var pcodeTranslate = {
+  'MMR001' : {EN: 'Kachin State', MM: 'ကချင်ပြည်နယ်'},
+  'MMR002' : {EN: 'Kayar State', MM: 'ကယားပြည်နယ်'},
+  'MMR003' : {EN: 'Kayin State', MM: 'ကရင်ပြည်နယ်'},
+  'MMR004' : {EN: 'Chin State', MM: 'ချင်းပြည်နယ်'},
+  'MMR005' : {EN: 'Sagaing Region', MM: 'စစ်ကိုင်းတိုင်းဒေသကြီး'},
+  'MMR006' : {EN: 'Tanintharyi Region', MM: 'တနင်္သာရီတိုင်းဒေသကြီး'},
+  'MMR111' : {EN: 'Bago Region', MM: 'ပဲခူးတိုင်းဒေသကြီး'},
+  'MMR007' : {EN: 'Bago Region', MM: 'ပဲခူးတိုင်းဒေသကြီး'},
+  'MMR009' : {EN: 'Magway Region', MM: 'မကွေးတိုင်းဒေသကြီး'},
+  'MMR010' : {EN: 'Mandalay Region', MM: 'မန္တလေးတိုင်းဒေသကြီး'},
+  'MMR011' : {EN: 'Mon State', MM: 'မွန်ပြည်နယ်'},
+  'MMR012' : {EN: 'Rakhine State', MM: 'ရခိုင်ပြည်နယ်'},
+  'MMR013' : {EN: 'Yangon Region', MM: 'ရန်ကုန်တိုင်းဒေသကြီး'},
+  'MMR222' : {EN: 'Shan State', MM: 'ရှမ်းပြည်နယ်'},
+  'MMR014' : {EN: 'Shan State', MM: 'ရှမ်းပြည်နယ်'},
+  'MMR015' : {EN: 'Shan State', MM: 'ရှမ်းပြည်နယ်'},
+  'MMR016' : {EN: 'Shan State', MM: 'ရှမ်းပြည်နယ်'},
+  'MMR017' : {EN: 'Ayeyarwady Region', MM: 'ဧရာဝတီတိုင်းဒေသကြီး'},
+  'MMR018' : {EN: 'Nay Pyi Taw Union Territory', MM: 'နေပြည်တော်ပြည်ထောင်စုနယ်မြေ'}
+};

@@ -5,8 +5,9 @@ function drawNationChart(township, id) {
     levels: 5,
     roundStrokes: false,
     median: false,
-    tiers: true
-  }
+    tiers: true,
+    subExplain: true
+  };
   RadarChart.draw(id, medianData, radarChartOptions);
 
 }
